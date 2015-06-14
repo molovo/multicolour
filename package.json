@@ -1,0 +1,25 @@
+{
+  "name": "rainbow",
+  "version": "1.0.0",
+  "description": "Don't look here",
+  "main": "index.js",
+  "scripts": {
+    "start": "node_modules/.bin/babel-node ./",
+    "test": "mocha --harmony -R spec -u tdd --check-leaks --slow 600 $(find tests -name '*.js')"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davemackintosh/rainbow.git"
+  },
+  "author": "davemackintosh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davemackintosh/rainbow/issues"
+  },
+  "homepage": "https://github.com/davemackintosh/rainbow#readme",
+  "dependencies": {
+    "bell": "^4.0.0",
+    "hapi": "^8.6.1",
+    "waterline": "^0.10.23"
+  }
+}
