@@ -18,9 +18,17 @@
   "homepage": "https://github.com/newworldcode/rainbow#readme",
   "dependencies": {
     "bell": "^4.0.0",
+    "glob": "^5.0.12",
     "hapi": "^8.6.1",
+    "hapi-swagger": "^0.7.3",
+    "joi": "^6.5.0",
+    "jsonwebtoken": "^5.0.4",
+    "sails-mongo": "^0.11.2",
     "waterline": "^0.10.23",
-    "glob": "^5.0.12"
+    "xml2json": "^0.7.1"
   },
-  "engine": "node >= 0.12.2"
+  "engine": "node >= 0.12.0",
+  "devDependencies": {
+    "tape": "^4.0.1"
+  }
 }
