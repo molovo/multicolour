@@ -12,14 +12,14 @@ const hapi      = require('hapi')
 const format    = require('util').format
 const bell      = require('bell')
 
+// Get the function templates for our routes.
+const functions = require('./templates')
+
 // Get our utility to convert blueprints to joi models.
 const bp_to_joi = require('./blueprint-to-joi')
 
 // Get the user's configuration.
 const rainbow_config = require('../../config')
-
-// Get the function templates for our routes.
-const functions = require('./templates')
 
 // Create an app to put stuff.
 let App = {
@@ -34,33 +34,8 @@ let App = {
   // We'll store the blueprints.
   blueprints: new Set(),
 
-  // Create the server.
-  server: new hapi.Server()
-}
-
-// Configure the server.
-App.server.connection(App.config.http.api)
-
-// Add swagger docs.
-if (App.config.debug) {
-  App.server.register({
-    register: require('hapi-swagger'),
-    options: {
-      apiVersion: require('../../package.json').version
-    }
-  }, err => {
-    if (err) App.server.log(['error'], 'hapi-swagger load error: ' + err)
-    else App.server.log(['start'], 'hapi-swagger interface loaded')
-  })
-}
-
-if (App.config.auth) {
-  App.server.register(bell, err => {
-    if (err) throw err
-    // Create an auth strategy.
-    App.server.auth.strategy(App.config.auth.provider, 'bell', App.config.auth)
-    App.server.auth.default(App.config.auth.provider)
-  })
+  // Get the server.
+  server: require('./server')
 }
 
 function slugifyUrl(name) {
@@ -88,6 +63,8 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Get the model
       let model = require(file_path)
 
+      bp_to_joi(model.blueprint)
+
       // Add the loaded blueprint.
       App.blueprints.add(model)
 
@@ -95,7 +72,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       let collection = Waterline.Collection.extend({
         identity: slugifyUrl(model.name || path.basename(file_path, '.js')),
         connection: process.env.RAIN_ENV || 'production',
-        attributes: model.schematic
+        attributes: model.blueprint
       })
 
       // Create the collection.

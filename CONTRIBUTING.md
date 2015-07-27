@@ -1,2 +1,1 @@
-This project adheres to the [Open Code of Conduct][code-of-conduct]. By participating, you are expected to honor this code.
-[code-of-conduct]: http://todogroup.org/opencodeofconduct/#New World Code/abuse@newworld.codes
+This project adheres to the [Open Code of Conduct](http://todogroup.org/opencodeofconduct/#New World Code/abuse@newworld.codes). By participating, you are expected to honor this code.
