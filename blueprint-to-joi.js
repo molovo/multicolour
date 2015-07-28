@@ -48,7 +48,7 @@ function convert(object, array) {
         // return the current date rather than a compile time static date
         // See https://github.com/hapijs/joi/issues/363
         if (prop.default instanceof String && prop.default.toLowerCase() === 'now')
-          prop.default = () => new Date
+          prop.default = function() { return new Date() }
       break
       case "autoIncrement":
       case "primaryKey":
