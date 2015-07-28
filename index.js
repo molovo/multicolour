@@ -32,7 +32,7 @@ let App = {
   collections: new Set(),
 
   // We'll store the blueprints.
-  blueprints: new Set(),
+  blueprints: new Map(),
 
   // Get the server.
   server: require('./server')
@@ -62,15 +62,14 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     .map(file_path => {
       // Get the model
       let model = require(file_path)
-
-      bp_to_joi(model.blueprint)
+      const name = slugifyUrl(model.name || path.basename(file_path, '.js'))
 
       // Add the loaded blueprint.
-      App.blueprints.add(model)
+      App.blueprints.set(name, model)
 
       // Create the collection
       let collection = Waterline.Collection.extend({
-        identity: slugifyUrl(model.name || path.basename(file_path, '.js')),
+        identity: name,
         connection: process.env.RAIN_ENV || 'production',
         attributes: model.blueprint
       })
@@ -101,10 +100,8 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
         path: '/login',
         config: {
           auth: App.config.auth.provider,
-          handler: (request, reply) => {
-            reply(request.auth.credentials)
-          },
-          description: 'Create a session using the provider "%s"',
+          handler: (request, reply) => reply(request.auth.credentials),
+          description: format('Create a session using the provider "%s"', App.config.auth.provider),
           notes: 'Using the "bell" scheme create a session.',
           tags: [ 'api', 'session' ]
         }
@@ -125,7 +122,13 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             handler: () => functions.get.apply(App.models[model_name], arguments),
             description: format('Get %ss', name),
             notes: format('Return a paginated list of %ss in the database. If an ID is passed, return matching documents.', name),
-            tags: [ 'api', name ]
+            tags: [ 'api', name ],
+            response: {
+              schema: bp_to_joi(App.blueprints.get(model_name).blueprint, true)
+                .meta({
+                  className: format('Get %s', name)
+                })
+            }
           }
         },
         {
@@ -134,8 +137,14 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           config: {
             handler: () => functions.create.apply(App.models[model_name], arguments),
             description: format('Create a new %s', name),
-            notes: format('Create a new %s from the posted data.', name),
-            tags: [ 'api', name ]
+            notes: format('Create a new %s with the posted data.', name),
+            tags: [ 'api', name ],
+            response: {
+              schema: bp_to_joi(App.blueprints.get(model_name).blueprint)
+                .meta({
+                  className: format('Create %s', name)
+                })
+            }
           }
         },
         {
@@ -145,7 +154,13 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             handler: () => functions.update.apply(App.models[model_name], arguments),
             description: format('Update a %s', name),
             notes: format('Update a %s with the posted data.', name),
-            tags: [ 'api', name ]
+            tags: [ 'api', name ],
+            response: {
+              schema: bp_to_joi(App.blueprints.get(model_name).blueprint)
+                .meta({
+                  className: format('Update %s', name)
+                })
+            }
           }
         },
         {
