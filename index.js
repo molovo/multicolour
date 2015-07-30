@@ -13,10 +13,10 @@ const format    = require('util').format
 const bell      = require('bell')
 
 // Get the function templates for our routes.
-const functions = require('./templates')
+const functions = require('./lib/templates')
 
 // Get our utility to convert blueprints to joi models.
-const bp_to_joi = require('./blueprint-to-joi')
+const bp_to_joi = require('./lib/blueprint-to-joi')
 
 // Get the user's configuration.
 const rainbow_config = require('../../config')
@@ -38,18 +38,14 @@ let App = {
   server: require('./server')
 }
 
+if (App.config.auth) require('./lib/server-auth')(App)
+
 function slugifyUrl(name) {
   return name
     .toLowerCase()
     .replace(/\s+/g, '_')
     .replace(/[^a-z0-9]/g, '')
 }
-
-App.server.ext('onPreResponse', (request, reply) => {
-  // let parser = require('xml2json')
-  // let data = parser.toJson(request.response.data)
-  reply.continue()
-})
 
 require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../content'), (err, files) => {
   if (err) throw err
@@ -93,25 +89,12 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     // Add the collections to the app for ORM doings.
     App.models = models.collections
 
-    // If we have auth, set up a login endpoint.
-    if (App.config.auth) {
-      App.server.route({
-        method: [ 'GET', 'POST' ],
-        path: '/login',
-        config: {
-          auth: App.config.auth.provider,
-          handler: (request, reply) => reply(request.auth.credentials),
-          description: format('Create a session using the provider "%s"', App.config.auth.provider),
-          notes: 'Using the "bell" scheme create a session.',
-          tags: [ 'api', 'session' ]
-        }
-      })
-    }
-
     // Create the routes.
     for (let model_name in App.models) {
       // Get the model name.
       let name = App.models[model_name].adapter.identity
+
+      let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
       // Route the things.
       App.server.route([
@@ -121,7 +104,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           config: {
             handler: () => functions.get.apply(App.models[model_name], arguments),
             description: format('Get %ss', name),
-            notes: format('Return a paginated list of %ss in the database. If an ID is passed, return matching documents.', name),
+            notes: format('Return a paginated list of "%s" in the database. If an ID is passed, return matching documents.', name),
             tags: [ 'api', name ],
             response: {
               schema: bp_to_joi(App.blueprints.get(model_name).blueprint, true)
@@ -139,11 +122,13 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             description: format('Create a new %s', name),
             notes: format('Create a new %s with the posted data.', name),
             tags: [ 'api', name ],
+            validate: {
+              payload: joi_schema
+            },
             response: {
-              schema: bp_to_joi(App.blueprints.get(model_name).blueprint)
-                .meta({
-                  className: format('Create %s', name)
-                })
+              schema: joi_schema.meta({
+                className: format('Create %s', name)
+              })
             }
           }
         },
@@ -155,9 +140,11 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             description: format('Update a %s', name),
             notes: format('Update a %s with the posted data.', name),
             tags: [ 'api', name ],
+            validate: {
+              payload: joi_schema
+            },
             response: {
-              schema: bp_to_joi(App.blueprints.get(model_name).blueprint)
-                .meta({
+              schema: joi_schema.meta({
                   className: format('Update %s', name)
                 })
             }
