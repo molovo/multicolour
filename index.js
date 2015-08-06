@@ -25,6 +25,9 @@ const rainbow_config = require('../../config')
 let App = {
   config: rainbow_config,
 
+  // Count the number of endpoints.
+  endpoint_total: 0,
+
   // Create an instance of Waterline.
   waterline: new Waterline(),
 
@@ -35,10 +38,10 @@ let App = {
   blueprints: new Map(),
 
   // Get the server.
-  server: require('./server')
+  server: require('./lib/server')
 }
 
-if (App.config.auth) require('./lib/server-auth')(App)
+if (App.config.auth) require('./lib/auth')(App)
 
 function slugifyUrl(name) {
   return name
@@ -60,31 +63,44 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       let model = require(file_path)
       const name = slugifyUrl(model.name || path.basename(file_path, '.js'))
 
-      // Add the loaded blueprint.
-      App.blueprints.set(name, model)
+      // If we have a blueprint, set it up with Waterline.
+      if (model.hasOwnProperty('blueprint')) {
+        // Add the loaded blueprint.
+        App.blueprints.set(name, model)
 
-      // Create the collection
-      let collection = Waterline.Collection.extend({
-        identity: name,
-        connection: process.env.RAIN_ENV || 'production',
-        attributes: model.blueprint
-      })
+        // Create the collection
+        let collection = Waterline.Collection.extend({
+          identity: name,
+          connection: process.env.RAIN_ENV || 'production',
+          attributes: model.blueprint
+        })
 
-      // Create the collection.
-      App.collections.add(collection)
+        // Create the collection.
+        App.collections.add(collection)
 
-      // Load the model.
-      App.waterline.loadCollection(collection)
+        // Load the model.
+        App.waterline.loadCollection(collection)
+      }
 
       // Keep going
       return model
+    })
+    // If the model specifies any routes, register them with Hapi.
+    .map(file_model => {
+      if (file_model.hasOwnProperty('routes') && file_model.routes.length > 0) {
+        // Get the length of the routes and add to the endpoint count.
+        App.endpoint_total += file_model.routes.length
+
+        // Register the routes.
+        App.server.route(file_model.routes)
+      }
+
+      return file_model
     })
 
   // Kick off Waterline.
   App.waterline.initialize(App.config.db, (err, models) => {
     if (err) throw err
-
-    let endpoints = 0
 
     // Add the collections to the app for ORM doings.
     App.models = models.collections
@@ -102,8 +118,9 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'GET',
           path: format('/%s/{id?}', name),
           config: {
+            auth: App.config.auth ? App.config.auth.token : undefined,
             handler: () => functions.get.apply(App.models[model_name], arguments),
-            description: format('Get %ss', name),
+            description: format('Get a list of "%s"', name),
             notes: format('Return a paginated list of "%s" in the database. If an ID is passed, return matching documents.', name),
             tags: [ 'api', name ],
             response: {
@@ -118,6 +135,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'POST',
           path: format('/%s', name),
           config: {
+            auth: App.config.auth ? App.config.auth.token : undefined,
             handler: () => functions.create.apply(App.models[model_name], arguments),
             description: format('Create a new %s', name),
             notes: format('Create a new %s with the posted data.', name),
@@ -136,6 +154,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'PUT',
           path: format('/%s/{id}', name),
           config: {
+            auth: App.config.auth ? App.config.auth.token : undefined,
             handler: () => functions.update.apply(App.models[model_name], arguments),
             description: format('Update a %s', name),
             notes: format('Update a %s with the posted data.', name),
@@ -154,6 +173,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'DELETE',
           path: format('/%s/{id}', name),
           config: {
+            auth: App.config.auth ? App.config.auth.token : undefined,
             handler: () => functions.delete.apply(App.models[model_name], arguments),
             description: format('Delete a %s', name),
             notes: format('Delete a %s permanently.', name),
@@ -162,10 +182,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
         }
       ])
 
-      endpoints += 4
+      App.endpoint_total += 4
     }
 
     // Kick off the http server.
-    App.server.start(() => console.log('Rainbow API running on %s with %s endpoints.', App.server.info.uri, endpoints))
+    App.server.start(() => console.log('Rainbow API running on %s with %s endpoints.', App.server.info.uri, App.endpoint_total))
   })
 })
