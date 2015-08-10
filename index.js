@@ -41,7 +41,8 @@ let App = {
   server: require('./lib/server')
 }
 
-if (App.config.auth) require('./lib/auth')(App)
+if (App.config.auth)
+  require('./lib/auth')(App)
 
 function slugifyUrl(name) {
   return name
@@ -110,6 +111,11 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Get the model name.
       let name = App.models[model_name].adapter.identity
 
+      // Check we're not picking up stuff we shouldn't,
+      // if we are just continue with the next iteration.
+      if (!App.blueprints.get(model_name)) continue
+
+      // Generate a schema to validate payloads against.
       let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
       // Route the things.
