@@ -18,12 +18,13 @@ const functions = require('./lib/templates')
 // Get our utility to convert blueprints to joi models.
 const bp_to_joi = require('./lib/blueprint-to-joi')
 
-// Get the user's configuration.
-const rainbow_config = require('../../config')
+// Get our config.
+const program = require('./lib/cli')
+const config = program.config
 
 // Create an app to put stuff.
 let App = {
-  config: rainbow_config,
+  config: config,
 
   // Count the number of endpoints.
   endpoint_total: 0,
@@ -35,11 +36,11 @@ let App = {
   collections: new Set(),
 
   // We'll store the blueprints.
-  blueprints: new Map(),
-
-  // Get the server.
-  server: require('./lib/server')
+  blueprints: new Map()
 }
+
+// Get the server.
+App.server = require('./lib/server')(App)
 
 if (App.config.auth)
   require('./lib/auth')(App)
@@ -195,3 +196,5 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     App.server.start(() => console.log('Rainbow API running on %s with %s endpoints.', App.server.info.uri, App.endpoint_total))
   })
 })
+
+module.exports = App

@@ -5,7 +5,7 @@
   "main": "index.js",
   "preferGlobal": "true",
   "bin": {
-    "rainbow": "index.js"
+    "rainbow": "start.js"
   },
   "scripts": {
     "test": "mocha --harmony -R spec -u tdd --check-leaks --slow 600 $(find tests -name '*.js')"
