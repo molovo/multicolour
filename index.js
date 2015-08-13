@@ -8,6 +8,7 @@
 
 const program = require('./lib/cli')
 
+// If we're not starting the servers, stop here.
 if (!program.start) return
 
 const path      = require('path')
@@ -176,7 +177,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             notes: format('Update a %s with the posted data.', name),
             tags: [ 'api', name ],
             validate: {
-              payload: joi_schema.in
+              payload: joi_schema.in,
+              params: Joi.object({
+                id: Joi.string().optional()
+              })
             },
             response: {
               schema: joi_schema.out.meta({
@@ -193,7 +197,12 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             handler: () => functions.delete.apply(App.models[model_name], arguments),
             description: format('Delete a %s', name),
             notes: format('Delete a %s permanently.', name),
-            tags: [ 'api', name ]
+            tags: [ 'api', name ],
+            validate: {
+              params: Joi.object({
+                id: Joi.string().optional()
+              })
+            }
           }
         }
       ])
