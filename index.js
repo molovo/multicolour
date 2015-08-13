@@ -11,6 +11,7 @@ const Waterline = require('waterline')
 const hapi      = require('hapi')
 const format    = require('util').format
 const bell      = require('bell')
+const Joi       = require('joi')
 
 // Get the function templates for our routes.
 const functions = require('./lib/templates')
@@ -130,8 +131,13 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             description: format('Get a list of "%s"', name),
             notes: format('Return a paginated list of "%s" in the database. If an ID is passed, return matching documents.', name),
             tags: [ 'api', name ],
+            validate: {
+              params: Joi.object({
+                id: Joi.string().optional()
+              })
+            },
             response: {
-              schema: bp_to_joi(App.blueprints.get(model_name).blueprint, true)
+              schema: Joi.array().items(joi_schema.out)
                 .meta({
                   className: format('Get %s', name)
                 })
@@ -148,10 +154,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             notes: format('Create a new %s with the posted data.', name),
             tags: [ 'api', name ],
             validate: {
-              payload: joi_schema
+              payload: joi_schema.in
             },
             response: {
-              schema: joi_schema.meta({
+              schema: joi_schema.out.meta({
                 className: format('Create %s', name)
               })
             }
@@ -167,10 +173,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             notes: format('Update a %s with the posted data.', name),
             tags: [ 'api', name ],
             validate: {
-              payload: joi_schema
+              payload: joi_schema.in
             },
             response: {
-              schema: joi_schema.meta({
+              schema: joi_schema.out.meta({
                   className: format('Update %s', name)
                 })
             }

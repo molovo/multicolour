@@ -1,25 +1,25 @@
 {
-  "name": "rainbow",
+  "name": "multicolour",
   "version": "0.0.1",
-  "description": "Don't look here",
+  "description": "Generate your API with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
   "bin": {
-    "rainbow": "start.js"
+    "multicolour": "start.js"
   },
   "scripts": {
     "test": "mocha --harmony -R spec -u tdd --check-leaks --slow 600 $(find tests -name '*.js')"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/newworldcode/rainbow.git"
+    "url": "git+https://github.com/newworldcode/multicolour.git"
   },
   "author": "newworldcode",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/newworldcode/rainbow/issues"
+    "url": "https://github.com/newworldcode/multicolour/issues"
   },
-  "homepage": "https://github.com/newworldcode/rainbow#readme",
+  "homepage": "https://github.com/newworldcode/multicolour#readme",
   "dependencies": {
     "bell": "^4.0.0",
     "cli-color": "^1.0.0",
