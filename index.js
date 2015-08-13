@@ -6,6 +6,10 @@
 // Boot up the app.
 'use strict'
 
+const program = require('./lib/cli')
+
+if (!program.start) return
+
 const path      = require('path')
 const Waterline = require('waterline')
 const hapi      = require('hapi')
@@ -20,7 +24,6 @@ const functions = require('./lib/templates')
 const bp_to_joi = require('./lib/blueprint-to-joi')
 
 // Get our config.
-const program = require('./lib/cli')
 const config = program.config
 
 // Create an app to put stuff.

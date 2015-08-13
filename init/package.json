@@ -1,0 +1,8 @@
+{
+  "name": "multicolour-example",
+  "version": "0.0.1",
+  "dependencies": {
+    "multicolour": "^0.0.1",
+    "sails-mongo": "*"
+  }
+}
