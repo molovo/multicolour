@@ -179,7 +179,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             validate: {
               payload: joi_schema.in,
               params: Joi.object({
-                id: Joi.string().optional()
+                id: Joi.string().required()
               })
             },
             response: {
@@ -200,7 +200,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             tags: [ 'api', name ],
             validate: {
               params: Joi.object({
-                id: Joi.string().optional()
+                id: Joi.string().required()
               })
             }
           }
