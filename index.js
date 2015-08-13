@@ -74,7 +74,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
         // Create the collection
         let collection = Waterline.Collection.extend({
           identity: name,
-          connection: process.env.RAIN_ENV || 'production',
+          connection: process.env.NODE_ENV || 'production',
           attributes: model.blueprint
         })
 
@@ -199,7 +199,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     }
 
     // Kick off the http server.
-    App.server.start(() => console.log('Rainbow API running on %s with %s endpoints.', App.server.info.uri, App.endpoint_total))
+    App.server.start(() => console.log('Multicolour API running on %s with %s endpoints.', App.server.info.uri, App.endpoint_total))
   })
 })
 
