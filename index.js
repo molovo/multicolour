@@ -124,6 +124,8 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Generate a schema to validate payloads against.
       let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
+      console.log(joi_schema.get._inner.children)
+
       // Route the things.
       App.server.route([
         {
@@ -141,7 +143,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
               })
             },
             response: {
-              schema: Joi.array().items(joi_schema.out)
+              schema: Joi.array().items(joi_schema.get)
                 .meta({
                   className: format('Get %s', name)
                 })
@@ -158,10 +160,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             notes: format('Create a new %s with the posted data.', name),
             tags: [ 'api', name ],
             validate: {
-              payload: joi_schema.in
+              payload: joi_schema.post
             },
             response: {
-              schema: joi_schema.out.meta({
+              schema: joi_schema.get.meta({
                 className: format('Create %s', name)
               })
             }
@@ -177,13 +179,13 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             notes: format('Update a %s with the posted data.', name),
             tags: [ 'api', name ],
             validate: {
-              payload: joi_schema.in,
+              payload: joi_schema.put,
               params: Joi.object({
                 id: Joi.string().required()
               })
             },
             response: {
-              schema: joi_schema.out.meta({
+              schema: joi_schema.get.meta({
                   className: format('Update %s', name)
                 })
             }
