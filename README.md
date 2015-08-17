@@ -18,6 +18,12 @@ Then you can run `multicolour init` in your desired working folder to get starte
 
 `multicolour -c config.js` to start your services, head over to `http://localhost:1811/documentation` to get an idea on the default guff created by init and the API.
 
+## Contributing
+
+### Git commits.
+
+Part of making secure software is to make sure the code you get is the code you expect, all contributions to the codebase are signed using secure GPG keys and all tags will be as well. This means you get exactly what you expect to get and are able to verify that as fact.
+
 More coming soon.
 
 [todo]: https://github.com/newworldcode/multicolour/issues/1
