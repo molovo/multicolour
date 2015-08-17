@@ -124,8 +124,6 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Generate a schema to validate payloads against.
       let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
-      console.log(joi_schema.get._inner.children)
-
       // Route the things.
       App.server.route([
         {
@@ -185,7 +183,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
               })
             },
             response: {
-              schema: joi_schema.get.meta({
+              schema: Joi.array().items(joi_schema.get).meta({
                   className: format('Update %s', name)
                 })
             }
