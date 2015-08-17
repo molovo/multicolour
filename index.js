@@ -17,6 +17,7 @@ const hapi      = require('hapi')
 const format    = require('util').format
 const bell      = require('bell')
 const Joi       = require('joi')
+const pluralize = require('pluralize')
 
 // Get the function templates for our routes.
 const functions = require('./lib/templates')
@@ -51,10 +52,10 @@ if (App.config.auth)
   require('./lib/auth')(App)
 
 function slugifyUrl(name) {
-  return name
+  return pluralize(name
     .toLowerCase()
     .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9]/g, '')
+    .replace(/[^a-z0-9]/g, ''), 1)
 }
 
 require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../content'), (err, files) => {
