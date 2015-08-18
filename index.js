@@ -48,16 +48,24 @@ let App = {
 // Get the server.
 App.server = require('./lib/server')(App)
 
+// If we enabled auth, register the plugin
+// and set up the validateFuncs.
 if (App.config.auth) {
+  // Get the auth mechanism we want.
   const auth_mechanism = require('./lib/auth')(App)
 
-  App.server.ext('onPreResponse', (res, reply) => {
-    auth_mechanism(res, reply)
-
-    reply.continue()
+  // On pre response, check stuff over.
+  App.server.ext('onPreResponse', (req, reply) => {
+    auth_mechanism(req, reply)
   })
 }
 
+/**
+ * Make the name sane and safe.
+ *
+ * @param  {String} name to make safe for a slug.
+ * @return {String} Safe name to use in urls and databases.
+ */
 function slugifyUrl(name) {
   return pluralize(name
     .toLowerCase()
@@ -65,6 +73,7 @@ function slugifyUrl(name) {
     .replace(/[^a-z0-9]/g, ''), 1)
 }
 
+// Start reading the blueprints in.
 require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../content'), (err, files) => {
   if (err) throw err
 
@@ -97,9 +106,10 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
         App.waterline.loadCollection(collection)
       }
 
-      // Keep going
+      // Keep going.
       return model
     })
+    
     // If the model specifies any routes, register them with Hapi.
     .map(file_model => {
       if (file_model.hasOwnProperty('routes') && file_model.routes.length > 0) {
