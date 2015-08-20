@@ -50,15 +50,7 @@ App.server = require('./lib/server')(App)
 
 // If we enabled auth, register the plugin
 // and set up the validateFuncs.
-if (App.config.auth) {
-  // Get the auth mechanism we want.
-  const auth_mechanism = require('./lib/auth')(App)
-
-  // On pre response, check stuff over.
-  App.server.ext('onPreResponse', (req, reply) => {
-    auth_mechanism(req, reply)
-  })
-}
+if (App.config.auth) require('./lib/auth')(App)
 
 /**
  * Make the name sane and safe.
@@ -109,7 +101,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Keep going.
       return model
     })
-    
+
     // If the model specifies any routes, register them with Hapi.
     .map(file_model => {
       if (file_model.hasOwnProperty('routes') && file_model.routes.length > 0) {
@@ -142,16 +134,21 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
       // Generate a schema to validate payloads against.
       let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
+      let auth_options = {
+        strategy: App.config.auth ? App.config.auth.provider : undefined,
+        scope: [ 'user', 'admin' ]
+      }
+
+      // If no auth is desired, wipe the options.
+      if (!App.config.auth) auth_options = undefined
+
       // Route the things.
       App.server.route([
         {
           method: 'GET',
           path: format('/%s/{id?}', name),
           config: {
-            auth: {
-              strategy: App.config.auth ? App.config.auth.provider : undefined,
-              scope: [ 'user', 'admin' ]
-            },
+            auth: auth_options,
             handler: () => functions.get.apply(App.models[model_name], arguments),
             description: format('Get a list of "%s"', name),
             notes: format('Return a paginated list of "%s" in the database. If an ID is passed, return matching documents.', name),
@@ -173,10 +170,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'POST',
           path: format('/%s', name),
           config: {
-            auth: {
-              strategy: App.config.auth ? App.config.auth.provider : undefined,
-              scope: [ 'user', 'admin' ]
-            },
+            auth: auth_options,
             handler: () => functions.create.apply(App.models[model_name], arguments),
             description: format('Create a new %s', name),
             notes: format('Create a new %s with the posted data.', name),
@@ -195,10 +189,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'PUT',
           path: format('/%s/{id}', name),
           config: {
-            auth: {
-              strategy: App.config.auth ? App.config.auth.provider : undefined,
-              scope: [ 'user', 'admin' ]
-            },
+            auth: auth_options,
             handler: () => functions.update.apply(App.models[model_name], arguments),
             description: format('Update a %s', name),
             notes: format('Update a %s with the posted data.', name),
@@ -220,10 +211,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
           method: 'DELETE',
           path: format('/%s/{id}', name),
           config: {
-            auth: {
-              strategy: App.config.auth ? App.config.auth.provider : undefined,
-              scope: [ 'user', 'admin' ]
-            },
+            auth: auth_options,
             handler: () => functions.delete.apply(App.models[model_name], arguments),
             description: format('Delete a %s', name),
             notes: format('Delete a %s permanently.', name),
