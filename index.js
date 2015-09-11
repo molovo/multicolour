@@ -2,34 +2,34 @@
 // stuff for you automatically like generate
 // Waterline collections, Hapi JS routes and
 // Backbone models/collections/routes.
-//
-// Boot up the app.
-'use strict'
+"use strict"
 
-const program = require('./lib/cli')
+// Boot up the app.
+const program = require("./lib/cli")
 
 // If we're not starting the servers, stop here.
-if (!program.start) return
+if (!program.start) {
+  process.exit(0)
+}
 
-const path      = require('path')
-const Waterline = require('waterline')
-const hapi      = require('hapi')
-const format    = require('util').format
-const bell      = require('bell')
-const Joi       = require('joi')
-const pluralize = require('pluralize')
+const path = require("path")
+const Waterline = require("waterline")
+const hapi = require("hapi")
+const bell = require("bell")
+const Joi = require("joi")
+const pluralize = require("pluralize")
 
 // Get the function templates for our routes.
-const functions = require('./lib/templates')
+const functions = require("./lib/templates")
 
 // Get our utility to convert blueprints to joi models.
-const bp_to_joi = require('./lib/blueprint-to-joi')
+const bp_to_joi = require("./lib/blueprint-to-joi")
 
 // Get our config.
 const config = program.config
 
 // Create an app to put stuff.
-let App = {
+const App = {
   config: config,
 
   // Count the number of endpoints.
@@ -41,16 +41,12 @@ let App = {
   // Create a collections set.
   collections: new Set(),
 
-  // We'll store the blueprints.
+  // We"ll store the blueprints.
   blueprints: new Map()
 }
 
 // Get the server.
-App.server = require('./lib/server')(App)
-
-// If we enabled auth, register the plugin
-// and set up the validateFuncs.
-if (App.config.auth) require('./lib/auth')(App)
+App.server = require("./lib/server")(App)
 
 /**
  * Make the name sane and safe.
@@ -61,13 +57,15 @@ if (App.config.auth) require('./lib/auth')(App)
 function slugifyUrl(name) {
   return pluralize(name
     .toLowerCase()
-    .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9]/g, ''), 1)
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9]/g, ""), 1)
 }
 
 // Start reading the blueprints in.
-require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../content'), (err, files) => {
-  if (err) throw err
+require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (err, files) => {
+  if (err) {
+    throw err
+  }
 
   files
     // Fix the paths.
@@ -76,18 +74,18 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     // Create the collections and change from file_paths to file_models.
     .map(file_path => {
       // Get the model
-      let model = require(file_path)
-      const name = slugifyUrl(model.name || path.basename(file_path, '.js'))
+      const model = require(file_path)
+      const name = slugifyUrl(model.name || path.basename(file_path, ".js"))
 
       // If we have a blueprint, set it up with Waterline.
-      if (model.hasOwnProperty('blueprint')) {
+      if (model.hasOwnProperty("blueprint")) {
         // Add the loaded blueprint.
         App.blueprints.set(name, model)
 
         // Create the collection
-        let collection = Waterline.Collection.extend({
+        const collection = Waterline.Collection.extend({
           identity: name,
-          connection: process.env.NODE_ENV || 'production',
+          connection: process.env.NODE_ENV || "production",
           attributes: model.blueprint
         })
 
@@ -104,7 +102,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
 
     // If the model specifies any routes, register them with Hapi.
     .map(file_model => {
-      if (file_model.hasOwnProperty('routes') && file_model.routes.length > 0) {
+      if (file_model.hasOwnProperty("routes") && file_model.routes.length > 0) {
         // Get the length of the routes and add to the endpoint count.
         App.endpoint_total += file_model.routes.length
 
@@ -116,43 +114,55 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     })
 
   // Kick off Waterline.
-  App.waterline.initialize(App.config.db, (err, models) => {
-    if (err) throw err
+  App.waterline.initialize(App.config.db, (error, models) => {
+    if (error) {
+      throw error
+    }
 
     // Add the collections to the app for ORM doings.
     App.models = models.collections
 
-    // Create the routes.
-    for (let model_name in App.models) {
-      // Get the model name.
-      let name = App.models[model_name].adapter.identity
+    // If we enabled auth, register the plugin
+    // and set up the validateFuncs.
+    if (App.config.auth) {
+      require("./lib/auth")(App)
+    }
 
-      // Check we're not picking up stuff we shouldn't,
+    // Create the routes.
+    for (const model_name in App.models) {
+      // Get the model name.
+      const name = App.models[model_name].adapter.identity
+
+      // Check we're not picking up stuff we shouldn"t,
       // if we are just continue with the next iteration.
-      if (!App.blueprints.get(model_name)) continue
+      if (!App.blueprints.get(model_name)) {
+        continue
+      }
 
       // Generate a schema to validate payloads against.
-      let joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
+      const joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
       let auth_options = {
         strategy: App.config.auth ? App.config.auth.provider : undefined,
-        scope: [ 'user', 'admin' ]
+        scope: ["user", "admin"]
       }
 
       // If no auth is desired, wipe the options.
-      if (!App.config.auth) auth_options = undefined
+      if (!App.config.auth) {
+        auth_options = undefined
+      }
 
       // Route the things.
       App.server.route([
         {
-          method: 'GET',
-          path: format('/%s/{id?}', name),
+          method: "GET",
+          path: `/${name}/{id?}`,
           config: {
             auth: auth_options,
             handler: () => functions.get.apply(App.models[model_name], arguments),
-            description: format('Get a list of "%s"', name),
-            notes: format('Return a paginated list of "%s" in the database. If an ID is passed, return matching documents.', name),
-            tags: [ 'api', name ],
+            description: `Get a list of "${name}"`,
+            notes: `Return a paginated list of "${name}" in the database. If an ID is passed, return matching documents.`,
+            tags: ["api", name],
             validate: {
               params: Joi.object({
                 id: Joi.string().optional()
@@ -161,39 +171,39 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             response: {
               schema: Joi.array().items(joi_schema.get)
                 .meta({
-                  className: format('Get %s', name)
+                  className: `Get ${name}`
                 })
             }
           }
         },
         {
-          method: 'POST',
-          path: format('/%s', name),
+          method: "POST",
+          path: `/${name}`,
           config: {
             auth: auth_options,
             handler: () => functions.create.apply(App.models[model_name], arguments),
-            description: format('Create a new %s', name),
-            notes: format('Create a new %s with the posted data.', name),
-            tags: [ 'api', name ],
+            description: `Create a new ${name}`,
+            notes: `Create a new ${name} with the posted data.`,
+            tags: ["api", name],
             validate: {
               payload: joi_schema.post
             },
             response: {
               schema: joi_schema.get.meta({
-                className: format('Create %s', name)
+                className: `Create ${name}`
               })
             }
           }
         },
         {
-          method: 'PUT',
-          path: format('/%s/{id}', name),
+          method: "PUT",
+          path: `/${name}/{id}`,
           config: {
             auth: auth_options,
             handler: () => functions.update.apply(App.models[model_name], arguments),
-            description: format('Update a %s', name),
-            notes: format('Update a %s with the posted data.', name),
-            tags: [ 'api', name ],
+            description: `Update a ${name}`,
+            notes: `Update a ${name} with the posted data.`,
+            tags: ["api", name],
             validate: {
               payload: joi_schema.put,
               params: Joi.object({
@@ -202,20 +212,20 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
             },
             response: {
               schema: Joi.array().items(joi_schema.get).meta({
-                  className: format('Update %s', name)
-                })
+                className: `Update ${name}`
+              })
             }
           }
         },
         {
-          method: 'DELETE',
-          path: format('/%s/{id}', name),
+          method: "DELETE",
+          path: `/${name}/{id}`,
           config: {
             auth: auth_options,
             handler: () => functions.delete.apply(App.models[model_name], arguments),
-            description: format('Delete a %s', name),
-            notes: format('Delete a %s permanently.', name),
-            tags: [ 'api', name ],
+            description: `Delete a ${name}`,
+            notes: `Delete a ${name} permanently.`,
+            tags: ["api", name],
             validate: {
               params: Joi.object({
                 id: Joi.string().required()
@@ -231,7 +241,7 @@ require('glob')(format('%s/blueprints/**/*.js', App.config.content || '../../con
     }
 
     // Kick off the http server.
-    App.server.start(() => console.log('Multicolour API running on %s with %s endpoints.', App.server.info.uri, App.endpoint_total))
+    App.server.start(() => console.log("Multicolour API running on %s with %s endpoints.", App.server.info.uri, App.endpoint_total))
   })
 })
 
