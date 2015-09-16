@@ -162,7 +162,7 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
           path: `/${name}/{id?}`,
           config: {
             auth: auth_options,
-            handler: () => functions.get.apply(App.models[model_name], arguments),
+            handler: functions.get.bind(App.models[model_name]),
             description: `Get a paginated list of "${name}"`,
             notes: `Return a list of "${name}" in the database. If an ID is passed, return matching documents.`,
             tags: ["api", name],
@@ -184,7 +184,7 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
           path: `/${name}`,
           config: {
             auth: auth_options,
-            handler: () => functions.create.apply(App.models[model_name], arguments),
+            handler: functions.create.bind(App.models[model_name]),
             description: `Create a new ${name}`,
             notes: `Create a new ${name} with the posted data.`,
             tags: ["api", name],
@@ -203,7 +203,7 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
           path: `/${name}/{id}`,
           config: {
             auth: auth_options,
-            handler: () => functions.update.apply(App.models[model_name], arguments),
+            handler: functions.update.bind(App.models[model_name]),
             description: `Update a ${name}`,
             notes: `Update a ${name} with the posted data.`,
             tags: ["api", name],
@@ -225,7 +225,7 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
           path: `/${name}/{id}`,
           config: {
             auth: auth_options,
-            handler: () => functions.delete.apply(App.models[model_name], arguments),
+            handler: functions.delete.bind(App.models[model_name]),
             description: `Delete a ${name}`,
             notes: `Delete a ${name} permanently.`,
             tags: ["api", name],
