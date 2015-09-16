@@ -67,6 +67,9 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
     throw err
   }
 
+  // Load the users blueprint.
+  require("./lib/auth/blueprint")(App)
+
   files
     // Fix the paths.
     .map(file_path => path.resolve(file_path))
@@ -143,13 +146,13 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
       const joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
 
       let auth_options = {
-        strategy: App.config.auth ? App.config.auth.provider : undefined,
+        strategy: App.config.auth ? App.config.auth.provider : false,
         scope: ["user", "admin"]
       }
 
       // If no auth is desired, wipe the options.
       if (!App.config.auth) {
-        auth_options = undefined
+        auth_options = false
       }
 
       // Route the things.
@@ -160,8 +163,8 @@ require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (
           config: {
             auth: auth_options,
             handler: () => functions.get.apply(App.models[model_name], arguments),
-            description: `Get a list of "${name}"`,
-            notes: `Return a paginated list of "${name}" in the database. If an ID is passed, return matching documents.`,
+            description: `Get a paginated list of "${name}"`,
+            notes: `Return a list of "${name}" in the database. If an ID is passed, return matching documents.`,
             tags: ["api", name],
             validate: {
               params: Joi.object({
