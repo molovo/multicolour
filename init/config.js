@@ -10,13 +10,10 @@ module.exports = {
   // Are you developing? true or false
   debug: process.env.NODE_ENV !== "production",
 
-  // If you would like authentication on your API, uncomment this and read
+  // If you would like authentication on your API and didn't enable during init, read
   // the documentation on auth methods (JWT or OAuth 2.0 currently) at
   // https://github.com/newworldcode/multicolour/blob/master/README.md#authenticating
-  // auth: {
-  //   provider: "token",
-  //   privateKey: require("crypto").createDiffieHellman(600).generateKeys("base64")
-  // },
+  auth: {{AUTH_BLOCK}},
 
   // Configure our servers, api and frontend.
   http: {
