@@ -1,8 +1,8 @@
 {
   "name": "multicolour-example",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "dependencies": {
-    "multicolour": "^0.0.1",
-    "sails-mongo": "*"
+    "multicolour": "^0.0.2",
+    "{{DATABASE_REQUIRE}}": "{{DATABASE_VERSION}}"
   }
 }

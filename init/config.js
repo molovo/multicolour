@@ -36,8 +36,8 @@ module.exports = {
   // Set up our desired database adapter (defaults to Mongo)
   db: {
     adapters: {
-      development: require("sails-mongo"),
-      production: require("sails-mongo")
+      development: require("{{DATABASE_REQUIRE}}"),
+      production: require("{{DATABASE_REQUIRE}}")
     },
     connections: {
       development: {
