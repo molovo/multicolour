@@ -1,6 +1,6 @@
 {
   "name": "multicolour",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generate your API with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
