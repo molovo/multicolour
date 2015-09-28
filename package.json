@@ -1,6 +1,6 @@
 {
   "name": "multicolour",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generate your API with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
@@ -36,11 +36,13 @@
     "pluralize": "^1.1.4",
     "replacestream": "^4.0.0",
     "sorrow": "^2.0.10",
+    "swig": "^1.4.2",
     "uuid": "^2.0.1",
     "validate-npm-package-name": "^2.2.2",
     "vision": "^3.0.0",
     "waterline": "^0.10.23"
   },
+  "engine-strict": true,
   "engineStrict": true,
   "engines": {
     "node": ">= 4.0.0"
