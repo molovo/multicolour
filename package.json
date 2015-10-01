@@ -1,14 +1,14 @@
 {
   "name": "multicolour",
-  "version": "0.0.3",
-  "description": "Generate your API with a config file and JSON and use almost any DB tech",
+  "version": "0.1.0",
+  "description": "Generate your API and single page app with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
   "bin": {
     "multicolour": "start.js"
   },
   "scripts": {
-    "test": "mocha --harmony -R spec -u tdd --check-leaks --slow 600 $(find tests -name '*.js')"
+    "test": "tape tests/**/*.js | node_modules/.bin/tap-spec"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/newworldcode/multicolour#readme",
   "dependencies": {
+    "@newworldcode/talkie": "^1.0.0",
     "bell": "^4.0.0",
     "cli-color": "^1.0.0",
     "commander": "^2.8.1",
@@ -49,6 +50,9 @@
   },
   "devDependencies": {
     "eslint": "^1.5.1",
-    "tape": "^4.0.1"
+    "tape": "^4.2.0"
+  },
+  "peerDependencies": {
+    "hapi": ">= 9.x.x < 11.0.0"
   }
 }
