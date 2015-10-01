@@ -40,13 +40,17 @@ class multicolour {
       .reply("stashes", new Map())
   }
 
-  *scan() {
+  scan() {
     // Get our content location.
     const content = this.request("config").get("content")
 
-    console.log(content)
+    // Get the file list.
+    const files = require("fs").readdirSync(`${content}/blueprints`)
 
-    yield require("fs").readdir(`${content}/blueprints`)
+    this.__props.set("blueprints", files)
+    this.reply("blueprints", this.__props.get("blueprints"))
+
+    return this
   }
 
   /**
@@ -90,12 +94,7 @@ class multicolour {
    */
   destroy() {
     // Get the servers so we can gracefully shutdown.
-    const servers = this.request("servers")
-
-    // Shutdown the API servers gracefully.
-    for (const server in servers) {
-      server.stop()
-    }
+    this.request("server").stop()
   }
 }
 

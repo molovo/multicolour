@@ -5,9 +5,9 @@ const tape = require("tape")
 const Multicolour = require("../index.js")
 
 // Where we keep the test content.
-const test_content_path = "./test_content/"
+const test_content_path = "./tests/test_content/"
 
-tape("Multicolour initializes with base properties.", test => {
+tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   const multicolour = new Multicolour()
 
   // Has members.
@@ -32,7 +32,7 @@ tape("Multicolour scans for content.", test => {
   const multicolour = new Multicolour({ content: test_content_path })
 
   // Register a fake server generator.
-  console.log(multicolour.scan().next())
+  multicolour.scan()
 
   /* eslint-disable */
   test.notEqual(multicolour.request("blueprints"), undefined, "Blueprints should exist.")
@@ -54,8 +54,8 @@ tape("Multicolour can register generators.", test => {
   multicolour.use(server_plugin)
 
   /* eslint-disable */
-  test.notEqual(multicolour.request("server"), undefined, "Servers should not be undefined.")
-  test.notEqual(multicolour.request("stashes").get(server_plugin.id), undefined, "Should create a stash for the plugin/")
+  test.notEqual(multicolour.request("server"), undefined, "Server should not be undefined.")
+  test.notEqual(multicolour.request("stashes").get(server_plugin.id), undefined, "Should create a stash for the plugin.")
   /* eslint-enable */
 
   // Done and dusted. Go home.
