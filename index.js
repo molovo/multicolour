@@ -47,7 +47,10 @@ class multicolour {
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
 
+    // Set the blueprints property.
     this.__props.set("blueprints", files)
+
+    // Set up a reply to the server object.
     this.reply("blueprints", this.__props.get("blueprints"))
 
     return this
@@ -76,8 +79,11 @@ class multicolour {
       this.__props.set("server", configuration.generator(
         this.request("blueprints"),
         this.request("config").get("api"),
-        this.request("stashes")
+        this.request("stashes").get(configuration.id)
       ))
+
+      // Reply with the server when requested.
+      this.reply("server", this.__props.get("server"))
 
       break
 
@@ -86,6 +92,11 @@ class multicolour {
     }
 
     return this
+  }
+
+  start() {
+    // Start the API server
+    this.request("server").start()
   }
 
   /**

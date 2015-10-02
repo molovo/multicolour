@@ -17,6 +17,7 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   test.equals(!!multicolour.destroy, true, "Has destroy function.")
   test.equals(!!multicolour.use, true, "Has use function.")
   test.equals(!!multicolour.scan, true, "Has scan function.")
+  test.equals(!!multicolour.start, true, "Has start function.")
 
   // Replies with values.
   test.equals(!!multicolour.request("cli"), true, "Does reply with CLI member.")
@@ -28,7 +29,7 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   test.end()
 })
 
-tape("Multicolour scans for content.", test => {
+tape("Multicolour scans for blueprints.", test => {
   const multicolour = new Multicolour({ content: test_content_path })
 
   // Register a fake server generator.
@@ -42,19 +43,34 @@ tape("Multicolour scans for content.", test => {
   test.end()
 })
 
-tape("Multicolour can register generators.", test => {
-  const multicolour = new Multicolour()
+tape("Multicolour can register plugins.", test => {
+  const multicolour = new Multicolour({
+    content: test_content_path,
+    api: {
+      host: "localhost",
+      port: 1811,
+      routes: {
+        cors: true
+      },
+      router: {
+        stripTrailingSlash: true
+      }
+    }
+  })
+
   const server_plugin = {
     type: multicolour.request("types").SERVER_GENERATOR,
     id: multicolour.request("uuid"),
-    generator: (blueprints, api_config, stash) => stash
+    generator: (blueprints, api_config, stash) => api_config
   }
 
   // Register a fake server generator.
-  multicolour.use(server_plugin)
+  multicolour
+    .scan()
+    .use(server_plugin)
 
   /* eslint-disable */
-  test.notEqual(multicolour.request("server"), undefined, "Server should not be undefined.")
+  test.notEqual(multicolour.request("server"), undefined, "Should register server plugin.")
   test.notEqual(multicolour.request("stashes").get(server_plugin.id), undefined, "Should create a stash for the plugin.")
   /* eslint-enable */
 
