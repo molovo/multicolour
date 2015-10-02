@@ -8,13 +8,14 @@
     "multicolour": "start.js"
   },
   "scripts": {
-    "test": "tape tests/**/*.js | node_modules/.bin/tap-spec"
+    "test": "tape tests/*.js | tap-spec",
+    "test-coverage": "istanbul cover tests/*.js --report lcovonly | tap-spec"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/newworldcode/multicolour.git"
   },
-  "author": "newworldcode",
+  "author": "newworldcode <hello@newworld.codes> (https://newworld.codes)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/newworldcode/multicolour/issues"
@@ -22,25 +23,13 @@
   "homepage": "https://github.com/newworldcode/multicolour#readme",
   "dependencies": {
     "@newworldcode/talkie": "^1.0.0",
-    "bell": "^4.0.0",
     "cli-color": "^1.0.0",
     "commander": "^2.8.1",
-    "fs-extra": "^0.24.0",
-    "glob": "^5.0.12",
-    "hapi": "^9.0.0",
-    "hapi-auth-jwt2": "^5.0.7",
-    "hapi-swagger": "^1.1.0",
-    "inert": "^3.0.1",
     "inquirer": "^0.10.0",
-    "joi": "^6.7.0",
-    "jsonwebtoken": "^5.0.4",
-    "pluralize": "^1.1.4",
     "replacestream": "^4.0.0",
-    "sorrow": "^2.0.10",
     "swig": "^1.4.2",
     "uuid": "^2.0.1",
     "validate-npm-package-name": "^2.2.2",
-    "vision": "^3.0.0",
     "waterline": "^0.10.23"
   },
   "engine-strict": true,
@@ -50,6 +39,8 @@
   },
   "devDependencies": {
     "eslint": "^1.5.1",
+    "istanbul": "^0.3.21",
+    "tap-spec": "^4.1.0",
     "tape": "^4.2.0"
   },
   "peerDependencies": {
