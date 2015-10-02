@@ -1,6 +1,6 @@
 # Multicolour
 [![Build Status](https://travis-ci.org/newworldcode/multicolour.svg)](https://travis-ci.org/newworldcode/multicolour)
-[![Coverage Status](https://coveralls.io/repos/newworldcode/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/newworldcode/multicolour?branch=master)
+[![Coverage Status](https://coveralls.io/repos/newworldcode/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/newworldcode/multicolour?branch=dev)
 
 The overall mission of this library is to make mundane CRUD API generation fast with a single page app frontend, easy and cost efficient by simplifying the work involved in creating RESTful services and REST based apps.
 
