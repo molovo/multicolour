@@ -2,7 +2,6 @@
 
 // Get the testing library.
 const tape = require("tape")
-const Promise = require("bluebird")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
