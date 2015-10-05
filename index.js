@@ -152,7 +152,7 @@ class multicolour {
         .start(callback)
     }
     else {
-      callback(new ReferenceError("No server to start. Ignoring."))
+      callback && callback(new ReferenceError("No server to start. Ignoring."))
     }
 
     // Emit an event to say the server has started.
@@ -177,7 +177,7 @@ class multicolour {
         .stop(callback)
     }
     else {
-      callback(new ReferenceError("No server to shutdown. Ignoring."))
+      callback && callback(new ReferenceError("No server to shutdown. Ignoring."))
     }
 
     // Emit an event to say the server has stopped.
