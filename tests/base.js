@@ -11,7 +11,7 @@ const test_content_path = "./tests/test_content/"
 
 // Used in a few tests below.
 class Server {
-  constructor() {}
+  constructor() { }
   warn() { return this }
   start(callback) { callback(); return this }
   stop(callback) { callback(); return this }
@@ -21,7 +21,6 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   const multicolour = new Multicolour()
 
   // Has members.
-  test.equals(!!multicolour.__props, true, "Has __props member.")
   test.equals(!!multicolour.request, true, "Has request function.")
   test.equals(!!multicolour.reply, true, "Has reply function.")
   test.equals(!!multicolour.use, true, "Has use function.")
@@ -31,9 +30,9 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
 
   // Replies with values.
   test.equals(!!multicolour.new("cli"), true, "Does reply with CLI member.")
-  test.equals(!!multicolour.request("config"), true, "Does reply with config member.")
+  test.equals(!!multicolour.get("config"), true, "Does reply with config member.")
   test.equals(!!multicolour.request("uuid"), true, "Does reply with uuid.")
-  test.equals(!!multicolour.request("types"), true, "Does reply with types dictionary.")
+  test.equals(!!multicolour.get("types"), true, "Does reply with types dictionary.")
 
   // Reset multicolour.
   multicolour.reset()
@@ -44,13 +43,13 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
 
 tape("Multicolour configures itself.", test => {
   // Load from a file.
-  const multicolour = new Multicolour().from_config_file_path("./tests/test_content/config.js")
+  const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
 
   // Get the config object to check a few things were done right.
-  const config = multicolour.request("config")
+  const config = multicolour.get("config")
 
-  test.notEqual(typeof multicolour.request("config"), "undefined", "Config should exist.")
-  test.throws(() => multicolour.from_config_file_path(), ReferenceError, "Should throw without path argument")
+  test.notEqual(typeof multicolour.get("config"), "undefined", "Config should exist.")
+  test.throws(() => Multicolour.new_from_config_file_path(), ReferenceError, "Should throw without path argument")
   test.notEqual(typeof config.get("content"), "undefined", "Config should have a content property.")
 
   // Reset multicolour.
@@ -62,10 +61,10 @@ tape("Multicolour configures itself.", test => {
 
 tape("Multicolour can register plugins.", test => {
   // Load from a file.
-  const multicolour = new Multicolour().from_config_file_path("./tests/test_content/config.js")
+  const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
 
   const server_plugin = {
-    type: multicolour.request("types").SERVER_GENERATOR,
+    type: multicolour.get("types").SERVER_GENERATOR,
     generator: Server
   }
 
@@ -76,8 +75,8 @@ tape("Multicolour can register plugins.", test => {
     .scan()
     .use(server_plugin)
 
-  test.notEqual(typeof multicolour.request("server"), "undefined", "Should register server plugin.")
-  test.notEqual(typeof multicolour.request("stashes").get(multicolour.request("server").request("id")), "undefined", "Should create a stash for the plugin.")
+  test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
+  test.notEqual(typeof multicolour.get("stashes").get(multicolour.get("server").request("id")), "undefined", "Should create a stash for the plugin.")
 
   // Reset multicolour.
   multicolour.reset()
@@ -92,7 +91,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
   // Scan for content in the above defined content directory.
   multicolour.scan()
 
-  test.notEqual(typeof multicolour.request("blueprints"), "undefined", "Blueprints should exist.")
+  test.notEqual(typeof multicolour.get("blueprints"), "undefined", "Blueprints should exist.")
 
   // Reset multicolour.
   multicolour.reset()
@@ -114,13 +113,12 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
   test.plan(4)
 
   // Create an instance of Multicolour.
-  const multicolour = new Multicolour()
-    .from_config_file_path("./tests/test_content/config.js")
+  const multicolour = Multicolour
+    .new_from_config_file_path("./tests/test_content/config.js")
     .scan()
 
   const server_plugin = {
-    type: multicolour.request("types").SERVER_GENERATOR,
-    id: multicolour.request("uuid"),
+    type: multicolour.get("types").SERVER_GENERATOR,
     generator: Server
   }
 

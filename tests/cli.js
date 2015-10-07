@@ -55,8 +55,7 @@ tape("CLI start and stop", test => {
   // Create an instance of multicolour.
   const multicolour = new Multicolour({ content: test_content_path })
   const server_plugin = {
-    type: multicolour.request("types").SERVER_GENERATOR,
-    id: multicolour.request("uuid"),
+    type: multicolour.get("types").SERVER_GENERATOR,
     generator: Server
   }
 

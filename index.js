@@ -6,7 +6,7 @@ const Talkie = require("@newworldcode/talkie")
 // Get some bits we need to instantiate later.
 const Config = require("./lib/config")
 
-class multicolour {
+class multicolour extends Map {
   /**
    * Create some internal properties and load in
    * the CLI and configuration.
@@ -15,52 +15,53 @@ class multicolour {
    * @return {void}
    */
   constructor(config) {
+    // Construct.
+    super()
+
     // Set raw properties on Multicolour.
-    this.__props = new Map([
-      ["cli", require("./lib/cli")],
-      ["config", new Config(config)]
-    ])
+    this
+      // Get the CLI.
+      .set("cli", require("./lib/cli"))
+
+      // Set the configuration for this instance.
+      .set("config", config instanceof Config ? config : new Config(config))
+
+      // Some static types used throughout Multicolour.
+      .set("types", require("./lib/consts"))
+
+      // Create a stash.
+      .set("stashes", new Map())
 
     // Reply to requests with the right modules.
     this
       // Get the CLI.
-      .reply("cli", this.__props.get("cli"))
-
-      // Configuration for multicolour.
-      .reply("config", this.__props.get("config"))
+      .reply("cli", this.get("cli"))
 
       // Generate a unique id.
       .reply("uuid", () => require("uuid").v4())
-
-      // Some static types used throughout Multicolour.
-      .reply("types", require("./lib/consts"))
-
-      // Create a stash.
-      .reply("stashes", new Map())
   }
 
   /**
    * Update the config for this instance of Multicolour
    * based on the contents of a config file.
    * @param  {String} config_location to load config from.
-   * @return {multicolour} Object for chaining.
+   * @return {multicolour} Newly created instance of Multicolour.
    */
-  from_config_file_path(config_location) {
+  static new_from_config_file_path(config_location) {
     // Check we got a config location.
     if (!config_location || config_location === "") {
       throw new ReferenceError("Config location must be a (string) value")
     }
 
     // Create a new configuration object from the file path.
-    const conf = this.request("config").new_from_file(config_location)
+    const conf = Config.new_from_file(config_location)
 
-    // Set the config property based on a new config from a file.
-    this.__props.set("config", conf)
+    // Return a new instance of Multicolour.
+    return new multicolour(conf)
+  }
 
-    // Update the reply reference.
-    this.reply("config", this.__props.get("config"))
-
-    return this
+  reset_from_config_path(config_location) {
+    return multicolour.new_from_config_file_path(config_location)
   }
 
   /**
@@ -82,7 +83,7 @@ class multicolour {
    */
   scan() {
     // Get our content location.
-    const content = this.request("config").get("content")
+    const content = this.get("config").get("content")
 
     if (!content) {
       throw new ReferenceError("Content is not set in the config. Not scanning.")
@@ -94,10 +95,7 @@ class multicolour {
       .map(file => `${content}/blueprints/${file}`)
 
     // Set the blueprints property.
-    this.__props.set("blueprints", files)
-
-    // Set up a reply to the server object.
-    this.reply("blueprints", this.__props.get("blueprints"))
+    this.set("blueprints", files)
 
     // Set up the DB.
     this.use(require("./lib/db")(this))
@@ -112,23 +110,23 @@ class multicolour {
    */
   use(configuration) {
     // Get our types so we can switch the arg.
-    const types = this.request("types")
+    const types = this.get("types")
     const plugin_id = this.request("uuid")
 
     // Check we can generate anything at all.
-    if (!this.request("blueprints")) {
+    if (!this.get("blueprints")) {
       throw new ReferenceError("Cannot generate without first scanning.")
     }
 
     // Creat a new stash for the plugin.
-    this.request("stashes").set(plugin_id, new Map())
+    this.get("stashes").set(plugin_id, new Map())
 
     // Extend the plugin to have bits and bobs it will likely need.
     Talkie()
       .extend(configuration.generator)
       .reply("host", this)
       .reply("id", plugin_id)
-      .reply("stash", this.request("stashes").get(plugin_id))
+      .reply("stash", this.get("stashes").get(plugin_id))
 
     // Create the plugin.
     const plugin = new configuration.generator()
@@ -137,19 +135,12 @@ class multicolour {
     switch (configuration.type) {
     case types.SERVER_GENERATOR:
       // Set the server and run the generator.
-      this.__props.set("server", plugin)
-
-      // Reply with the server when requested.
-      this.reply("server", this.__props.get("server"))
-
+      this.set("server", plugin)
       break
 
     case types.DATABASE_GENERATOR:
       // Set the server and run the generator.
-      this.__props.set("database", plugin)
-
-      // Reply with the database when requested.
-      this.reply("database", this.__props.get("database"))
+      this.set("database", plugin)
       break
     }
 
@@ -163,12 +154,12 @@ class multicolour {
    */
   start(callback) {
     // Get the server (undefined if it doesn't exist.)
-    const server = this.request("server")
+    const server = this.get("server")
 
     if (server) {
       // Start the API server
       server
-        .warn("message", this.request("types").SERVER_BOOTUP)
+        .warn("message", this.get("types").SERVER_BOOTUP)
         .start(callback)
 
       // Emit an event to say the server has started.
@@ -188,12 +179,12 @@ class multicolour {
    */
   stop(callback) {
     // Get the server (undefined if it doesn't exist.)
-    const server = this.request("server")
+    const server = this.get("server")
 
     // Get the servers so we can gracefully shutdown.
     if (server) {
       server
-        .warn("message", this.request("types").SERVER_SHUTDOWN)
+        .warn("message", this.get("types").SERVER_SHUTDOWN)
         .stop(callback)
 
       // Emit an event to say the server has stopped.
