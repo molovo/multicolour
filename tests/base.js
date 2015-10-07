@@ -66,7 +66,6 @@ tape("Multicolour can register plugins.", test => {
 
   const server_plugin = {
     type: multicolour.request("types").SERVER_GENERATOR,
-    id: multicolour.request("uuid"),
     generator: Server
   }
 
@@ -78,7 +77,7 @@ tape("Multicolour can register plugins.", test => {
     .use(server_plugin)
 
   test.notEqual(typeof multicolour.request("server"), "undefined", "Should register server plugin.")
-  test.notEqual(typeof multicolour.request("stashes").get(server_plugin.id), "undefined", "Should create a stash for the plugin.")
+  test.notEqual(typeof multicolour.request("stashes").get(multicolour.request("server").request("id")), "undefined", "Should create a stash for the plugin.")
 
   // Reset multicolour.
   multicolour.reset()

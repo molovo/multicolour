@@ -113,6 +113,7 @@ class multicolour {
   use(configuration) {
     // Get our types so we can switch the arg.
     const types = this.request("types")
+    const plugin_id = this.request("uuid")
 
     // Check we can generate anything at all.
     if (!this.request("blueprints")) {
@@ -120,14 +121,14 @@ class multicolour {
     }
 
     // Creat a new stash for the plugin.
-    this.request("stashes").set(configuration.id, new Map())
+    this.request("stashes").set(plugin_id, new Map())
 
     // Extend the plugin to have bits and bobs it will likely need.
     Talkie()
       .extend(configuration.generator)
       .reply("host", this)
-      .reply("id", this.request("uuid"))
-      .reply("stash", this.request("stashes").get(configuration.id))
+      .reply("id", plugin_id)
+      .reply("stash", this.request("stashes").get(plugin_id))
 
     // Create the plugin.
     const plugin = new configuration.generator()
