@@ -91,6 +91,7 @@ class multicolour {
 
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
+      .map(file => `${content}/blueprints/${file}`)
 
     // Set the blueprints property.
     this.__props.set("blueprints", files)
@@ -110,26 +111,44 @@ class multicolour {
     // Get our types so we can switch the arg.
     const types = this.request("types")
 
+    // Check we can generate anything at all.
     if (!this.request("blueprints")) {
       throw new ReferenceError("Cannot generate without first scanning.")
     }
 
+    // Creat a new stash for the plugin.
+    this.request("stashes").set(configuration.id, new Stash())
+
+    // Extend the plugin to have bits and bobsit will likely need.
+    Talkie()
+      .extend(configuration.generator)
+      .reply("id", this.request("uuid"))
+      .reply("stash", this.request("stashes").get(configuration.id))
+      .reply("scope", this)
+
+    // Create the plugin.
+    const plugin = new configuration.generator(
+      this.request("blueprints"),
+      this.request("config").get(configuration.config_key) || {}
+    )
+
     // Switch the type in the configuration
     switch (configuration.type) {
     case types.SERVER_GENERATOR:
-      // Creat a new server stash.
-      this.request("stashes").set(configuration.id, new Stash())
-
       // Set the server and run the generator.
-      this.__props.set("server", new configuration.generator(
-        this.request("blueprints"),
-        this.request("config").get("api") || {},
-        this.request("stashes").get(configuration.id)
-      ))
+      this.__props.set("server", plugin)
 
       // Reply with the server when requested.
       this.reply("server", this.__props.get("server"))
 
+      break
+
+    case types.DATABASE_GENERATOR:
+      // Set the server and run the generator.
+      this.__props.set("database", plugin)
+
+      // Reply with the database when requested.
+      this.reply("database", this.__props.get("database"))
       break
     }
 
@@ -138,10 +157,13 @@ class multicolour {
 
   /**
    * Start the various services behind Multicolour.
-   * @param {Function} callback to execute when server has started.
+   * @param {Function} callback to execute when server has started with error argument.
    * @return {multicolour} object for chaining.
    */
   start(callback) {
+    // Set up the DB.
+    this.use(require("./lib/db")(this))
+
     // Get the server (undefined if it doesn't exist.)
     const server = this.request("server")
 
@@ -150,20 +172,20 @@ class multicolour {
       server
         .warn("message", this.request("types").SERVER_BOOTUP)
         .start(callback)
+
+      // Emit an event to say the server has started.
+      this.trigger("server_starting", server)
     }
     else {
       callback && callback(new ReferenceError("No server to start. Ignoring."))
     }
-
-    // Emit an event to say the server has started.
-    this.trigger("server_starting", server)
 
     return this
   }
 
   /**
    * Destroy all resources gracefully and terminate Multicolour.
-   * @param {Function} callback to execute when server has shutdown.
+   * @param {Function} callback to execute when server has shutdown with error argument.
    * @return {multicolour} Object for chaining.
    */
   stop(callback) {
@@ -175,13 +197,13 @@ class multicolour {
       server
         .warn("message", this.request("types").SERVER_SHUTDOWN)
         .stop(callback)
+
+      // Emit an event to say the server has stopped.
+      this.trigger("server_stopping", server)
     }
     else {
       callback && callback(new ReferenceError("No server to shutdown. Ignoring."))
     }
-
-    // Emit an event to say the server has stopped.
-    this.trigger("server_stopping", server)
 
     return this
   }
