@@ -5,7 +5,6 @@ const Talkie = require("@newworldcode/talkie")
 
 // Get some bits we need to instantiate later.
 const Config = require("./lib/config")
-const Stash = require("./lib/stash")
 
 class multicolour {
   /**
@@ -91,6 +90,7 @@ class multicolour {
 
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
+      // Create a full path from it.
       .map(file => `${content}/blueprints/${file}`)
 
     // Set the blueprints property.
@@ -98,6 +98,9 @@ class multicolour {
 
     // Set up a reply to the server object.
     this.reply("blueprints", this.__props.get("blueprints"))
+
+    // Set up the DB.
+    this.use(require("./lib/db")(this))
 
     return this
   }
@@ -117,20 +120,17 @@ class multicolour {
     }
 
     // Creat a new stash for the plugin.
-    this.request("stashes").set(configuration.id, new Stash())
+    this.request("stashes").set(configuration.id, new Map())
 
-    // Extend the plugin to have bits and bobsit will likely need.
+    // Extend the plugin to have bits and bobs it will likely need.
     Talkie()
       .extend(configuration.generator)
+      .reply("host", this)
       .reply("id", this.request("uuid"))
       .reply("stash", this.request("stashes").get(configuration.id))
-      .reply("scope", this)
 
     // Create the plugin.
-    const plugin = new configuration.generator(
-      this.request("blueprints"),
-      this.request("config").get(configuration.config_key) || {}
-    )
+    const plugin = new configuration.generator()
 
     // Switch the type in the configuration
     switch (configuration.type) {
@@ -161,9 +161,6 @@ class multicolour {
    * @return {multicolour} object for chaining.
    */
   start(callback) {
-    // Set up the DB.
-    this.use(require("./lib/db")(this))
-
     // Get the server (undefined if it doesn't exist.)
     const server = this.request("server")
 

@@ -11,7 +11,7 @@ const test_content_path = "./tests/test_content/"
 
 // Used in a few tests below.
 class Server {
-  constructor(blueprints, api_config, stash) {}
+  constructor() {}
   warn() { return this }
   start(callback) { callback(); return this }
   stop(callback) { callback(); return this }
