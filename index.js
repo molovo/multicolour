@@ -32,6 +32,9 @@ class multicolour extends Map {
       // Create a stash.
       .set("stashes", new Map())
 
+      // Get the package as well.
+      .set("package", require("../../package.json"))
+
     // Reply to requests with the right modules.
     this
       // Get the CLI.
@@ -142,6 +145,9 @@ class multicolour extends Map {
       // Set the server and run the generator.
       this.set("database", plugin)
       break
+
+    default:
+      throw new TypeError("Plugin not a recognised type.")
     }
 
     return this
@@ -153,21 +159,21 @@ class multicolour extends Map {
    * @return {multicolour} object for chaining.
    */
   start(callback) {
-    // Get the server (undefined if it doesn't exist.)
+    // Get the server & database.
     const server = this.get("server")
+    const database = this.get("database")
 
-    if (server) {
+    // The database start is async, wait for that first.
+    database.start(err => {
+      if (err) {
+        throw err
+      }
+
       // Start the API server
       server
         .warn("message", this.get("types").SERVER_BOOTUP)
         .start(callback)
-
-      // Emit an event to say the server has started.
-      this.trigger("server_starting", server)
-    }
-    else {
-      callback && callback(new ReferenceError("No server to start. Ignoring."))
-    }
+    })
 
     return this
   }
