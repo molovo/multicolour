@@ -32,8 +32,11 @@ class multicolour extends Map {
       // Create a stash.
       .set("stashes", new Map())
 
-      // Get the package as well.
-      .set("package", require("../../package.json"))
+    // Get the package as well, if it exists.
+    if (!require("fs").existsSync("../../package.json")) {
+      /* istanbul ignore next: Untestable */
+      this.set("package", require("../../package.json"))
+    }
 
     // Reply to requests with the right modules.
     this
