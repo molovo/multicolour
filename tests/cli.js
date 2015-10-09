@@ -4,7 +4,7 @@
 const tape = require("tape")
 
 // Get Multicolour.
-const Multicolour = require("../index.js")
+const Multicolour = require("../index.js", { bash: true })
 
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"
@@ -30,6 +30,9 @@ tape("CLI initializes an interface", test => {
   test.deepEquals(cli.__scope, multicolour, "Scope is set to the instance of multicolour instantiated.")
   test.notEquals(typeof cli.program, "undefined", "cli instance has a program.")
 
+  // Reset Multicolour.
+  multicolour.reset()
+
   test.end()
 })
 
@@ -37,7 +40,7 @@ tape("CLI scope should change when using `.scope()`", test => {
   test.plan(2)
 
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({ content: test_content_path })
+  const multicolour = Multicolour.new_from_config_file_path(`${test_content_path}/config.js`)
   const alt_multicolour = new Multicolour()
 
   // Get the CLI from it.
@@ -52,8 +55,10 @@ tape("CLI scope should change when using `.scope()`", test => {
 })
 
 tape("CLI start and stop", test => {
+  test.plan(2)
+
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({ content: test_content_path })
+  const multicolour = Multicolour.new_from_config_file_path(`${test_content_path}/config.js`)
   const server_plugin = {
     type: multicolour.get("types").SERVER_GENERATOR,
     generator: Server
@@ -69,21 +74,24 @@ tape("CLI start and stop", test => {
   // Get the CLI
   let cli = multicolour.cli()
 
-  // Don't ever do this, just for tests.
+  // Don't ever do this, just for edge case testing.
   delete cli.__scope
 
-  test.throws(() => cli.start(), ReferenceError, "Start should throw when no __scope present and server start fired.")
-  test.throws(() => cli.stop(), ReferenceError, "Stop should throw when no __scope present and server stop fired.")
+  test.throws(() => cli.start(err => {throw err}), ReferenceError, "Start should throw when no __scope present and server start fired.")
+  test.throws(() => cli.stop(err => {throw err}), ReferenceError, "Stop should throw when no __scope present and server stop fired.")
 
   // Re-set the scope.
   cli = cli.scope(multicolour)
 
+  multicolour.get("config").get("db").adapters = {
+    production: {},
+    development: {}
+  }
+
   // Make sure nothing throws here.
-  cli.start(cli.program, { config: `${test_content_path}/config.js` })
+  cli.start(cli.program, { config: `${test_content_path}/config.js` }, err => {throw err})
   cli.stop()
 
   // Reset.
   multicolour.reset()
-
-  test.end()
 })

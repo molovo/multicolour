@@ -60,6 +60,8 @@ tape("Multicolour configures itself.", test => {
 })
 
 tape("Multicolour can register plugins.", test => {
+  test.plan(4)
+
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
 
@@ -75,14 +77,12 @@ tape("Multicolour can register plugins.", test => {
     .scan()
     .use(server_plugin)
 
+  test.throws(() => multicolour.use({ type: "random", generator: class a{} }), TypeError, "Should throw when unrecognised plugin type registered.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
   test.notEqual(typeof multicolour.get("stashes").get(multicolour.get("server").request("id")), "undefined", "Should create a stash for the plugin.")
 
   // Reset multicolour.
   multicolour.reset()
-
-  // Done and dusted. Go home.
-  test.end()
 })
 
 tape("Multicolour scans for and finds blueprints.", test => {
@@ -109,8 +109,8 @@ tape("Multicolour scans for and finds blueprints.", test => {
 })
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
-  // Expect 4 tests.
-  test.plan(4)
+  // Expect N tests.
+  test.plan(7)
 
   // Create an instance of Multicolour.
   const multicolour = Multicolour
@@ -123,19 +123,30 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
   }
 
   // Check some sanity stuff.
-  multicolour.start(error => test.throws(() => { throw error }, ReferenceError, "Start throws a ReferenceError when server generator not configured correctly."))
-  multicolour.stop(error => test.throws(() => { throw error }, ReferenceError, "Stop throws a ReferenceError when server generator not configured correctly."))
+  test.throws(() => multicolour.start(), ReferenceError, "Start throws a ReferenceError when no server configured without callback.")
+  test.throws(() => multicolour.start(error => {throw error}), ReferenceError, "Start callback gets a ReferenceError when no server configured.")
+  test.throws(() => multicolour.stop(error => {throw error}), ReferenceError, "Stop throws a ReferenceError when server generator not configured correctly.")
+
+  // Fluff config for tests.
+  multicolour.get("config").get("db").adapters = {
+    production: {},
+    development: {}
+  }
 
   // Register the plugin.
   multicolour.use(server_plugin)
 
   // Check when a server is configured properly that error is non-existent.
-  multicolour.start(error => test.equal(typeof error, "undefined", "Error not set when starting properly configured server plugin."))
-  multicolour.stop(error => test.equal(typeof error, "undefined", "Error not set when stopping properly configured server plugin."))
+  multicolour.start(err => test.equal(typeof err, "undefined", "Error not set when starting properly configured server plugin."))
+  multicolour.stop(err => test.equal(typeof err, "undefined", "Error not set when stopping properly configured server plugin."))
+
+  // Fluff the config for the tests.
+  delete multicolour.get("config").get("db").adapters
+
+  // Check the db adapter throws when improperly configured.
+  test.throws(() => multicolour.start(), Error, "Improperly configured DB throws on start without callback.")
+  test.throws(() => multicolour.start(err => {throw err}), Error, "Improperly configured DB throws on start with callback.")
 
   // Reset multicolour.
   multicolour.reset()
-
-  // Done and dusted. Go home.
-  test.end()
 })

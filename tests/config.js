@@ -35,5 +35,8 @@ tape("Config can `set` and `get`", test => {
   config.set("test", 1)
   test.equal(config.get("test"), 1, "config.get('test') should be 1")
 
+  // Reset Multicolour.
+  multicolour.reset()
+
   test.end()
 })

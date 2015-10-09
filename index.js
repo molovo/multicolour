@@ -64,7 +64,8 @@ class multicolour extends Map {
   }
 
   reset_from_config_path(config_location) {
-    return multicolour.new_from_config_file_path(config_location)
+    this.set("config", Config.new_from_file(config_location))
+    return this
   }
 
   /**
@@ -137,12 +138,10 @@ class multicolour extends Map {
     // Switch the type in the configuration
     switch (configuration.type) {
     case types.SERVER_GENERATOR:
-      // Set the server and run the generator.
       this.set("server", plugin)
       break
 
     case types.DATABASE_GENERATOR:
-      // Set the server and run the generator.
       this.set("database", plugin)
       break
 
@@ -163,15 +162,35 @@ class multicolour extends Map {
     const server = this.get("server")
     const database = this.get("database")
 
-    // The database start is async, wait for that first.
-    database.start(err => {
-      if (err) {
+    if (!server) {
+      const err = new ReferenceError("No server configured, not starting.")
+      if (!callback) {
         throw err
       }
+      else {
+        return callback(err)
+      }
+    }
+
+    // The database start is async, wait for that first.
+    database.start((err, models) => {
+      if (err) {
+        if (!callback) {
+          throw err
+        }
+        else {
+          return callback(err)
+        }
+      }
+
+      database.set("models", models)
+
+      // Emit an event to say the server has stopped.
+      this.trigger("server_starting", server)
 
       // Start the API server
       server
-        .warn("message", this.get("types").SERVER_BOOTUP)
+        .warn("command", this.get("types").SERVER_BOOTUP)
         .start(callback)
     })
 
@@ -189,12 +208,12 @@ class multicolour extends Map {
 
     // Get the servers so we can gracefully shutdown.
     if (server) {
-      server
-        .warn("message", this.get("types").SERVER_SHUTDOWN)
-        .stop(callback)
-
       // Emit an event to say the server has stopped.
       this.trigger("server_stopping", server)
+
+      server
+        .warn("command", this.get("types").SERVER_SHUTDOWN)
+        .stop(callback)
     }
     else {
       callback && callback(new ReferenceError("No server to shutdown. Ignoring."))

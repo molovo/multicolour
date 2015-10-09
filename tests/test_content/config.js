@@ -21,7 +21,7 @@ module.exports = {
     }
   },
 
-  // Set up our desired database adapter (defaults to Mongo)
+  // Set up our desired database adapter
   db: {
     adapters: {
       development: null,
