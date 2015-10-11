@@ -32,10 +32,12 @@ class multicolour extends Map {
       // Create a stash.
       .set("stashes", new Map())
 
+    const package_path = require("path").resolve("package.json")
+
     // Get the package as well, if it exists.
-    if (require("fs").existsSync(require("path").resolve("package.json"))) {
+    if (require("fs").existsSync(package_path)) {
       /* istanbul ignore next: Untestable */
-      this.set("package", require("../../package.json"))
+      this.set("package", require(package_path))
     }
 
     // Reply to requests with the right modules.
