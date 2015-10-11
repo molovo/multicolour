@@ -32,6 +32,10 @@ class multicolour extends Map {
       // Create a stash.
       .set("stashes", new Map())
 
+      // Set the environment we're in.
+      .set("env", process.env.NODE_ENV || "dev")
+
+    // Where is the package.
     const package_path = require("path").resolve("package.json")
 
     // Get the package as well, if it exists.
