@@ -155,7 +155,7 @@ class multicolour extends Map {
       break
 
     default:
-      throw new TypeError("Plugin not a recognised type.")
+      throw new TypeError(`Plugin not a recognised type, "${configuration.type}" invalid value.`)
     }
 
     return this
