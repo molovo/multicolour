@@ -1,8 +1,0 @@
-web:
-  # Build the Dockerfile.
-  build: .
-  # Expose the ports.
-  ports:
-   - "1811:1811"
-  volumes:
-   - .:/code
