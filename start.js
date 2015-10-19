@@ -1,3 +1,7 @@
-#!/usr/bin/env node --harmony
+#!/usr/bin/env node
 
-require('multicolour')
+// Get Multicolour.
+const Multicolour = require('multicolour')
+
+// Instantiate.
+new Multicolour().cli()

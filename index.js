@@ -1,248 +1,240 @@
-// This is a library that does a heap of
-// stuff for you automatically like generate
-// Waterline collections, Hapi JS routes and
-// Backbone models/collections/routes.
 "use strict"
 
-// Boot up the app.
-const program = require("./lib/cli")
+// Turn objects into message busses.
+const Talkie = require("@newworldcode/talkie")
 
-// If we're not starting the servers, stop here.
-if (program.start) {
+// Get some bits we need to instantiate later.
+const Config = require("./lib/config")
 
-  const path = require("path")
-  const Waterline = require("waterline")
-  const Joi = require("joi")
-  const pluralize = require("pluralize")
-
-  // Get the function templates for our routes.
-  const functions = require("./lib/templates")
-
-  // Get our utility to convert blueprints to joi models.
-  const bp_to_joi = require("./lib/blueprint-to-joi")
-
-  // Get our config.
-  const config = program.config
-
-  // Create an app to put stuff.
-  const App = {
-    config: config,
-
-    // Count the number of endpoints.
-    endpoint_total: 0,
-
-    // Create an instance of Waterline.
-    waterline: new Waterline(),
-
-    // Create a collections set.
-    collections: new Set(),
-
-    // We"ll store the blueprints.
-    blueprints: new Map()
-  }
-
-  // Get the server.
-  App.server = require("./lib/server")(App)
-
+class multicolour extends Map {
   /**
-   * Make the name sane and safe.
+   * Create some internal properties and load in
+   * the CLI and configuration.
    *
-   * @param  {String} name to make safe for a slug.
-   * @return {String} Safe name to use in urls and databases.
+   * @param  {Object} config to start Multicolour with
+   * @return {void}
    */
-  function slugifyUrl(name) {
-    return pluralize(name
-      .toLowerCase()
-      .replace(/\s+/g, "_")
-      .replace(/[^a-z0-9]/g, ""), 1)
-  }
+  constructor(config) {
+    // Construct.
+    super()
 
-  // Start reading the blueprints in.
-  require("glob")(`${App.config.content}/blueprints/**/*.js` || "../../content", (err, files) => {
-    if (err) {
-      throw err
+    // Set raw properties on Multicolour.
+    this
+      // Get the CLI.
+      .set("cli", require("./lib/cli"))
+
+      // Set the configuration for this instance.
+      .set("config", config instanceof Config ? config : new Config(config))
+
+      // Some static types used throughout Multicolour.
+      .set("types", require("./lib/consts"))
+
+      // Create a stash.
+      .set("stashes", new Map())
+
+      // Set the environment we're in.
+      .set("env", process.env.NODE_ENV || "dev")
+
+    // Where is the package.
+    const package_path = require("path").resolve("package.json")
+
+    // Get the package as well, if it exists.
+    if (require("fs").existsSync(package_path)) {
+      /* istanbul ignore next: Untestable */
+      this.set("package", require(package_path))
     }
 
-    // Load the users blueprint.
-    require("./lib/auth/blueprint")(App)
+    // Reply to requests with the right modules.
+    this
+      // Get the CLI.
+      .reply("cli", this.get("cli"))
 
-    files
-      // Fix the paths.
-      .map(file_path => path.resolve(file_path))
+      // Generate a unique id.
+      .reply("uuid", () => require("uuid").v4())
+  }
 
-      // Create the collections and change from file_paths to file_models.
-      .map(file_path => {
-        // Get the model
-        const model = require(file_path)
-        const name = slugifyUrl(model.name || path.basename(file_path, ".js"))
+  /**
+   * Update the config for this instance of Multicolour
+   * based on the contents of a config file.
+   * @param  {String} config_location to load config from.
+   * @return {multicolour} Newly created instance of Multicolour.
+   */
+  static new_from_config_file_path(config_location) {
+    // Check we got a config location.
+    if (!config_location || config_location === "") {
+      throw new ReferenceError("Config location must be a (string) value")
+    }
 
-        // If we have a blueprint, set it up with Waterline.
-        if (model.hasOwnProperty("blueprint")) {
-          // Add the loaded blueprint.
-          App.blueprints.set(name, model)
+    // Create a new configuration object from the file path.
+    const conf = Config.new_from_file(config_location)
 
-          // Create the collection
-          const collection = Waterline.Collection.extend({
-            identity: name,
-            connection: process.env.NODE_ENV || "production",
-            attributes: model.blueprint
-          })
+    // Return a new instance of Multicolour.
+    return new multicolour(conf)
+  }
 
-          // Create the collection.
-          App.collections.add(collection)
+  reset_from_config_path(config_location) {
+    this.set("config", Config.new_from_file(config_location))
+    return this
+  }
 
-          // Load the model.
-          App.waterline.loadCollection(collection)
+  /**
+   * Create and return an instance of the CLI tool
+   * which performs many few tasks, set the scope
+   * of the CLI tool to this currently running instance
+   * by default.
+   * @return {CLI} CLI instance to run commands on.
+   */
+  cli() {
+    return this.new("cli").scope(this)
+  }
+
+  /**
+   * Scan the content directory for content like blueprints,
+   * config files, etc and set the appropriate properties on
+   * this instance of multicolour.
+   * @return {multicolour} object for chaining.
+   */
+  scan() {
+    // Get our content location.
+    const content = this.get("config").get("content")
+
+    if (!content) {
+      throw new ReferenceError("Content is not set in the config. Not scanning.")
+    }
+
+    // Get the file list.
+    const files = require("fs").readdirSync(`${content}/blueprints`)
+      // Create a full path from it.
+      .map(file => `${content}/blueprints/${file}`)
+
+    // Set the blueprints property.
+    this.set("blueprints", files)
+
+    // Set up the DB.
+    this.use(require("./lib/db")(this))
+
+    return this
+  }
+
+  /**
+   * Configure a plugin to run with Multicolour.
+   * @param  {Object} configuration of the plugin.
+   * @return {multicolour} object for chaining.
+   */
+  use(configuration) {
+    // Get our types so we can switch the arg.
+    const types = this.get("types")
+    const plugin_id = this.request("uuid")
+
+    // Check we can generate anything at all.
+    if (!this.get("blueprints")) {
+      throw new ReferenceError("Cannot generate without first scanning.")
+    }
+
+    // Creat a new stash for the plugin.
+    this.get("stashes").set(plugin_id, new Map())
+
+    // Extend the plugin to have bits and bobs it will likely need.
+    Talkie()
+      .extend(configuration.generator)
+      .reply("host", this)
+      .reply("id", plugin_id)
+      .reply("stash", this.get("stashes").get(plugin_id))
+
+    // Create the plugin.
+    const plugin = new configuration.generator()
+
+    // Switch the type in the configuration
+    switch (configuration.type) {
+    case types.SERVER_GENERATOR:
+      this.set("server", plugin)
+      break
+
+    case types.DATABASE_GENERATOR:
+      this.set("database", plugin)
+      break
+
+    default:
+      throw new TypeError(`Plugin not a recognised type, "${configuration.type}" invalid value.`)
+    }
+
+    return this
+  }
+
+  /**
+   * Start the various services behind Multicolour.
+   * @param {Function} callback to execute when server has started with error argument.
+   * @return {multicolour} object for chaining.
+   */
+  start(callback) {
+    // Get the server & database.
+    const server = this.get("server")
+    const database = this.get("database")
+
+    if (!server) {
+      const err = new ReferenceError("No server configured, not starting.")
+      if (!callback) {
+        throw err
+      }
+      else {
+        return callback(err)
+      }
+    }
+
+    // The database start is async, wait for that first.
+    database.start((err, models) => {
+      if (err) {
+        if (!callback) {
+          throw err
         }
-
-        // Keep going.
-        return model
-      })
-
-      // If the model specifies any routes, register them with Hapi.
-      .map(file_model => {
-        if (file_model.hasOwnProperty("routes") && file_model.routes.length > 0) {
-          // Get the length of the routes and add to the endpoint count.
-          App.endpoint_total += file_model.routes.length
-
-          // Register the routes.
-          App.server.route(file_model.routes)
+        else {
+          return callback(err)
         }
-
-        return file_model
-      })
-
-    // Kick off Waterline.
-    App.waterline.initialize(App.config.db, (error, models) => {
-      if (error) {
-        throw error
       }
 
-      // Add the collections to the app for ORM doings.
-      App.models = models.collections
+      database.set("models", models)
 
-      // If we enabled auth, register the plugin
-      // and set up the validateFuncs.
-      if (App.config.auth) {
-        require("./lib/auth")(App)
-      }
+      // Emit an event to say the server has stopped.
+      this.trigger("server_starting", server)
 
-      // Create the routes.
-      for (const model_name in App.models) {
-        // Get the model name.
-        const name = App.models[model_name].adapter.identity
-
-        // Check we're not picking up stuff we shouldn"t,
-        // if we are just continue with the next iteration.
-        if (!App.blueprints.get(model_name)) {
-          continue
-        }
-
-        // Generate a schema to validate payloads against.
-        const joi_schema = bp_to_joi(App.blueprints.get(model_name).blueprint)
-
-        let auth_options = {
-          strategy: App.config.auth ? App.config.auth.provider : false,
-          scope: ["user", "admin"]
-        }
-
-        // If no auth is desired, wipe the options.
-        if (!App.config.auth) {
-          auth_options = false
-        }
-
-        // Route the things.
-        App.server.route([
-          {
-            method: "GET",
-            path: `/${name}/{id?}`,
-            config: {
-              auth: auth_options,
-              handler: functions.get.bind(App.models[model_name]),
-              description: `Get a paginated list of "${name}"`,
-              notes: `Return a list of "${name}" in the database. If an ID is passed, return matching documents.`,
-              tags: ["api", name],
-              validate: {
-                params: Joi.object({
-                  id: Joi.string().optional()
-                })
-              },
-              response: {
-                schema: Joi.array().items(joi_schema.get)
-                  .meta({
-                    className: `Get ${name}`
-                  })
-              }
-            }
-          },
-          {
-            method: "POST",
-            path: `/${name}`,
-            config: {
-              auth: auth_options,
-              handler: functions.create.bind(App.models[model_name]),
-              description: `Create a new ${name}`,
-              notes: `Create a new ${name} with the posted data.`,
-              tags: ["api", name],
-              validate: {
-                payload: joi_schema.post
-              },
-              response: {
-                schema: joi_schema.get.meta({
-                  className: `Create ${name}`
-                })
-              }
-            }
-          },
-          {
-            method: "PUT",
-            path: `/${name}/{id}`,
-            config: {
-              auth: auth_options,
-              handler: functions.update.bind(App.models[model_name]),
-              description: `Update a ${name}`,
-              notes: `Update a ${name} with the posted data.`,
-              tags: ["api", name],
-              validate: {
-                payload: joi_schema.put,
-                params: Joi.object({
-                  id: Joi.string().required()
-                })
-              },
-              response: {
-                schema: Joi.array().items(joi_schema.get).meta({
-                  className: `Update ${name}`
-                })
-              }
-            }
-          },
-          {
-            method: "DELETE",
-            path: `/${name}/{id}`,
-            config: {
-              auth: auth_options,
-              handler: functions.delete.bind(App.models[model_name]),
-              description: `Delete a ${name}`,
-              notes: `Delete a ${name} permanently.`,
-              tags: ["api", name],
-              validate: {
-                params: Joi.object({
-                  id: Joi.string().required()
-                })
-              }
-            }
-          }
-        ])
-
-
-
-        App.endpoint_total += 4
-      }
-
-      // Kick off the http server.
-      App.server.start(() => console.log("Multicolour API running on %s with %s endpoints.", App.server.info.uri, App.endpoint_total))
+      // Start the API server
+      server
+        .warn("command", this.get("types").SERVER_BOOTUP)
+        .start(callback)
     })
-  })
 
-  module.exports = App
+    return this
+  }
+
+  /**
+   * Destroy all resources gracefully and terminate Multicolour.
+   * @param {Function} callback to execute when server has shutdown with error argument.
+   * @return {multicolour} Object for chaining.
+   */
+  stop(callback) {
+    // Get the server (undefined if it doesn't exist.)
+    const server = this.get("server")
+
+    // Get the servers so we can gracefully shutdown.
+    if (server) {
+      // Emit an event to say the server has stopped.
+      this.trigger("server_stopping", server)
+
+      server
+        .warn("command", this.get("types").SERVER_SHUTDOWN)
+        .stop(callback)
+    }
+    else {
+      callback && callback(new ReferenceError("No server to shutdown. Ignoring."))
+    }
+
+    return this
+  }
 }
+
+// Make Multicolour a messaging bus between
+// the various open source projects behind it.
+Talkie().extend(multicolour)
+
+// Export the final Multicolour.
+module.exports = multicolour
