@@ -33,7 +33,7 @@ class multicolour extends Map {
       .set("stashes", new Map())
 
       // Set the environment we're in.
-      .set("env", process.env.NODE_ENV || "dev")
+      .set("env", process.env.NODE_ENV || "development")
 
     // Where is the package.
     const package_path = require("path").resolve("package.json")
@@ -111,7 +111,7 @@ class multicolour extends Map {
     this.set("blueprints", files)
 
     // Set up the DB.
-    this.use(require("./lib/db")(this))
+    this.use(require("./lib/db"))
 
     return this
   }
