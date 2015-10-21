@@ -173,23 +173,14 @@ class multicolour extends Map {
 
     if (!server) {
       const err = new ReferenceError("No server configured, not starting.")
-      if (!callback) {
-        throw err
-      }
-      else {
-        return callback(err)
-      }
+
+      return callback(err)
     }
 
     // The database start is async, wait for that first.
     database.start((err, models) => {
       if (err) {
-        if (!callback) {
-          throw err
-        }
-        else {
-          return callback(err)
-        }
+        return callback(err)
       }
 
       database.set("models", models)

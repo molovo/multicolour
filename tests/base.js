@@ -123,7 +123,7 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
   }
 
   // Check some sanity stuff.
-  test.throws(() => multicolour.start(), ReferenceError, "Start throws a ReferenceError when no server configured without callback.")
+  test.throws(() => multicolour.start(), TypeError, "Start throws a TypeError when no server configured without callback.")
   test.throws(() => multicolour.start(error => {throw error}), ReferenceError, "Start callback gets a ReferenceError when no server configured.")
   test.throws(() => multicolour.stop(error => {throw error}), ReferenceError, "Stop throws a ReferenceError when server generator not configured correctly.")
 
