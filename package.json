@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "tape tests/*.js | tap-spec",
-    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov html | tap-spec",
+    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov html -x cli.js | tap-spec",
     "watch-tests": "nodemon -x \"clear && npm test\""
   },
   "repository": {
