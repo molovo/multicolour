@@ -13,9 +13,10 @@ The overall mission of this library is to make CRUD API generation fast (instant
 
 Start by running `npm i -G multicolour` then you can start your API development with `multicolour init`, in your desired working folder to start the wizard.
 
-Follow the current version milestone task list [here](https://github.com/newworldcode/multicolour/milestones/1.0.0)
+Follow the current version milestone task list [here](https://github.com/newworldcode/multicolour/milestones/1.0.0RC)
 
 Read the [API docs here](https://github.com/newworldcode/multicolour/wiki)
+Get news from [Twitter](https://twitter.com/getmulticolour)
 
 MIT license  
 [Contributors](https://github.com/newworldcode/multicolour/blob/master/CONTRIBUTING.md)
