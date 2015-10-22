@@ -15,7 +15,7 @@ Start by running `npm i -G multicolour` then you can start your API development 
 
 Follow the current version milestone task list [here](https://github.com/newworldcode/multicolour/milestones/1.0.0RC)
 
-Read the [API docs here](https://github.com/newworldcode/multicolour/wiki)
+Read the [API docs here](https://github.com/newworldcode/multicolour/wiki)  
 Get news from [Twitter](https://twitter.com/getmulticolour)
 
 MIT license  
