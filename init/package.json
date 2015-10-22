@@ -1,5 +1,4 @@
 {
-  "name": "{{PROJECT_NAME}}",
   "version": "1.0.0",
   "scripts": {
     "start": "node_modules/.bin/multicolour start"
@@ -9,7 +8,7 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
-    "multicolour": "^0.0.2",
-    "{{DATABASE_REQUIRE}}": "{{DATABASE_VERSION}}"
+    "multicolour": "^0.1.0",
+    "multicolour-server-hapi": "^1.0.0"
   }
 }
