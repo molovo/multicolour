@@ -1,0 +1,28 @@
+{
+  "http": {
+    "api": {
+      "host": "localhost",
+      "port": 1811,
+      "routes": {
+        "cors": true
+      },
+      "router": {
+        "stripTrailingSlash": true
+      }
+    }
+  },
+
+  "db": {
+    "adapters": {
+      "development": null
+    },
+    "connections": {
+      "development": {
+        "adapter": "production",
+        "host": "localhost",
+        "port": 27017,
+        "database": "multicolour"
+      }
+    }
+  }
+}
