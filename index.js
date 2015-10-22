@@ -135,8 +135,7 @@ class multicolour extends Map {
     this.get("stashes").set(plugin_id, new Map())
 
     // Extend the plugin to have bits and bobs it will likely need.
-    Talkie()
-      .extend(configuration.generator)
+    Talkie().extend(configuration.generator)
       .reply("host", this)
       .reply("id", plugin_id)
       .reply("stash", this.get("stashes").get(plugin_id))
@@ -171,6 +170,7 @@ class multicolour extends Map {
     const server = this.get("server")
     const database = this.get("database")
 
+    // Check for a server before trying to start.
     if (!server) {
       const err = new ReferenceError("No server configured, not starting.")
 
@@ -183,6 +183,8 @@ class multicolour extends Map {
         return callback(err)
       }
 
+      // Set the models on the database so we
+      // can access them elsewhere in the codebase.
       database.set("models", models)
 
       // Emit an event to say the server has stopped.
