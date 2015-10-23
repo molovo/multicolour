@@ -85,7 +85,7 @@ class multicolour extends Map {
    * @return {CLI} CLI instance to run commands on.
    */
   cli() {
-    return this.new("cli").scope(this)
+    return this.new("cli").scope(this).parse()
   }
 
   /**
