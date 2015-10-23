@@ -1,14 +1,12 @@
 {
-  "http": {
-    "api": {
-      "host": "localhost",
-      "port": 1811,
-      "routes": {
-        "cors": true
-      },
-      "router": {
-        "stripTrailingSlash": true
-      }
+  "api": {
+    "host": "localhost",
+    "port": 1811,
+    "routes": {
+      "cors": true
+    },
+    "router": {
+      "stripTrailingSlash": true
     }
   },
 
