@@ -72,6 +72,10 @@ class multicolour extends Map {
     return new multicolour(conf)
   }
 
+  /**
+   * Reset the config on this instance of Multicolour.
+   * @param {String} config_location to load config from.
+   */
   reset_from_config_path(config_location) {
     this.set("config", Config.new_from_file(config_location))
     return this
@@ -85,7 +89,9 @@ class multicolour extends Map {
    * @return {CLI} CLI instance to run commands on.
    */
   cli() {
-    return this.new("cli").scope(this).parse()
+    return this.new("cli")
+      .scope(this)
+      .parse()
   }
 
   /**
@@ -172,15 +178,13 @@ class multicolour extends Map {
 
     // Check for a server before trying to start.
     if (!server) {
-      const err = new ReferenceError("No server configured, not starting.")
-
-      return callback(err)
+      throw new ReferenceError("No server configured, not starting.")
     }
 
     // The database start is async, wait for that first.
     database.start((err, models) => {
       if (err) {
-        return callback(err)
+        throw err
       }
 
       // Set the models on the database so we
