@@ -182,14 +182,16 @@ class multicolour extends Map {
     }
 
     // The database start is async, wait for that first.
-    database.start((err, models) => {
+    database.start((err, ontology) => {
       if (err) {
         throw err
       }
 
       // Set the models on the database so we
       // can access them elsewhere in the codebase.
-      database.set("models", models)
+      database
+        .set("models", ontology.collections)
+        .set("connections", ontology.connections)
 
       // Emit an event to say the server has stopped.
       this.trigger("server_starting", server)
