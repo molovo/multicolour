@@ -110,6 +110,9 @@ class multicolour extends Map {
 
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
+      // Delete crap like .DS_Store.
+      .filter(file_name => file_name !== ".DS_Store")
+
       // Create a full path from it.
       .map(file => `${content}/blueprints/${file}`)
 
