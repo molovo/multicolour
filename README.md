@@ -1,8 +1,9 @@
-<a href="https://getmulticolour.com"><img src="https://www.dropbox.com/s/kt9uv5wbswjkvhc/logo.svg?dl=1" width="250"></a>
+<img src="https://www.dropbox.com/s/kt9uv5wbswjkvhc/logo.svg?dl=1" width="250">
 
 # Multicolour
 [![Build Status](https://travis-ci.org/newworldcode/multicolour.svg)](https://travis-ci.org/newworldcode/multicolour)
 [![Coverage Status](https://coveralls.io/repos/newworldcode/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/newworldcode/multicolour?branch=master)
+[![Code Climate](https://codeclimate.com/github/newworldcode/multicolour/badges/gpa.svg)](https://codeclimate.com/github/newworldcode/multicolour)
 [![Dependency Status](https://david-dm.org/newworldcode/multicolour.svg)](https://david-dm.org/newworldcode/multicolour)
 
 Multicolour development is sponsored by: [New World Code](https://newworld.codes/)  
