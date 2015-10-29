@@ -184,6 +184,9 @@ class multicolour extends Map {
       throw new ReferenceError("No server configured, not starting.")
     }
 
+    // Don't limit sockets.
+    require('http').globalAgent.maxSockets = require('https').globalAgent.maxSockets = Infinity
+
     // The database start is async, wait for that first.
     database.start((err, ontology) => {
       if (err) {
