@@ -120,7 +120,9 @@ class multicolour extends Map {
     this.set("blueprints", files)
 
     // Set up the DB.
-    this.use(require("./lib/db"))
+    this
+      .use(require("./lib/storage"))
+      .use(require("./lib/db"))
 
     return this
   }
@@ -160,6 +162,10 @@ class multicolour extends Map {
 
     case types.DATABASE_GENERATOR:
       this.set("database", plugin)
+      break
+
+    case types.STORAGE_PLUGIN:
+      this.reply("storage", plugin)
       break
 
     default:
