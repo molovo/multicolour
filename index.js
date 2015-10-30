@@ -196,6 +196,7 @@ class multicolour extends Map {
     // The database start is async, wait for that first.
     database.start((err, ontology) => {
       if (err) {
+        /* istanbul ignore next: Untestable */
         throw err
       }
 
