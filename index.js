@@ -108,6 +108,7 @@ class multicolour extends Map {
       throw new ReferenceError("Content is not set in the config. Not scanning.")
     }
 
+
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
       // Delete crap like .DS_Store.
@@ -115,6 +116,9 @@ class multicolour extends Map {
 
       // Create a full path from it.
       .map(file => `${content}/blueprints/${file}`)
+
+    // Push our user model to the array of blueprints.
+    files.push(require.resolve(`./lib/user-model`))
 
     // Set the blueprints property.
     this.set("blueprints", files)
