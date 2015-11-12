@@ -1,22 +1,32 @@
 # Change Log
 
-## [Unreleased](https://github.com/newworldcode/multicolour/tree/HEAD)
+## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-12)
+**Implemented enhancements:**
+
+- Add query parameter support to GET requests. [\#22](https://github.com/Multicolour/multicolour/issues/22)
+
+**Fixed bugs:**
+
+- Identity in blueprints not respected [\#21](https://github.com/Multicolour/multicolour/issues/21)
 
 **Closed issues:**
 
-- Add upload storage provider plugin support [\#19](https://github.com/newworldcode/multicolour/issues/19)
-- Create CLI [\#14](https://github.com/newworldcode/multicolour/issues/14)
-- Create Waterline to Joi converter [\#8](https://github.com/newworldcode/multicolour/issues/8)
-- Integrate Swagger for automatic REST docs. [\#7](https://github.com/newworldcode/multicolour/issues/7)
-- `Bell` integration for multiple OAuth authorisation types on REST api. [\#5](https://github.com/newworldcode/multicolour/issues/5)
-- Rainbow blueprint -\> Hapi CRUD route generation. [\#4](https://github.com/newworldcode/multicolour/issues/4)
-- Rainbow blueprint -\> Waterline Collection. [\#3](https://github.com/newworldcode/multicolour/issues/3)
-- Version 1.0 [\#1](https://github.com/newworldcode/multicolour/issues/1)
+- Add upload storage provider plugin support [\#19](https://github.com/Multicolour/multicolour/issues/19)
+- Custom, additional route creation in blueprints. [\#15](https://github.com/Multicolour/multicolour/issues/15)
+- Create CLI [\#14](https://github.com/Multicolour/multicolour/issues/14)
+- Make it all JSON API compliant [\#13](https://github.com/Multicolour/multicolour/issues/13)
+- Paginate GET requests [\#10](https://github.com/Multicolour/multicolour/issues/10)
+- Create Waterline to Joi converter [\#8](https://github.com/Multicolour/multicolour/issues/8)
+- Integrate Swagger for automatic REST docs. [\#7](https://github.com/Multicolour/multicolour/issues/7)
+- `Bell` integration for multiple OAuth authorisation types on REST api. [\#5](https://github.com/Multicolour/multicolour/issues/5)
+- Rainbow blueprint -\> Hapi CRUD route generation. [\#4](https://github.com/Multicolour/multicolour/issues/4)
+- Rainbow blueprint -\> Waterline Collection. [\#3](https://github.com/Multicolour/multicolour/issues/3)
+- Version 1.0 [\#1](https://github.com/Multicolour/multicolour/issues/1)
 
 **Merged pull requests:**
 
-- Add a Gitter chat badge to README.md [\#20](https://github.com/newworldcode/multicolour/pull/20) ([gitter-badger](https://github.com/gitter-badger))
-- Dev [\#2](https://github.com/newworldcode/multicolour/pull/2) ([davemackintosh](https://github.com/davemackintosh))
+- Add a Gitter chat badge to README.md [\#20](https://github.com/Multicolour/multicolour/pull/20) ([gitter-badger](https://github.com/gitter-badger))
+- Dev [\#2](https://github.com/Multicolour/multicolour/pull/2) ([davemackintosh](https://github.com/davemackintosh))
 
 
 
