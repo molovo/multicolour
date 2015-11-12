@@ -50,7 +50,7 @@ class multicolour extends Map {
       .reply("cli", this.get("cli"))
 
       // Generate a unique id.
-      .reply("uuid", () => require("uuid").v4())
+      .reply("new_uuid", () => require("uuid").v4())
   }
 
   /**
@@ -136,10 +136,9 @@ class multicolour extends Map {
    * @param  {Object} configuration of the plugin.
    * @return {multicolour} object for chaining.
    */
-  use(configuration) {
-    // Get our types so we can switch the arg.
-    const types = this.get("types")
-    const plugin_id = this.request("uuid")
+  use(Plugin) {
+    // Get some tools
+    const plugin_id = this.request("new_uuid")
 
     // Check we can generate anything at all.
     if (!this.get("blueprints")) {
