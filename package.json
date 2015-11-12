@@ -1,6 +1,6 @@
 {
   "name": "multicolour",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Generate your API and single page app with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
@@ -10,7 +10,7 @@
   "scripts": {
     "test": "tape tests/*.js | tap-spec",
     "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov html -x cli.js | tap-spec",
-    "changelog": "github_changelog_generator -u newworldcode -p multicolour"
+    "changelog": "github_changelog_generator -u Multicolour -p multicolour"
   },
   "repository": {
     "type": "git",
