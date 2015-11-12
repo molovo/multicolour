@@ -108,7 +108,6 @@ class multicolour extends Map {
       throw new ReferenceError("Content is not set in the config. Not scanning.")
     }
 
-
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
       // Delete crap like .DS_Store.
@@ -145,35 +144,20 @@ class multicolour extends Map {
       throw new ReferenceError("Cannot generate without first scanning.")
     }
 
-    // Creat a new stash for the plugin.
+    // Create a new stash for the plugin.
     this.get("stashes").set(plugin_id, new Map())
 
     // Extend the plugin to have bits and bobs it will likely need.
-    Talkie().extend(configuration.generator)
+    Talkie().extend(Plugin)
       .reply("host", this)
       .reply("id", plugin_id)
       .reply("stash", this.get("stashes").get(plugin_id))
 
     // Create the plugin.
-    const plugin = new configuration.generator()
+    const plugin = new Plugin()
 
-    // Switch the type in the configuration
-    switch (configuration.type) {
-    case types.SERVER_GENERATOR:
-      this.set("server", plugin)
-      break
-
-    case types.DATABASE_GENERATOR:
-      this.set("database", plugin)
-      break
-
-    case types.STORAGE_PLUGIN:
-      this.reply("storage", plugin)
-      break
-
-    default:
-      throw new TypeError(`Plugin not a recognised type, "${configuration.type}" invalid value.`)
-    }
+    // Perform any registration it needs to do.
+    plugin.register(this)
 
     return this
   }
