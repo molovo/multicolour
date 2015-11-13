@@ -1,12 +1,15 @@
 # Change Log
 
-## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-12)
+## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-13)
 **Implemented enhancements:**
 
+- Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Add query parameter support to GET requests. [\#22](https://github.com/Multicolour/multicolour/issues/22)
 
 **Fixed bugs:**
 
+- Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
+- Fix PUT and PATCH [\#23](https://github.com/Multicolour/multicolour/issues/23)
 - Identity in blueprints not respected [\#21](https://github.com/Multicolour/multicolour/issues/21)
 
 **Closed issues:**
