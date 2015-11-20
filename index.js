@@ -181,7 +181,7 @@ class multicolour extends Map {
     require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
 
     // The database start is async, wait for that first.
-    database.start(err=> {
+    database.start(err => {
       if (err) {
         /* istanbul ignore next: Untestable */
         throw err
@@ -191,10 +191,12 @@ class multicolour extends Map {
       this.trigger("server_starting", server)
 
       // Start the API server
-      server
-        .warn("command", this.get("types").SERVER_BOOTUP)
-        .start(callback)
+      server.start(callback)
     })
+
+    // When we ask the program to terminate,
+    // do so as gracefully as programmatically possible.
+    process.on("SIGINT", this.stop.bind(this))
 
     return this
   }
@@ -213,9 +215,8 @@ class multicolour extends Map {
       // Emit an event to say the server has stopped.
       this.trigger("server_stopping", server)
 
-      server
-        .warn("command", this.get("types").SERVER_SHUTDOWN)
-        .stop(callback)
+      // Stop the server.
+      server.stop(callback)
     }
     else {
       callback && callback(new ReferenceError("No server to shutdown. Ignoring."))
