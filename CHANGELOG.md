@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-13)
+## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-20)
 **Implemented enhancements:**
 
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
