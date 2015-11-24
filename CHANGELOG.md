@@ -9,6 +9,7 @@
 
 **Fixed bugs:**
 
+- Throwing error in multicolour start and not db start prevents error reporting [\#26](https://github.com/Multicolour/multicolour/issues/26)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Fix PUT and PATCH [\#23](https://github.com/Multicolour/multicolour/issues/23)
