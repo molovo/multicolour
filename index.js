@@ -181,12 +181,7 @@ class multicolour extends Map {
     require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
 
     // The database start is async, wait for that first.
-    database.start(err => {
-      if (err) {
-        /* istanbul ignore next: Untestable */
-        throw err
-      }
-
+    database.start(() => {
       // Emit an event to say the server has stopped.
       this.trigger("server_starting", server)
 
