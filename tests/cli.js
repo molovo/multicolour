@@ -11,8 +11,8 @@ const test_content_path = "./tests/test_content/"
 
 // Used in a few tests below.
 class Server {
-  constructor(blueprints, api_config, stash) {}
-  warn() { return this }
+  constructor() {}
+  register(multicolour) { multicolour.set("server", this) }
   start(callback) { callback && callback(); return this }
   stop(callback) { callback && callback(); return this }
 }
@@ -59,17 +59,13 @@ tape("CLI start and stop", test => {
 
   // Create an instance of multicolour.
   const multicolour = Multicolour.new_from_config_file_path(`${test_content_path}/config.js`)
-  const server_plugin = {
-    type: multicolour.get("types").SERVER_GENERATOR,
-    generator: Server
-  }
 
   // Set up multicolour.
   multicolour
     // Scan for content.
     .scan()
     // Use the server plugin.
-    .use(server_plugin)
+    .use(Server)
 
   // Get the CLI
   let cli = multicolour.cli()
