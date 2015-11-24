@@ -1,13 +1,15 @@
 # Change Log
 
-## [0.1.4](https://github.com/Multicolour/multicolour/tree/0.1.4) (2015-11-20)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-11-24)
 **Implemented enhancements:**
 
+- Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Add query parameter support to GET requests. [\#22](https://github.com/Multicolour/multicolour/issues/22)
 
 **Fixed bugs:**
 
+- Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Fix PUT and PATCH [\#23](https://github.com/Multicolour/multicolour/issues/23)
 - Identity in blueprints not respected [\#21](https://github.com/Multicolour/multicolour/issues/21)
