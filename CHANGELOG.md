@@ -1,14 +1,18 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-11-24)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-11-25)
 **Implemented enhancements:**
 
+- Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Add query parameter support to GET requests. [\#22](https://github.com/Multicolour/multicolour/issues/22)
 
 **Fixed bugs:**
 
+- 500 on POST /user caused by incorrectly handled waterline validation error. [\#29](https://github.com/Multicolour/multicolour/issues/29)
+- Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
+- Don't default the migration policy to "alter" [\#27](https://github.com/Multicolour/multicolour/issues/27)
 - Throwing error in multicolour start and not db start prevents error reporting [\#26](https://github.com/Multicolour/multicolour/issues/26)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
