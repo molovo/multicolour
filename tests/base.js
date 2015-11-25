@@ -5,6 +5,7 @@ const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
+const Plugin = require("../lib/plugin")
 
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"
@@ -16,6 +17,8 @@ class Server {
   start(callback) { callback(); return this }
   stop(callback) { callback(); return this }
 }
+
+class Alt extends Plugin {}
 
 tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   const multicolour = new Multicolour()
@@ -60,7 +63,7 @@ tape("Multicolour configures itself.", test => {
 })
 
 tape("Multicolour can register plugins.", test => {
-  test.plan(3)
+  test.plan(4)
 
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
@@ -70,6 +73,7 @@ tape("Multicolour can register plugins.", test => {
   // Register a fake server generator.
   multicolour.scan().use(Server)
 
+  test.doesNotThrow(() => multicolour.use(Alt), "Should not throw if plugin inherits from Multicolour.Plugin.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
   test.notEqual(typeof multicolour.get("server").request("stash"), "undefined", "Should create a stash for the plugin.")
 
