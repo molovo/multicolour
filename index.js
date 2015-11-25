@@ -35,6 +35,9 @@ class multicolour extends Map {
       // Set the environment we're in.
       .set("env", process.env.NODE_ENV || "development")
 
+      // We haven't scanned yet.
+      .set("has_scanned", false)
+
     // Where is the package.
     const package_path = require("path").resolve("package.json")
 
@@ -120,12 +123,14 @@ class multicolour extends Map {
     files.push(require.resolve(`./lib/user-model`))
 
     // Set the blueprints property.
-    this.set("blueprints", files)
+    this
+      .set("has_scanned", true)
+      .set("blueprints", files)
 
     // Set up the DB.
     this
-      .use(require("./lib/storage"))
       .use(require("./lib/db"))
+      .use(require("./lib/storage"))
 
     return this
   }
@@ -136,13 +141,13 @@ class multicolour extends Map {
    * @return {multicolour} object for chaining.
    */
   use(Plugin) {
-    // Get some tools
-    const plugin_id = this.request("new_uuid")
-
     // Check we can generate anything at all.
-    if (!this.get("blueprints")) {
+    if (!this.get("has_scanned")) {
       throw new ReferenceError("Cannot generate without first scanning.")
     }
+
+    // Get some tools
+    const plugin_id = this.request("new_uuid")
 
     // Create a new stash for the plugin.
     this.get("stashes").set(plugin_id, new Map())
