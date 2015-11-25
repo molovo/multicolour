@@ -1,14 +1,14 @@
 "use strict"
 
 module.exports = {
-  blueprint: {
+  attributes: {
     name: {
       required: true,
       type: "string"
     },
     age: {
       required: true,
-      type: "number",
+      type: "integer",
       min: 0,
       max: 9000 // OVER 9000!???!!!
     }

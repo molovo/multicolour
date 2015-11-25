@@ -5,7 +5,6 @@ const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
-const Waterline_Generator = require("../lib/db")
 
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"
