@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-11-25)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-12-02)
 **Implemented enhancements:**
 
 - Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
@@ -10,6 +10,7 @@
 
 **Fixed bugs:**
 
+- REST API GET handling by id \(non-existent objects\) [\#31](https://github.com/Multicolour/multicolour/issues/31)
 - 500 on POST /user caused by incorrectly handled waterline validation error. [\#29](https://github.com/Multicolour/multicolour/issues/29)
 - Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
 - Don't default the migration policy to "alter" [\#27](https://github.com/Multicolour/multicolour/issues/27)
