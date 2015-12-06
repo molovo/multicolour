@@ -26,9 +26,6 @@ class multicolour extends Map {
       // Set the configuration for this instance.
       .set("config", config instanceof Config ? config : new Config(config))
 
-      // Some static types used throughout Multicolour.
-      .set("types", require("./lib/consts"))
-
       // Create a stash.
       .set("stashes", new Map())
 
