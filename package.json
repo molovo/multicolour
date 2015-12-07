@@ -1,6 +1,6 @@
 {
   "name": "multicolour",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Generate your API and single page app with a config file and JSON and use almost any DB tech",
   "main": "index.js",
   "preferGlobal": "true",
@@ -31,7 +31,8 @@
     "replacestream": "^4.0.0",
     "uuid": "^2.0.1",
     "validate-npm-package-name": "^2.2.2",
-    "waterline": "^0.10.26"
+    "waterline": "^0.10.26",
+    "jsocrud": "^2.0.3"
   },
   "engine-strict": true,
   "engineStrict": true,
