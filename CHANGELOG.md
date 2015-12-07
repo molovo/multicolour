@@ -1,8 +1,9 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-12-02)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-12-07)
 **Implemented enhancements:**
 
+- Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
 - Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
 - Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
@@ -10,6 +11,7 @@
 
 **Fixed bugs:**
 
+- Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
 - REST API GET handling by id \(non-existent objects\) [\#31](https://github.com/Multicolour/multicolour/issues/31)
 - 500 on POST /user caused by incorrectly handled waterline validation error. [\#29](https://github.com/Multicolour/multicolour/issues/29)
 - Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
