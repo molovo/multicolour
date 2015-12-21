@@ -35,7 +35,6 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   test.equals(!!multicolour.new("cli"), true, "Does reply with CLI member.")
   test.equals(!!multicolour.get("config"), true, "Does reply with config member.")
   test.equals(!!multicolour.request("new_uuid"), true, "Does reply with uuid.")
-  test.equals(!!multicolour.get("types"), true, "Does reply with types dictionary.")
 
   // Reset multicolour.
   multicolour.reset()
