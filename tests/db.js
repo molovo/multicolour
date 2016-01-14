@@ -47,7 +47,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
       name: "test",
       password: "password"
     }, (err, user) => {
-      test.equal(err, null, "No error during 2nd seed")
+      test.equal(err, null, "No error during 3rd seed")
       test.doesNotThrow(() => user.toJSON(), "Called toJSON on user")
     })
     models.user.create({
@@ -55,7 +55,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
       name: "test2",
       email: null
     }, (err, user) => {
-      test.equal(err, null, "No error during 2nd seed")
+      test.equal(err, null, "No error during 4th seed")
       test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
     })
   })
