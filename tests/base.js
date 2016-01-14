@@ -52,6 +52,8 @@ tape("Multicolour configures itself.", test => {
 
   test.notEqual(typeof multicolour.get("config"), "undefined", "Config should exist.")
   test.throws(() => Multicolour.new_from_config_file_path(), ReferenceError, "Should throw without path argument")
+  test.throws(() => multicolour.reset_from_config_path(), TypeError, "Should throw without path argument")
+  test.doesNotThrow(() => multicolour.reset_from_config_path("./tests/test_content/config.js"), TypeError, "Should not throw with path argument")
   test.notEqual(typeof config.get("content"), "undefined", "Config should have a content property.")
 
   // Reset multicolour.
