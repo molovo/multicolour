@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 // Get Multicolour.
-const Multicolour = require('multicolour')
+const Multicolour = require("multicolour")
 
 // Instantiate.
 new Multicolour().cli()
