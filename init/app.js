@@ -13,5 +13,5 @@ const my_service = require("multicolour")
   .get("server")
     .use(require("{{AUTH}}"))
 
-  // Start the service.
-  .start()
+// Start the service.
+my_service.start()
