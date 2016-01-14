@@ -1,5 +1,5 @@
 {
-  "api": {
+  "api_connections": {
     "host": "localhost",
     "port": 1811,
     "routes": {
@@ -8,6 +8,15 @@
     "router": {
       "stripTrailingSlash": true
     }
+  },
+
+  "api_server": {
+    "connections": {
+      "routes": {
+        "security": true
+      }
+    },
+    "debug": { "request": ["error"] }
   },
 
   "db": {
