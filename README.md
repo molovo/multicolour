@@ -3,10 +3,10 @@
 # Multicolour
 
 [![Join the chat at https://gitter.im/newworldcode/multicolour](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/newworldcode/multicolour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/newworldcode/multicolour.svg)](https://travis-ci.org/newworldcode/multicolour)
-[![Coverage Status](https://coveralls.io/repos/newworldcode/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/newworldcode/multicolour?branch=master)
+[![Build Status](https://travis-ci.org/Multicolour/multicolour.svg?branch=master)](https://travis-ci.org/Multicolour/multicolour)
+[![Coverage Status](https://coveralls.io/repos/Multicolour/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/Multicolour/multicolour?branch=master)
 [![Code Climate](https://codeclimate.com/github/newworldcode/multicolour/badges/gpa.svg)](https://codeclimate.com/github/newworldcode/multicolour)
-[![Dependency Status](https://david-dm.org/newworldcode/multicolour.svg)](https://david-dm.org/newworldcode/multicolour)
+[![Dependency Status](https://david-dm.org/Multicolour/multicolour.svg)](https://david-dm.org/Multicolour/multicolour)
 
 Multicolour development is sponsored by: [New World Code](https://newworld.codes/)  
 
