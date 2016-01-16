@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2015-12-15)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-01-16)
 **Implemented enhancements:**
 
 - Better constraints. [\#34](https://github.com/Multicolour/multicolour/issues/34)
@@ -13,6 +13,7 @@
 
 **Fixed bugs:**
 
+- CLI bashing config and not respecting path [\#36](https://github.com/Multicolour/multicolour/issues/36)
 - Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
 - REST API GET handling by id \(non-existent objects\) [\#31](https://github.com/Multicolour/multicolour/issues/31)
 - CLI outdated [\#30](https://github.com/Multicolour/multicolour/issues/30)
@@ -27,7 +28,9 @@
 
 **Closed issues:**
 
+- Create Example app [\#35](https://github.com/Multicolour/multicolour/issues/35)
 - Add upload storage provider plugin support [\#19](https://github.com/Multicolour/multicolour/issues/19)
+- API docs/WIKI [\#18](https://github.com/Multicolour/multicolour/issues/18)
 - Custom, additional route creation in blueprints. [\#15](https://github.com/Multicolour/multicolour/issues/15)
 - Create CLI [\#14](https://github.com/Multicolour/multicolour/issues/14)
 - Make it all JSON API compliant [\#13](https://github.com/Multicolour/multicolour/issues/13)
