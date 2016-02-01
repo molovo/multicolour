@@ -1,8 +1,9 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-01-16)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-02-01)
 **Implemented enhancements:**
 
+- Add nedb adapter for database [\#38](https://github.com/Multicolour/multicolour/issues/38)
 - Better constraints. [\#34](https://github.com/Multicolour/multicolour/issues/34)
 - Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
 - Missing role support for users [\#32](https://github.com/Multicolour/multicolour/issues/32)
@@ -13,6 +14,7 @@
 
 **Fixed bugs:**
 
+- Missed multicolour-auth-oauth module in CLI [\#39](https://github.com/Multicolour/multicolour/issues/39)
 - CLI bashing config and not respecting path [\#36](https://github.com/Multicolour/multicolour/issues/36)
 - Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
 - REST API GET handling by id \(non-existent objects\) [\#31](https://github.com/Multicolour/multicolour/issues/31)
@@ -28,9 +30,12 @@
 
 **Closed issues:**
 
+- Can't seed app generated with CLI [\#42](https://github.com/Multicolour/multicolour/issues/42)
+- Mongodb kerberos peer dependency [\#40](https://github.com/Multicolour/multicolour/issues/40)
 - Create Example app [\#35](https://github.com/Multicolour/multicolour/issues/35)
 - Add upload storage provider plugin support [\#19](https://github.com/Multicolour/multicolour/issues/19)
 - API docs/WIKI [\#18](https://github.com/Multicolour/multicolour/issues/18)
+- Blueprint -\> Frontend route/collection/model generation. [\#17](https://github.com/Multicolour/multicolour/issues/17)
 - Custom, additional route creation in blueprints. [\#15](https://github.com/Multicolour/multicolour/issues/15)
 - Create CLI [\#14](https://github.com/Multicolour/multicolour/issues/14)
 - Make it all JSON API compliant [\#13](https://github.com/Multicolour/multicolour/issues/13)
