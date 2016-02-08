@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-02-08)
+## [v0.2.9](https://github.com/Multicolour/multicolour/tree/v0.2.9) (2016-02-08)
 **Implemented enhancements:**
 
 - Add nedb adapter for database [\#38](https://github.com/Multicolour/multicolour/issues/38)
