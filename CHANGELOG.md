@@ -1,6 +1,6 @@
 # Change Log
 
-## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-02-01)
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-02-08)
 **Implemented enhancements:**
 
 - Add nedb adapter for database [\#38](https://github.com/Multicolour/multicolour/issues/38)
@@ -14,6 +14,7 @@
 
 **Fixed bugs:**
 
+- Default migration policy appears to be "alter" [\#43](https://github.com/Multicolour/multicolour/issues/43)
 - Missed multicolour-auth-oauth module in CLI [\#39](https://github.com/Multicolour/multicolour/issues/39)
 - CLI bashing config and not respecting path [\#36](https://github.com/Multicolour/multicolour/issues/36)
 - Data layer should be in Multicolour core [\#33](https://github.com/Multicolour/multicolour/issues/33)
