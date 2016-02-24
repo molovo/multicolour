@@ -107,7 +107,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
   // Expect N tests.
-  test.plan(7)
+  test.plan(6)
 
   // Create an instance of Multicolour.
   const multicolour = Multicolour
@@ -117,7 +117,6 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
   // Check some sanity stuff.
   test.throws(() => multicolour.start(), ReferenceError, "Start throws a TypeError when no server configured without callback.")
   test.throws(() => multicolour.start(error => {throw error}), ReferenceError, "Start callback gets a ReferenceError when no server configured.")
-  test.throws(() => multicolour.stop(error => {throw error}), ReferenceError, "Stop throws a ReferenceError when server generator not configured correctly.")
 
   // Fluff config for tests.
   multicolour.get("config").get("db").adapters = {
