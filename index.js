@@ -183,22 +183,8 @@ class multicolour extends Map {
     // Don't limit sockets.
     require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
 
-    // Emit an event for database starting.
-    this.trigger("database_starting")
-
-    // The database start is async, wait for that first.
-    database.start(() => {
-      // Emit an events to say the database
-      // has started and the server is starting.
-      this.trigger("database_started")
-      this.trigger("server_starting")
-
-      // Start the API server
-      server.start(() => {
-        this.trigger("server_started")
-        callback()
-      })
-    })
+    // Start the database and server.
+    database.start(() => server.start(callback))
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
