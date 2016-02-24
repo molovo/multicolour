@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.0.0](https://github.com/Multicolour/multicolour/tree/1.0.0) (2016-02-24)
+[Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...1.0.0)
+
+**Implemented enhancements:**
+
+- 2 Blueprints but 3 resources is confusing [\#46](https://github.com/Multicolour/multicolour/issues/46)
+- Replace hapi-swaggered-ui [\#45](https://github.com/Multicolour/multicolour/issues/45)
+
+**Fixed bugs:**
+
+- `.stop\(\)` doesn't run the teardown routine on the db [\#49](https://github.com/Multicolour/multicolour/issues/49)
+- 'undefined' not recognised. Not good, setting to .any\(\) [\#47](https://github.com/Multicolour/multicolour/issues/47)
+- User parameters string is very long in Swagger [\#41](https://github.com/Multicolour/multicolour/issues/41)
+
 ## [v0.2.9](https://github.com/Multicolour/multicolour/tree/v0.2.9) (2016-02-08)
 **Implemented enhancements:**
 
