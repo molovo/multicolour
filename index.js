@@ -5,6 +5,7 @@ const Talkie = require("@newworldcode/talkie")
 
 // Get some bits we need to instantiate later.
 const Config = require("./lib/config")
+const Async = require("async")
 
 class multicolour extends Map {
   /**
@@ -204,20 +205,29 @@ class multicolour extends Map {
    * @return {multicolour} Object for chaining.
    */
   stop(callback) {
-    // Get the server (undefined if it doesn't exist.)
-    const server = this.get("server")
-
-    // Get the servers so we can gracefully shutdown.
-    if (server) {
-      // Emit an event to say the server has stopped.
-      this.trigger("server_stopping", server)
+    // Stahp all the things.
+    Async.waterfall([
+      // Stop the database.
+      next => this.get("database").stop(next),
 
       // Stop the server.
-      server.stop(callback)
-    }
-    else {
-      callback && callback(new ReferenceError("No server to shutdown. Ignoring."))
-    }
+      next => {
+        // Get the server (undefined if it doesn't exist.)
+        const server = this.get("server")
+
+        // Get the servers so we can gracefully shutdown.
+        if (server) {
+          // Emit an event to say the server has stopped.
+          this.trigger("server_stopping", server)
+
+          // Stop the server.
+          server.stop(next)
+        }
+        else {
+          next()
+        }
+      }
+    ], callback)
 
     return this
   }
