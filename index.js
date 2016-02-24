@@ -208,24 +208,32 @@ class multicolour extends Map {
     // Stahp all the things.
     Async.waterfall([
       // Stop the database.
-      next => this.get("database").stop(next),
+      next => {
+        // Emit an event to say the database is stopping.
+        this.trigger("database_stopping")
+
+        // Stop the database(s).
+        this.get("database").stop(() => {
+          // Emit an event once the server has stopped.
+          this.trigger("database_stopped")
+
+          next()
+        })
+      },
 
       // Stop the server.
       next => {
-        // Get the server (undefined if it doesn't exist.)
-        const server = this.get("server")
+        // Emit an event to say the server is stopping.
+        this.trigger("server_stopping")
 
-        // Get the servers so we can gracefully shutdown.
-        if (server) {
+        // Stop the server.
+        this.get("server").stop(() => {
           // Emit an event to say the server has stopped.
-          this.trigger("server_stopping", server)
+          this.trigger("server_stopped")
 
-          // Stop the server.
-          server.stop(next)
-        }
-        else {
+          // Continue.
           next()
-        }
+        })
       }
     ], callback)
 
