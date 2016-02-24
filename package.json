@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/newworldcode/multicolour.git"
+    "url": "git+https://github.com/Multicolour/multicolour.git"
   },
   "author": "newworldcode <hello@newworld.codes> (https://newworld.codes)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/newworldcode/multicolour/issues"
+    "url": "https://github.com/Multicolour/multicolour/issues"
   },
-  "homepage": "https://github.com/newworldcode/multicolour#readme",
+  "homepage": "https://github.com/Multicolour/multicolour#readme",
   "dependencies": {
     "@newworldcode/talkie": "^1.0.0",
     "async": "^1.5.2",
