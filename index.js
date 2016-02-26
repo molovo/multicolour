@@ -118,7 +118,7 @@ class multicolour extends Map {
       .map(file => `${content}/blueprints/${file}`)
 
     // Push our user model to the array of blueprints.
-    files.push(require.resolve(`./lib/user-model`))
+    files.push(require.resolve("./lib/user-model"))
 
     // Set the blueprints property.
     this
