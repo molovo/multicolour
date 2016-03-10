@@ -69,8 +69,6 @@ tape("Multicolour can register plugins.", test => {
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
 
-  test.throws(() => multicolour.use(Server), ReferenceError, "Should throw without scanning for blueprints first.")
-
   // Register a fake server generator.
   multicolour.scan().use(Server)
 
