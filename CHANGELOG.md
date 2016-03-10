@@ -1,6 +1,6 @@
 # Change Log
 
-## [0.3.0](https://github.com/Multicolour/multicolour/tree/0.3.0) (2016-02-24)
+## [0.3.0](https://github.com/Multicolour/multicolour/tree/0.3.0) (2016-03-10)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...0.3.0)
 
 **Implemented enhancements:**
