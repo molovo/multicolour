@@ -64,7 +64,7 @@ tape("Multicolour configures itself.", test => {
 })
 
 tape("Multicolour can register plugins.", test => {
-  test.plan(4)
+  test.plan(2)
 
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js")
@@ -74,7 +74,6 @@ tape("Multicolour can register plugins.", test => {
 
   test.doesNotThrow(() => multicolour.use(Alt), "Should not throw if plugin inherits from Multicolour.Plugin.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
-  test.notEqual(typeof multicolour.get("server").request("stash"), "undefined", "Should create a stash for the plugin.")
 
   // Reset multicolour.
   multicolour.reset()
