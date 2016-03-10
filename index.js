@@ -136,11 +136,6 @@ class multicolour extends Map {
    * @return {multicolour} object for chaining.
    */
   use(Plugin) {
-    // Check we can generate anything at all.
-    if (!this.get("has_scanned")) {
-      throw new ReferenceError("Cannot generate without first scanning.")
-    }
-
     // Get some tools
     const plugin_id = this.request("new_uuid")
 
