@@ -27,9 +27,6 @@ class multicolour extends Map {
       // Set the configuration for this instance.
       .set("config", config instanceof Config ? config : new Config(config))
 
-      // Create a stash.
-      .set("stashes", new Map())
-
       // Set the environment we're in.
       .set("env", process.env.NODE_ENV || "development")
 
@@ -147,14 +144,10 @@ class multicolour extends Map {
     // Get some tools
     const plugin_id = this.request("new_uuid")
 
-    // Create a new stash for the plugin.
-    this.get("stashes").set(plugin_id, new Map())
-
     // Extend the plugin to have bits and bobs it will likely need.
     Talkie().extend(Plugin)
       .reply("host", this)
       .reply("id", plugin_id)
-      .reply("stash", this.get("stashes").get(plugin_id))
 
     // Create the plugin.
     const plugin = new Plugin()
