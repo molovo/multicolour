@@ -1,10 +1,11 @@
 # Change Log
 
-## [0.3.0](https://github.com/Multicolour/multicolour/tree/0.3.0) (2016-03-10)
-[Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...0.3.0)
+## [0.3.4](https://github.com/Multicolour/multicolour/tree/0.3.4) (2016-03-10)
+[Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...0.3.4)
 
 **Implemented enhancements:**
 
+- Programatically add relationships to `multicolour\_user` [\#51](https://github.com/Multicolour/multicolour/issues/51)
 - 2 Blueprints but 3 resources is confusing [\#46](https://github.com/Multicolour/multicolour/issues/46)
 - Replace hapi-swaggered-ui [\#45](https://github.com/Multicolour/multicolour/issues/45)
 
