@@ -7,6 +7,7 @@
 [![Coverage Status](https://coveralls.io/repos/Multicolour/multicolour/badge.svg?branch=master&service=github)](https://coveralls.io/github/Multicolour/multicolour?branch=master)
 [![Code Climate](https://codeclimate.com/github/newworldcode/multicolour/badges/gpa.svg)](https://codeclimate.com/github/newworldcode/multicolour)
 [![Dependency Status](https://david-dm.org/Multicolour/multicolour.svg)](https://david-dm.org/Multicolour/multicolour)
+[![Known Vulnerabilities](https://snyk.io/test/github/Multicolour/multicolour/badge.svg)](https://snyk.io/test/github/Multicolour/multicolour)
 
 Multicolour development is sponsored by: [New World Code](https://newworld.codes/)  
 
