@@ -1,4 +1,4 @@
-<img src="https://www.dropbox.com/s/kt9uv5wbswjkvhc/logo.svg?dl=1" width="250">
+<img src="https://www.dropbox.com/s/0pyo9flzjr6d3y4/logo-text-outlined.svg?dl=1" width="250">
 
 # Multicolour
 
