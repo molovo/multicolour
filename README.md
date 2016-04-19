@@ -1,4 +1,4 @@
-<img src="https://www.dropbox.com/s/0pyo9flzjr6d3y4/logo-text-outlined.svg?dl=1" width="250">
+<img src="https://www.dropbox.com/s/0pyo9flzjr6d3y4/logo-text-outlined.svg?dl=1" width="350">
 
 [![Join the chat at https://gitter.im/newworldcode/multicolour](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/newworldcode/multicolour?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Build Status](https://travis-ci.org/Multicolour/multicolour.svg?branch=master)](https://travis-ci.org/Multicolour/multicolour)
