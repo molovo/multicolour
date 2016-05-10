@@ -49,6 +49,14 @@ class multicolour extends Map {
 
       // Generate a unique id.
       .reply("new_uuid", () => require("uuid").v4())
+
+    // Does the config say to add to global?
+    if (this.get("config").get("make_global")) {
+      /* eslint-disable */
+      console.info("Adding anything to global scope is generally bad.\nPlease consider removing make_global: true from your config.")
+      /* eslint-enable */
+      global.multicolour = this
+    }
   }
 
   /**
