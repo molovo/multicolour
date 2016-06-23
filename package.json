@@ -31,7 +31,7 @@
     "jsocrud": "^2.0.3",
     "pluralize": "^2.0.0",
     "replacestream": "^4.0.0",
-    "snyk": "^1.12.0",
+    "snyk": "^1.15.0",
     "uuid": "^2.0.1",
     "validate-npm-package-name": "^2.2.2",
     "waterline": "^0.12.1"
