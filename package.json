@@ -29,7 +29,7 @@
     "fs-extra": "^0.30.0",
     "inquirer": "^1.0.2",
     "jsocrud": "^2.0.3",
-    "pluralize": "^2.0.0",
+    "pluralize": "^3.0.0",
     "replacestream": "^4.0.0",
     "snyk": "^1.12.0",
     "uuid": "^2.0.1",
