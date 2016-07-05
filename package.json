@@ -42,7 +42,7 @@
     "node": ">= 4.0.0"
   },
   "devDependencies": {
-    "eslint": "^2.3.0",
+    "eslint": "^3.0.1",
     "istanbul": "^0.4.2",
     "mkdirp": "^0.5.1",
     "sails-memory": "^0.10.5",
