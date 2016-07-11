@@ -4,7 +4,7 @@
 const tape = require("tape")
 
 // Get Multicolour.
-const Multicolour = require("../index.js")
+const Multicolour = require("../index")
 
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"

@@ -203,11 +203,11 @@ class multicolour extends Map {
         this.trigger("database_stopping")
 
         // Stop the database(s).
-        this.get("database").stop(() => {
+        this.get("database").stop(error => {
           // Emit an event once the server has stopped.
           this.trigger("database_stopped")
 
-          next()
+          next(error)
         })
       },
 

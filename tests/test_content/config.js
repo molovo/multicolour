@@ -2,7 +2,7 @@
 
 module.exports = {
   // Where is your content? blueprints, etc
-  content: `${__dirname}/`,
+  content: __dirname,
 
   // Set up our desired database adapter
   db: {
