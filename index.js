@@ -68,7 +68,7 @@ class multicolour extends Map {
   static new_from_config_file_path(config_location) {
     // Check we got a config location.
     if (!config_location || config_location === "") {
-      throw new ReferenceError("Config location must be a (string) value")
+      throw new ReferenceError("Config location should be a (string) value")
     }
 
     // Create a new configuration object from the file path.
