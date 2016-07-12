@@ -83,6 +83,7 @@ class multicolour extends Map {
    * @param {String} config_location to load config from.
    */
   reset_from_config_path(config_location) {
+    this.reset()
     this.set("config", Config.new_from_file(config_location))
     return this
   }
@@ -130,7 +131,7 @@ class multicolour extends Map {
       .set("has_scanned", true)
       .set("blueprints", files)
 
-    // Set up the DB.
+    // Set up the DB and basic storage plugin.
     this
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
@@ -147,13 +148,14 @@ class multicolour extends Map {
     // Get some tools
     const plugin_id = this.request("new_uuid")
 
-    // Extend the plugin to have bits and bobs it will likely need.
-    Talkie().extend(Plugin)
+    // Extend the plugin to have bits and bobs it will likely need,
+    // this is done via the Talkie library.
+    this.extend(Plugin)
       .reply("host", this)
       .reply("id", plugin_id)
 
     // Create the plugin.
-    const plugin = new Plugin()
+    const plugin = new Plugin(this)
 
     // Perform any registration it needs to do.
     plugin.register(this)
@@ -171,16 +173,14 @@ class multicolour extends Map {
     const server = this.get("server")
     const database = this.get("database")
 
-    // Check for a server before trying to start.
-    if (!server) {
-      throw new ReferenceError("No server configured, not starting.")
-    }
-
     // Don't limit sockets.
     require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
 
     // Start the database and server.
-    database.start(() => server.start(callback))
+    Async.series({
+      start_database: next => database.start(next),
+      start_server: next => server ? server.start(next) : next()
+    }, callback)
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
@@ -196,9 +196,9 @@ class multicolour extends Map {
    */
   stop(callback) {
     // Stahp all the things.
-    Async.waterfall([
+    Async.series({
       // Stop the database.
-      next => {
+      stop_database: next => {
         // Emit an event to say the database is stopping.
         this.trigger("database_stopping")
 
@@ -212,7 +212,7 @@ class multicolour extends Map {
       },
 
       // Stop the server.
-      next => {
+      stop_server: next => {
         // Emit an event to say the server is stopping.
         this.trigger("server_stopping")
 
@@ -225,7 +225,7 @@ class multicolour extends Map {
           next()
         })
       }
-    ], callback)
+    }, callback)
 
     return this
   }
