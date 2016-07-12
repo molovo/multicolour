@@ -87,16 +87,10 @@ tape("Multicolour scans for and finds blueprints.", test => {
 
   test.notEqual(typeof multicolour.get("blueprints"), "undefined", "Blueprints should exist.")
 
-  // Reset multicolour.
-  multicolour.reset()
-
   multicolour = new Multicolour()
 
   // Scan for content when there's no config set.
   test.throws(() => multicolour.scan(), ReferenceError, "Throws error when no content path is set.")
-
-  // Reset multicolour.
-  multicolour.reset()
 
   // Done and dusted. Go home.
   test.end()
@@ -104,45 +98,41 @@ tape("Multicolour scans for and finds blueprints.", test => {
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
   // Expect N tests.
-  test.plan(6)
+  test.plan(3)
 
   // Create an instance of Multicolour.
   const multicolour = Multicolour
     .new_from_config_file_path(test_content_path + "config.js")
     .scan()
 
-  // Check some sanity stuff.
-  test.throws(() => multicolour.start(), ReferenceError, "Start throws a TypeError when no server configured without callback.")
-  test.throws(() => multicolour.start(error => {throw error}), ReferenceError, "Start callback gets a ReferenceError when no server configured.")
-
   // Register the plugin.
   multicolour.use(Server)
 
   // Check when a server is configured properly that error is non-existent.
   multicolour.start(err => {
-    test.equal(typeof err, "undefined", "Error not set when starting properly configured server plugin.")
+    test.ok(!err, "Error not set when starting properly configured server plugin.")
 
     multicolour.stop(err => {
       // @TODO: Come back when this is fixed in the dependency.
       // FWIW: This is shit.
-      if (err.message === "Cannot read property 'teardown' of undefined") {
+      if (err && err.message === "Cannot read property 'teardown' of undefined") {
         test.equal(err.message, "Cannot read property 'teardown' of undefined", "This 🐄 💩 error can be expected.")
       }
       else {
-        test.equal(typeof err, "undefined", "Error not set when stopping properly configured server plugin.")
+        test.ok(!err, "Error not set when stopping properly configured server plugin.")
       }
     })
   })
-
-  // Check the db adapter throws when improperly configured.
-  test.throws(() => multicolour.start(), Error, "Improperly configured DB throws on start without callback.")
 
   const bad_multicolour = new Multicolour({
     db: {},
     content: test_content_path
   }).scan()
 
-  test.throws(() => bad_multicolour.start(err => {throw err}), Error, "Improperly configured DB throws on start with callback.")
+  test.throws(() => bad_multicolour.start(err => {
+    throw err
+    bad_multicolour.stop()
+  }), Error, "Improperly configured DB throws on start with callback.")
 
   // Reset multicolour.
   multicolour.reset()

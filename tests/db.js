@@ -6,14 +6,11 @@ const tape = require("tape")
 // Get Multicolour.
 const Multicolour = require("../index")
 
-// Where we keep the test content.
-const test_content_path = "./tests/test_content/"
-
 tape("Waterline collections are created by Multicolour on instantiation and we only get expected errors.", test => {
-  test.plan(18)
+  test.plan(17)
 
   // Create an instance of multicolour.
-  const multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js").scan()
+  const multicolour = new Multicolour(require("./test_content/config.js")).scan()
   const DB = multicolour.get("database")
 
   // Test stuff exists.
@@ -42,9 +39,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
 
   // Seed for some more tests.
   DB.start((err, ontology) => {
-    test.equal(typeof err, "undefined", "Error in starting DB is undefined.")
-    console.log(err, DB.request("waterline"));
-    if (err) return false
+    test.ok(!err, "Error in starting DB is undefined.")
 
     const models = ontology.collections
 
