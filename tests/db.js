@@ -25,12 +25,18 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   test.doesNotThrow(() => DB.add_relation_to_collection("one2many", "test", "test2", true), "Does not throw when forcefully extending collection as a collection.")
 
   // as a "join", is actually just a pretty way to add_relation_to_collection.
-  test.doesNotThrow(() => DB.join({
-    as: "join",
-    from: "test2",
-    to: "test3",
-    many: true
-  }))
+  test.doesNotThrow(() => DB
+    .join({
+      as: "join",
+      from: "test2",
+      to: "test3",
+      many: true
+    })
+    .join({
+      from: "test3",
+      to: "test2"
+    })
+  )
 
   // Check error behaviour.
   test.throws(() => DB.add_relation_to_collection("fake1", "fake", "test2"), ReferenceError, "Throws when source collection not found.")
