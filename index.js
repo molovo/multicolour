@@ -18,6 +18,14 @@ class multicolour extends Map {
   }
 
   /**
+   * Getter for the flow library for built in
+   * integration testing of your endpoints.
+   */
+  static get Flow() {
+    return require("./flow")
+  }
+
+  /**
    * Create some internal properties and load in
    * the CLI and configuration.
    *
