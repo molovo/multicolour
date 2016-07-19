@@ -50,29 +50,31 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
     const models = ontology.collections
 
     // Test various inserts.
-    models.test.create({ name: "test", age: 100, empty: null, test2: 1 }, (err, t) => {
-      test.equal(err, null, "No error during 1st seed")
-      test.doesNotThrow(() => t.toJSON(), "Called toJSON on test")
-    })
-    models.test2.create({ name: "test", age: 100 }, (err, t) => {
-      test.equal(err, null, "No error during 2nd seed")
-      test.doesNotThrow(() => t.toJSON(), "Called toJSON on test2")
-    })
-    models.multicolour_user.create({
-      username: "test",
-      name: "test",
-      password: "password"
-    }, (err, user) => {
-      test.equal(err, null, "No error during 3rd seed")
-      test.doesNotThrow(() => user.toJSON(), "Called toJSON on user")
-    })
-    models.multicolour_user.create({
-      username: "test2",
-      name: "test2",
-      email: null
-    }, (err, user) => {
-      test.equal(err, null, "No error during 4th seed")
-      test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
-    })
+    Promise.all([
+      models.test.create({ name: "test", age: 100, empty: null, test2: 1 }, (err, t) => {
+        test.equal(err, null, "No error during 1st seed")
+        test.doesNotThrow(() => t.toJSON(), "Called toJSON on test")
+      }),
+      models.test2.create({ name: "test", age: 100 }, (err, t) => {
+        test.equal(err, null, "No error during 2nd seed")
+        test.doesNotThrow(() => t.toJSON(), "Called toJSON on test2")
+      }),
+      models.multicolour_user.create({
+        username: "test",
+        name: "test",
+        password: "password"
+      }, (err, user) => {
+        test.equal(err, null, "No error during 3rd seed")
+        test.doesNotThrow(() => user.toJSON(), "Called toJSON on user")
+      }),
+      models.multicolour_user.create({
+        username: "test2",
+        name: "test2",
+        email: null
+      }, (err, user) => {
+        test.equal(err, null, "No error during 4th seed")
+        test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
+      })
+    ], DB.stop.bind(DB))
   })
 })
