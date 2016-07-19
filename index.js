@@ -9,6 +9,15 @@ const Async = require("async")
 
 class multicolour extends Map {
   /**
+   * A simple, static getter for the endpoint
+   * library for granular, more syntactically
+   * friendly endpoint and model creation.
+   */
+  static get Endpoint() {
+    return require("./endpoint")
+  }
+
+  /**
    * Create some internal properties and load in
    * the CLI and configuration.
    *
@@ -195,6 +204,9 @@ class multicolour extends Map {
    * @return {multicolour} Object for chaining.
    */
   stop(callback) {
+    /* eslint-disable */
+    console.info("Shutting down services. Press ctrl+c again to quit ungracefully.")
+    /* eslint-enable */
     // Stahp all the things.
     Async.series({
       // Stop the database.
