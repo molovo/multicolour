@@ -34,7 +34,7 @@ multicolour.use(class Server extends Map {
 })
 
 tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
-  test.plan(7)
+  test.plan(8)
 
   test.doesNotThrow(() => {
     new Flow(multicolour)
@@ -49,6 +49,7 @@ tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
   test.doesNotThrow(() => new Flow(multicolour, () => 1+1).run(), "Basic Flow does not error while running with a before function.")
 
   test.throws(() => new Task(), TypeError, "Throws when no options passed in")
+  test.throws(() => new Task({}), ReferenceError, "Throws when missing verb option")
   test.throws(() => new Task({ verb: "GET" }), ReferenceError, "Throws when missing model option")
   test.throws(() => new Task({ verb: "GET", model: "test" }), ReferenceError, "Throws when missing multicolour option")
   test.doesNotThrow(() => new Task({ verb: "GET", model: "test", multicolour }), ReferenceError, "Doesn't throw an error with minimum args passed in.")
