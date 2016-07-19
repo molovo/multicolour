@@ -4,11 +4,11 @@
 const tape = require("tape")
 
 // Get Multicolour.
-const {Endpoint} = require("../index")
+const Multicolour = require("../index")
 
 tape("Endpoint library", test => {
 
-  const endpoint = new Endpoint({ test: "string" })
+  const endpoint = new Multicolour.Endpoint({ test: "string" })
     .add_create_route()
     .add_read_route()
     .add_update_route()
@@ -19,7 +19,7 @@ tape("Endpoint library", test => {
     .add_update_frontend()
     .add_delete_frontend()
 
-  test.throws(() => new Endpoint(), TypeError, "Throws when no blueprint passed to Endpoint")
+  test.throws(() => new Multicolour.Endpoint(), TypeError, "Throws when no blueprint passed to Endpoint")
 
   test.equals(endpoint.POST, true, "Create route function worked")
   test.equals(endpoint.GET, true, "Read route function worked")
