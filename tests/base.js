@@ -24,17 +24,19 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   const multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js")
 
   // Has members.
-  test.equals(!!multicolour.request, true, "Has request function.")
-  test.equals(!!multicolour.reply, true, "Has reply function.")
-  test.equals(!!multicolour.use, true, "Has use function.")
-  test.equals(!!multicolour.scan, true, "Has scan function.")
-  test.equals(!!multicolour.start, true, "Has start function.")
-  test.equals(!!multicolour.stop, true, "Has stop function.")
+  test.ok(multicolour.request, "Has request function.")
+  test.ok(multicolour.reply, "Has reply function.")
+  test.ok(multicolour.use, "Has use function.")
+  test.ok(multicolour.scan, "Has scan function.")
+  test.ok(multicolour.start, "Has start function.")
+  test.ok(multicolour.stop, "Has stop function.")
+  test.ok(Multicolour.Endpoint, "Has Endpoint lib.")
+  test.ok(Multicolour.Flow, "Has Flow lib.")
 
   // Replies with values.
-  test.equals(!!multicolour.new("cli"), true, "Does reply with CLI member.")
-  test.equals(!!multicolour.get("config"), true, "Does reply with config member.")
-  test.equals(!!multicolour.request("new_uuid"), true, "Does reply with uuid.")
+  test.ok(multicolour.new("cli"), "Does reply with CLI member.")
+  test.ok(multicolour.get("config"), "Does reply with config member.")
+  test.ok(multicolour.request("new_uuid"), "Does reply with uuid.")
 
   // Reset multicolour.
   multicolour.reset()
