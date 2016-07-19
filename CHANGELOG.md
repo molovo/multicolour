@@ -1,5 +1,34 @@
 # Change Log
 
+## [0.3.0](https://github.com/Multicolour/multicolour/tree/0.3.0) (2016-07-19)
+[Full Changelog](https://github.com/Multicolour/multicolour/compare/0.3.4...0.3.0)
+
+**Implemented enhancements:**
+
+- ROBOTS.txt [\#55](https://github.com/Multicolour/multicolour/issues/55)
+- Create an optional blueprint abstraction for granular route/FE control [\#53](https://github.com/Multicolour/multicolour/issues/53)
+- Support path prefix [\#52](https://github.com/Multicolour/multicolour/issues/52)
+
+**Fixed bugs:**
+
+- Error with schema creation [\#48](https://github.com/Multicolour/multicolour/issues/48)
+
+**Closed issues:**
+
+- 0.3.2 Release [\#50](https://github.com/Multicolour/multicolour/issues/50)
+- Integrate Sorrow [\#12](https://github.com/Multicolour/multicolour/issues/12)
+- Create automated test suite based on Joi for REST api. [\#9](https://github.com/Multicolour/multicolour/issues/9)
+- JWT integration. [\#6](https://github.com/Multicolour/multicolour/issues/6)
+
+**Merged pull requests:**
+
+- Feature/blueprint abstraction [\#68](https://github.com/Multicolour/multicolour/pull/68) ([davemackintosh](https://github.com/davemackintosh))
+- Feature/flow based testing [\#67](https://github.com/Multicolour/multicolour/pull/67) ([davemackintosh](https://github.com/davemackintosh))
+- Update eslint to version 3.0.1 🚀 [\#66](https://github.com/Multicolour/multicolour/pull/66) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update pluralize to version 3.0.0 🚀 [\#63](https://github.com/Multicolour/multicolour/pull/63) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- snyk@1.15.0 breaks build 🚨 [\#62](https://github.com/Multicolour/multicolour/pull/62) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+- Update all dependencies 🌴 [\#61](https://github.com/Multicolour/multicolour/pull/61) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
+
 ## [0.3.4](https://github.com/Multicolour/multicolour/tree/0.3.4) (2016-03-10)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...0.3.4)
 
