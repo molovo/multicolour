@@ -36,6 +36,12 @@ class Endpoint {
     return this
   }
 
+  rawify() {
+    return {
+      attributes: this.attributes
+    }
+  }
+
   add_create_route() {
     this.POST = true
     return this
