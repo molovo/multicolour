@@ -13,7 +13,7 @@ Multicolour development is sponsored by: [New World Code](https://newworld.codes
 
 The overall mission of this library is to make CRUD API generation fast (instant), easy and cost efficient by simplifying the work involved in creating RESTful services and API powered apps and websites.
 
-Start by running `npm i -G multicolour` then you can start your API development with `multicolour init`, in your desired working folder to start the wizard.
+Start by running `npm i -G multicolour` then you can start your API development with `multicolour init .`, in your desired working folder to start the wizard.
 
 Follow the current version milestone task list [here](https://github.com/newworldcode/multicolour/milestones/1.0.0RC)
 
