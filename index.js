@@ -197,7 +197,7 @@ class multicolour extends Map {
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
-    process.on("SIGINT", this.stop.bind(this))
+    process.on("SIGINT", this.stop.bind(this, process.exit.bind(process)))
 
     return this
   }
