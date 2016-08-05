@@ -92,7 +92,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
   multicolour = new Multicolour()
 
   // Scan for content when there's no config set.
-  test.throws(() => multicolour.scan(), ReferenceError, "Throws error when no content path is set.")
+  test.throws(() => multicolour.scan(), Error, "Throws error when no content path is set.")
 
   // Done and dusted. Go home.
   test.end()
@@ -126,15 +126,16 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
     })
   })
 
-  const bad_multicolour = new Multicolour({
-    db: {},
-    content: test_content_path
-  }).scan()
+  test.throws(() => {
+    const bad_multicolour = new Multicolour({
+      db: {},
+      content: test_content_path
+    }).scan()
 
-  test.throws(() => bad_multicolour.start(err => {
-    throw err
-    bad_multicolour.stop()
-  }), Error, "Improperly configured DB throws on start with callback.")
+    bad_multicolour.start(() => {
+      bad_multicolour.stop()
+    })
+  }, Error, "Improperly configured DB throws on start with callback.")
 
   // Reset multicolour.
   multicolour.reset()
