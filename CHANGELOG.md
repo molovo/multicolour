@@ -1,10 +1,12 @@
 # Change Log
 
-## [0.4.0](https://github.com/Multicolour/multicolour/tree/0.4.0) (2016-07-19)
+## [0.4.0](https://github.com/Multicolour/multicolour/tree/0.4.0) (2016-08-05)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/0.3.4...0.4.0)
 
 **Implemented enhancements:**
 
+- Add configuration validation [\#70](https://github.com/Multicolour/multicolour/issues/70)
+- Multicolour user collection/table creation issues [\#69](https://github.com/Multicolour/multicolour/issues/69)
 - ROBOTS.txt [\#55](https://github.com/Multicolour/multicolour/issues/55)
 - Create an optional blueprint abstraction for granular route/FE control [\#53](https://github.com/Multicolour/multicolour/issues/53)
 - Support path prefix [\#52](https://github.com/Multicolour/multicolour/issues/52)
