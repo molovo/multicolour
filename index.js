@@ -128,10 +128,6 @@ class multicolour extends Map {
     // Get our content location.
     const content = this.get("config").get("content")
 
-    if (!content) {
-      throw new ReferenceError("Content is not set in the config. Not scanning.")
-    }
-
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
       // Delete crap like .DS_Store.
