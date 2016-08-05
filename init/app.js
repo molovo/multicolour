@@ -9,9 +9,9 @@ const my_service = require("multicolour")
   // Register the server plugin.
   .use(require("{{SERVER}}"))
 
-  // Register the auth plugin to the server.
-  .get("server")
-    .use(require("{{AUTH}}"))
+  {{AUTH}}
 
 // Start the service.
-my_service.start()
+my_service.start(() => {
+  console.log(`Server started, go to ${my_service.get("server").get("api_root")}/docs`);
+})
