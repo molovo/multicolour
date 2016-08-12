@@ -1,5 +1,25 @@
 # Change Log
 
+## [0.4.2](https://github.com/Multicolour/multicolour/tree/0.4.2) (2016-08-12)
+[Full Changelog](https://github.com/Multicolour/multicolour/compare/0.4.1...0.4.2)
+
+**Implemented enhancements:**
+
+- Plugins can extend core Plugin class [\#73](https://github.com/Multicolour/multicolour/issues/73)
+
+**Closed issues:**
+
+- Add better logging behind debug module [\#74](https://github.com/Multicolour/multicolour/issues/74)
+- Uncaught error: reply\[multicolour.request\(...\)\] is not a function [\#72](https://github.com/Multicolour/multicolour/issues/72)
+- Clean exit when running app.js without DB running [\#71](https://github.com/Multicolour/multicolour/issues/71)
+
+**Merged pull requests:**
+
+- Feature/74 debugging logging [\#78](https://github.com/Multicolour/multicolour/pull/78) ([davemackintosh](https://github.com/davemackintosh))
+- 🐛 Fixes missing `multicolour.request\("decorator"\)` [\#77](https://github.com/Multicolour/multicolour/pull/77) ([davemackintosh](https://github.com/davemackintosh))
+- Default register method negates the requirement for one in the plugin. [\#76](https://github.com/Multicolour/multicolour/pull/76) ([davemackintosh](https://github.com/davemackintosh))
+- 🐛 Bug :: Process doesn't exit when DB errors. [\#75](https://github.com/Multicolour/multicolour/pull/75) ([davemackintosh](https://github.com/davemackintosh))
+
 ## [0.4.1](https://github.com/Multicolour/multicolour/tree/0.4.1) (2016-08-05)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/0.3.4...0.4.1)
 
