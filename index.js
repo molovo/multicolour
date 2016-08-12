@@ -6,6 +6,7 @@ const Talkie = require("@newworldcode/talkie")
 // Get some bits we need to instantiate later.
 const Config = require("./lib/config")
 const Async = require("async")
+const debug = require("debug")
 
 class multicolour extends Map {
   /**
@@ -36,6 +37,9 @@ class multicolour extends Map {
     // Construct.
     super()
 
+    // Add the debug module.
+    this.debug = debug("multicolour:core")
+
     // Set raw properties on Multicolour.
     this
       // Get the CLI.
@@ -50,6 +54,9 @@ class multicolour extends Map {
       // We haven't scanned yet.
       .set("has_scanned", false)
 
+    // Show the config.
+    this.debug("config is %s", this.get("config").toString())
+
     // Where is the package.
     const package_path = require("path").resolve("package.json")
 
@@ -57,6 +64,9 @@ class multicolour extends Map {
     if (require("fs").existsSync(package_path)) {
       /* istanbul ignore next: Untestable */
       this.set("package", require(package_path))
+
+      // Show the package we're loading.
+      this.debug("found package %s", JSON.stringify(this.get("package"), null, 2))
     }
 
     // Reply to requests with the right modules.
@@ -73,6 +83,8 @@ class multicolour extends Map {
       console.info("Adding anything to global scope is generally bad.\nPlease consider removing make_global: true from your config.")
       /* eslint-enable */
       global.multicolour = this
+
+      this.debug("Made instance global, I.E global.multicolour")
     }
   }
 
@@ -128,6 +140,9 @@ class multicolour extends Map {
     // Get our content location.
     const content = this.get("config").get("content")
 
+    // Debugging.
+    this.debug("Scanning %s", content)
+
     // Get the file list.
     const files = require("fs").readdirSync(`${content}/blueprints`)
       // Delete crap like .DS_Store.
@@ -139,6 +154,9 @@ class multicolour extends Map {
     // Push our user model to the array of blueprints.
     files.push(require.resolve("./lib/user-model"))
 
+    // Debugging.
+    this.debug("Scanned and found: %s", JSON.stringify(files, null, 2))
+
     // Set the blueprints property.
     this
       .set("has_scanned", true)
@@ -148,6 +166,9 @@ class multicolour extends Map {
     this
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
+
+    // Debugging.
+    this.debug("Finished scanning")
 
     return this
   }
@@ -193,7 +214,12 @@ class multicolour extends Map {
     Async.series({
       start_database: next => database.start(next),
       start_server: next => server ? server.start(next) : next()
-    }, callback)
+    }, results => {
+      // Debugging.
+      this.debug("Start routine finished with %s", JSON.stringify(results, null, 2))
+
+      callback && callback(results, database, server)
+    })
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
@@ -241,7 +267,12 @@ class multicolour extends Map {
           next()
         })
       }
-    }, callback)
+    }, results => {
+      // Debugging.
+      this.debug("Stop routine finished with %s", JSON.stringify(results, null, 2))
+
+      callback && callback(results)
+    })
 
     return this
   }
