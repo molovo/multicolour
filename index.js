@@ -19,11 +19,12 @@ class multicolour extends Map {
   }
 
   /**
-   * Getter for the flow library for built in
-   * integration testing of your endpoints.
+   * Get an instantiated Flow with this instance
+   * of Multicolour ready to start testing.
    */
-  static get Flow() {
-    return require("./flow")
+  get Flow() {
+    const Flow = require("./flow")
+    return new Flow(this)
   }
 
   /**

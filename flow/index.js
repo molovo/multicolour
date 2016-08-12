@@ -23,33 +23,53 @@ class Flow {
   }
 
   run() {
-    // Start the database.
-    this.multicolour.get("database").start(() => {
-      // Generate the routes.
-      this.multicolour.get("server").generate_routes()
+    const db = this.multicolour.get("database")
 
-      const validators = this.multicolour.get("server").get("validators")
+    if (!db.get("database_connected")) {
+      // Start the database.
+      db.start(() => {
+        try {
+          // Generate the routes.
+          this.multicolour.get("server").generate_routes()
+        /* eslint-disable */
+        } catch (error) {}
+        /* eslint-enable */
 
-      // Start the flows by currying an Async task function.
-      Async.series(Array.from(this.tests).map(task => next => task.run(next)), errors => {
-        /* istanbul ignore next */
-        if (errors && errors.length > 0) {
-          /* eslint-disable */
-          console.error(errors)
-          /* eslint-enable */
-          process.exit(1)
-        }
-        else {
-          this.tasks_complete = true
-
-          /* eslint-disable */
-          console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.length, validators.length)
-          /* eslint-enable */
-        }
+        // Run the tasks.
+        this.run_tasks()
       })
-    })
+    }
+    else {
+      /* istanbul ignore next */
+      this.run_tasks()
+    }
 
     return this
+  }
+
+  run_tasks() {
+    const validators = this.multicolour.get("server").get("validators")
+
+    // Start the flows by currying an Async task function.
+    Async.series(Array.from(this.tests).map(task => next => task.run(next)), errors => {
+      // Stop the db.
+      this.multicolour.get("database").stop()
+
+      /* istanbul ignore next */
+      if (errors && errors.length > 0) {
+        /* eslint-disable */
+        console.error(errors)
+        /* eslint-enable */
+        process.exit(1)
+      }
+      else {
+        this.tasks_complete = true
+
+        /* eslint-disable */
+        console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.length, validators.length)
+        /* eslint-enable */
+      }
+    })
   }
 
   create(model, payload) {

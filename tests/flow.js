@@ -9,19 +9,11 @@ const Task = require("../flow/task")
 // Get Multicolour.
 const Multicolour = require("../index.js")
 
-// Where we keep the test content.
-const test_content_path = "./tests/test_content/"
-
 // Create an instance of multicolour.
-let multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js").scan()
-
-tape.onFinish(() => {
-  multicolour.reset()
-  multicolour = null
-})
+let multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js").scan()
 
 // Add a fake server.
-multicolour.use(class Server extends Map {
+multicolour.use(class extends Map {
   constructor() {
     super()
     this.set("flow_runner", function(task, done) { done(null) }.bind(this))
@@ -36,8 +28,10 @@ multicolour.use(class Server extends Map {
 tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
   test.plan(8)
 
+  require("sails-memory").teardown(() => {})
+
   test.doesNotThrow(() => {
-    new Flow(multicolour)
+    multicolour.Flow
       .create("test", { name: "test", age: 28 })
       .read("test", 1)
       .update("test", 1, { name: "testing" })
