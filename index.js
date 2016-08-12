@@ -77,6 +77,9 @@ class multicolour extends Map {
       // Generate a unique id.
       .reply("new_uuid", () => require("uuid").v4())
 
+      // The default decorator is application/json.
+      .reply("decorator", "application/json")
+
     // Does the config say to add to global?
     if (this.get("config").get("make_global")) {
       /* eslint-disable */
