@@ -50,7 +50,7 @@ class multicolour extends Map {
       .set("config", config instanceof Config ? config : new Config(config))
 
       // Set the environment we're in.
-      .set("env", process.env.NODE_ENV || "development")
+      .set("env", process.env.NODE_ENV || "production")
 
       // We haven't scanned yet.
       .set("has_scanned", false)
