@@ -28,6 +28,14 @@ class multicolour extends Map {
   }
 
   /**
+   * Get the handlers used internally for database work.
+   * @return {Object} handlers used by core to communicate with database(s).
+   */
+  static get handlers() {
+    return require("./lib/handlers")
+  }
+
+  /**
    * Create some internal properties and load in
    * the CLI and configuration.
    *

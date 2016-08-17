@@ -31,6 +31,7 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   test.ok(multicolour.start, "Has start function.")
   test.ok(multicolour.stop, "Has stop function.")
   test.ok(Multicolour.Endpoint, "Has Endpoint lib.")
+  test.ok(Multicolour.handlers, "Has handlers object.")
 
   // Replies with values.
   test.ok(multicolour.new("cli"), "Does reply with CLI member.")
