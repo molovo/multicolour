@@ -28,8 +28,6 @@ multicolour.use(class extends Map {
 tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
   test.plan(8)
 
-  require("sails-memory").teardown(() => {})
-
   test.doesNotThrow(() => {
     multicolour.Flow
       .create("test", { name: "test", age: 28 })
