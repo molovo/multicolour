@@ -17,5 +17,15 @@ module.exports = {
     toJSON: function() {
       return this.toObject()
     }
-  }
+  },
+
+  constraints: {
+    post: {},
+    get: {},
+    patch: {},
+    delete: {},
+    put: {}
+  },
+
+  can_upload_file: true
 }
