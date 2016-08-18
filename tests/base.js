@@ -128,9 +128,14 @@ tape("Multicolour global setup", test => {
   config.make_global = true
 
   // Create an instance of Multicolour.
-  const multicolour = new Multicolour(config).scan()
+  let multicolour = new Multicolour(config).scan()
 
   test.ok(global.multicolour, "Multicolour should be global when configured so.")
 
-  multicolour.stop(test.end.bind(test))
+  multicolour.stop(() => {
+    multicolour = null
+    delete global.multicolour
+    delete config.make_global
+    test.end()
+  })
 })
