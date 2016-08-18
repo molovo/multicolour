@@ -5,16 +5,13 @@ const Async = require("async")
 const Task = require("./task")
 
 class Flow {
-  constructor(multicolour, before) {
+  constructor(multicolour) {
     if (!multicolour) {
       throw new ReferenceError("You must pass an instance of Multicolour into your flows.")
     }
 
     // Set Multicolour.
     this.multicolour = multicolour
-
-    // If there was a before function, call it.
-    this._before = before && before.call(this)
 
     // Tests will be added here.
     this.tests = new Set()
@@ -33,19 +30,12 @@ class Flow {
   run() {
     const db = this.multicolour.get("database")
 
+    // If the database isn't connected,
+    // force the connection.
     if (!db.get("database_connected")) {
       // Start the database.
-      db.start(err => {
+      this.multicolour.start(err => {
         if (err) throw err
-
-        try {
-          // Generate the routes.
-          this.multicolour.get("server").generate_routes()
-        /* eslint-disable */
-        } catch (error) {}
-        /* eslint-enable */
-
-        this.forced_start = true
 
         // Run the tasks.
         this.run_tasks()
@@ -86,11 +76,7 @@ class Flow {
 
   run_tasks() {
     // Start the flows by currying an Async task function.
-    Async.series(Array.from(this.tests).map(task => next => task.run(next)), errors => {
-      // Stop the db.
-      if (this.forced_start) this.multicolour.get("database").stop(this.report.bind(this, errors))
-      else this.report(errors)
-    })
+    Async.series(Array.from(this.tests).map(task => next => task.run(next)), this.report.bind(this))
   }
 
   create(model, payload) {

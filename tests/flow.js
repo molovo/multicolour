@@ -1,13 +1,11 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape-catch")
-
-const Flow = require("../flow")
+const tape = require("tape")
 const Task = require("../flow/task")
 
 // Get Multicolour.
-const Multicolour = require("../index.js")
+const Multicolour = require("../index")
 
 // Create an instance of multicolour.
 let multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js").scan()
@@ -36,8 +34,6 @@ tape("Flow runs without error.", test => {
       .run()
   }, "Basic Flow does not error while running")
 
-  test.doesNotThrow(() => new Flow(multicolour, () => 1+1).run(), "Basic Flow does not error while running with a before function.")
-
   test.throws(() => new Task(), TypeError, "Throws when no options passed in")
   test.throws(() => new Task({}), ReferenceError, "Throws when missing verb option")
   test.throws(() => new Task({ verb: "GET" }), ReferenceError, "Throws when missing model option")
@@ -51,8 +47,6 @@ tape("Flow runs without error.", test => {
       multicolour
     })
 
-    task.run(() => {})
+    task.run(() => multicolour.stop(test.end.bind(test)))
   }, "Task 'runs' without throwing error.")
-
-  multicolour.stop(test.end.bind(test))
 })

@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape-catch")
+const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
@@ -17,6 +17,7 @@ tape("Default disk storage adapter.", test => {
 
   test.doesNotThrow(() => multicolour.use(storage), "Registering default storage adapter does not throw error.")
   test.ok(multicolour.request("storage"), "Storage is set after registering storage plugin.")
+  test.doesNotThrow(() => multicolour.request("storage").set_destination(require("os").tmpdir()), "Does not throw when changing destination")
   test.throws(() => multicolour.request("storage").upload(`${test_content_path}/circle.svg`), ReferenceError, "Upload without destination throws.")
   test.doesNotThrow(() => multicolour.request("storage").upload(`${test_content_path}/circle.svg`, "circle.svg"), "Uploading of a test file.")
 

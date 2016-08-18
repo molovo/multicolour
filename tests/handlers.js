@@ -58,28 +58,5 @@ tape("Handlers", test => {
         next()
       })
     ], multicolour.stop.bind(multicolour))
-
-    // Async.parallel([
-      // next => test.doesNotThrow(() => handlers.PATCH.call(model, request, err => {
-      //   if (err) throw err
-      //   next()
-      // }), "No error in PATCH handler"),
-      // next => test.doesNotThrow(() => handlers.DELETE.call(model, request, err => {
-      //   if (err) throw err
-      //   next()
-      // }), "No error in DELETE handler"),
-      // next => test.doesNotThrow(() => handlers.PUT.call(model, request, err => {
-      //   if (err) throw err
-      //   next()
-      // }), "No error in PUT handler"),
-      // next => {
-      //   request.payload = {}
-      //   request.params = {}
-      //   test.doesNotThrow(() => handlers.GET.call(model, request, err => {
-      //     if (err) throw err
-      //     next()
-      //   }), "No error in GET handler")
-      // }
-    // ], test.end.bind(test)))
   })
 })
