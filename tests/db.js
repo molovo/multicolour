@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape")
+const tape = require("tape-catch")
 
 // Get Multicolour.
 const Multicolour = require("../index")
@@ -75,6 +75,6 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
         test.equal(err, null, "No error during 4th seed")
         test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
       })
-    ], DB.stop.bind(DB))
+    ], multicolour.stop.bind(multicolour))
   })
 })

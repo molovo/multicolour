@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape")
+const tape = require("tape-catch")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
@@ -34,9 +34,6 @@ tape("Config can `set` and `get`", test => {
 
   config.set("test", 1)
   test.equal(config.get("test"), 1, "config.get('test') should be 1")
-
-  // Reset Multicolour.
-  multicolour.reset()
 
   test.end()
 })

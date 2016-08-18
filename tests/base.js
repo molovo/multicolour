@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape")
+const tape = require("tape-catch")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
@@ -38,9 +38,6 @@ tape("(Stupid tests) Multicolour initializes with base properties.", test => {
   test.ok(multicolour.get("config"), "Does reply with config member.")
   test.ok(multicolour.request("new_uuid"), "Does reply with uuid.")
 
-  // Reset multicolour.
-  multicolour.reset()
-
   // Done and dusted. Go home.
   test.end()
 })
@@ -58,9 +55,6 @@ tape("Multicolour configures itself.", test => {
   test.doesNotThrow(() => multicolour.reset_from_config_path(test_content_path + "/config.js"), TypeError, "Should not throw with path argument")
   test.notEqual(typeof config.get("content"), "undefined", "Config should have a content property.")
 
-  // Reset multicolour.
-  multicolour.reset()
-
   // Done and dusted. Go home.
   test.end()
 })
@@ -76,9 +70,6 @@ tape("Multicolour can register plugins.", test => {
 
   test.doesNotThrow(() => multicolour.use(Alt), "Should not throw if plugin inherits from Multicolour.Plugin.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
-
-  // Reset multicolour.
-  multicolour.reset()
 })
 
 tape("Multicolour scans for and finds blueprints.", test => {
@@ -136,7 +127,20 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
       bad_multicolour.stop()
     })
   }, Error, "Improperly configured DB throws on start with callback.")
+})
 
-  // Reset multicolour.
-  multicolour.reset()
+tape("Multicolour global setup", test => {
+  const config = require("./test_content/config.js")
+
+  config.make_global = true
+
+  // Create an instance of Multicolour.
+  let multicolour = new Multicolour(config).scan()
+
+  test.ok(global.multicolour, "Multicolour should be global when configured so.")
+
+  multicolour.stop(() => {
+    multicolour = null
+    test.end()
+  })
 })

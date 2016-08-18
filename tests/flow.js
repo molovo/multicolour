@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape")
+const tape = require("tape-catch")
 
 const Flow = require("../flow")
 const Task = require("../flow/task")

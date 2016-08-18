@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape")
+const tape = require("tape-catch")
 
 // Get Multicolour.
 const Multicolour = require("../index.js", { bash: true })
@@ -19,11 +19,8 @@ tape("CLI initializes an interface", test => {
   // Test it's not undefined and it is instantiated correctly.
   test.notEqual(typeof cli, "undefined", "CLI should not be undefined")
   test.notEquals(typeof cli.__scope, "undefined", "cli.__scope is is not undefined (set in multicolour.cli).")
-  test.deepEquals(cli.__scope, multicolour, "Scope is set to the instance of multicolour instantiated.")
+  test.ok(cli.__scope instanceof Multicolour, "Scope is set to an instance of multicolour.")
   test.notEquals(typeof cli.program, "undefined", "cli instance has a program.")
-
-  // Reset Multicolour.
-  multicolour.reset()
 
   test.end()
 })
@@ -42,6 +39,4 @@ tape("CLI scope should change when using `.scope()`", test => {
 
   test.deepEquals(cli.__scope, alt_multicolour, "Scope changed to alternative instance of multicolour.")
   test.throws(() => cli.scope(), ReferenceError, "Should throw ReferenceError when no scope provided.")
-
-  multicolour.reset()
 })
