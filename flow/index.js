@@ -6,6 +6,10 @@ const Task = require("./task")
 
 class Flow {
   constructor(multicolour, before) {
+    if (!multicolour) {
+      throw new ReferenceError("You must pass an instance of Multicolour into your flows.")
+    }
+
     // Set Multicolour.
     this.multicolour = multicolour
 
@@ -18,6 +22,10 @@ class Flow {
     // Tasks are not complete by default.
     this.tasks_complete = false
 
+    // We might need to force starting the DB to run tests.
+    // Flag here so we can stop it again later.
+    this.forced_start = false
+
     // Return.
     return this
   }
@@ -27,13 +35,17 @@ class Flow {
 
     if (!db.get("database_connected")) {
       // Start the database.
-      db.start(() => {
+      db.start(err => {
+        if (err) throw err
+
         try {
           // Generate the routes.
           this.multicolour.get("server").generate_routes()
         /* eslint-disable */
         } catch (error) {}
         /* eslint-enable */
+
+        this.forced_start = true
 
         // Run the tasks.
         this.run_tasks()
@@ -47,28 +59,37 @@ class Flow {
     return this
   }
 
-  run_tasks() {
+  /**
+   * Report the test results.
+   *
+   * @param {Array} errors that happened during tests.
+   * @return {void}
+   */
+  report(errors) {
     const validators = this.multicolour.get("server").get("validators")
 
+    /* istanbul ignore next */
+    if (errors && errors.length > 0) {
+      /* eslint-disable */
+      console.error(errors)
+      /* eslint-enable */
+      process.exit(1)
+    }
+    else {
+      this.tasks_complete = true
+
+      /* eslint-disable */
+      console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.length, validators.length)
+      /* eslint-enable */
+    }
+  }
+
+  run_tasks() {
     // Start the flows by currying an Async task function.
     Async.series(Array.from(this.tests).map(task => next => task.run(next)), errors => {
       // Stop the db.
-      this.multicolour.get("database").stop()
-
-      /* istanbul ignore next */
-      if (errors && errors.length > 0) {
-        /* eslint-disable */
-        console.error(errors)
-        /* eslint-enable */
-        process.exit(1)
-      }
-      else {
-        this.tasks_complete = true
-
-        /* eslint-disable */
-        console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.length, validators.length)
-        /* eslint-enable */
-      }
+      if (this.forced_start) this.multicolour.get("database").stop(this.report.bind(this, errors))
+      else this.report(errors)
     })
   }
 

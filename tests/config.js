@@ -19,7 +19,7 @@ tape("Multicolour initializes a config instance", test => {
   // Test it's not undefined and it is instantiated correctly.
   test.notEqual(typeof config, "undefined", "config should not be undefined")
 
-  test.end()
+  multicolour.stop(test.end.bind(test))
 })
 
 tape("Config can `set` and `get`", test => {
@@ -35,5 +35,5 @@ tape("Config can `set` and `get`", test => {
   config.set("test", 1)
   test.equal(config.get("test"), 1, "config.get('test') should be 1")
 
-  test.end()
+  multicolour.stop(test.end.bind(test))
 })

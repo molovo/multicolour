@@ -11,8 +11,6 @@ const storage = require("../lib/storage")
 const test_content_path = "./tests/test_content/"
 
 tape("Default disk storage adapter.", test => {
-  test.plan(8)
-
   const multicolour = Multicolour
       .new_from_config_file_path(`${test_content_path}config.js`)
       .scan()
@@ -28,4 +26,6 @@ tape("Default disk storage adapter.", test => {
   test.doesNotThrow(() => multicolour.request("storage").upload(test_stream, "circle_abort.svg").abort(), "Abort uploading of stream.")
   test.equal(multicolour.request("storage").upload(test_stream, "circle_abort.svg").abort().destroyed, true, "Aborted upload stream is destroyed")
   test.doesNotThrow(() => multicolour.request("storage").get("circle.svg"), "Can retrieve file.")
+
+  multicolour.stop(test.end.bind(test))
 })

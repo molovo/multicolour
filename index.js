@@ -63,6 +63,9 @@ class multicolour extends Map {
       // We haven't scanned yet.
       .set("has_scanned", false)
 
+      // Whether the service is stopping.
+      .set("is_stopping", false)
+
     // Show the config.
     this.debug("config is %s", this.get("config").toString())
 
@@ -187,7 +190,7 @@ class multicolour extends Map {
 
   /**
    * Configure a plugin to run with Multicolour.
-   * @param  {Object} configuration of the plugin.
+   * @param  {class} plugin to register.
    * @return {multicolour} object for chaining.
    */
   use(Plugin) {
@@ -235,7 +238,7 @@ class multicolour extends Map {
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
-    process.on("SIGINT", this.stop.bind(this, process.exit.bind(process)))
+    process.on("SIGINT", this.stop.bind(this, process.exit.bind(process), true))
 
     return this
   }
@@ -245,39 +248,45 @@ class multicolour extends Map {
    * @param {Function} callback to execute when server has shutdown with error argument.
    * @return {multicolour} Object for chaining.
    */
-  stop(callback) {
+  stop(callback, forced) {
     /* eslint-disable */
-    console.info("Shutting down services. Press ctrl+c again to quit ungracefully.")
+    callback = callback || (() => console.info("Service stopped."))
     /* eslint-enable */
+
+    if (forced && !this.get("is_stopping")) {
+      /* eslint-disable */
+      console.info("Shutting down services. Press ctrl+c again to quit ungracefully.")
+      /* eslint-enable */
+    }
+
+    // Show intent to stop.
+    this.set("is_stopping", true)
+
     // Stahp all the things.
     Async.series({
-      // Stop the database.
-      stop_database: next => {
-        // Emit an event to say the database is stopping.
-        this.trigger("database_stopping")
-
-        // Stop the database(s).
-        this.get("database").stop(error => {
-          // Emit an event once the server has stopped.
-          this.trigger("database_stopped")
-
-          next(error)
-        })
-      },
-
       // Stop the server.
       stop_server: next => {
-        // Emit an event to say the server is stopping.
-        this.trigger("server_stopping")
+        let server = this.get("server")
 
         // Stop the server.
-        this.get("server").stop(() => {
-          // Emit an event to say the server has stopped.
-          this.trigger("server_stopped")
+        if (server) {
+          server.stop(() => {
+            // Continue.
+            next()
+            server = null
+          })
+        }
+        else next()
+      },
 
-          // Continue.
-          next()
-        })
+      // Stop the database.
+      stop_database: next => {
+        let database = this.get("database")
+
+        if (database) database.stop(next)
+        else next()
+
+        database = null
       }
     }, results => {
       // Debugging.

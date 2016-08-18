@@ -60,8 +60,6 @@ tape("Multicolour configures itself.", test => {
 })
 
 tape("Multicolour can register plugins.", test => {
-  test.plan(2)
-
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js")
 
@@ -70,23 +68,20 @@ tape("Multicolour can register plugins.", test => {
 
   test.doesNotThrow(() => multicolour.use(Alt), "Should not throw if plugin inherits from Multicolour.Plugin.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
+
+  multicolour.stop(test.end.bind(test))
 })
 
 tape("Multicolour scans for and finds blueprints.", test => {
-  let multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js")
-
-  // Scan for content in the above defined content directory.
-  multicolour.scan()
+  const multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js").scan()
 
   test.notEqual(typeof multicolour.get("blueprints"), "undefined", "Blueprints should exist.")
 
-  multicolour = new Multicolour()
-
   // Scan for content when there's no config set.
-  test.throws(() => multicolour.scan(), Error, "Throws error when no content path is set.")
+  test.throws(() => new Multicolour().scan(), Error, "Throws error when no content path is set.")
 
   // Done and dusted. Go home.
-  test.end()
+  multicolour.stop(test.end.bind(test))
 })
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
@@ -123,9 +118,7 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
       content: test_content_path
     }).scan()
 
-    bad_multicolour.start(() => {
-      bad_multicolour.stop()
-    })
+    bad_multicolour.start(() => bad_multicolour.stop())
   }, Error, "Improperly configured DB throws on start with callback.")
 })
 
@@ -135,12 +128,9 @@ tape("Multicolour global setup", test => {
   config.make_global = true
 
   // Create an instance of Multicolour.
-  let multicolour = new Multicolour(config).scan()
+  const multicolour = new Multicolour(config).scan()
 
   test.ok(global.multicolour, "Multicolour should be global when configured so.")
 
-  multicolour.stop(() => {
-    multicolour = null
-    test.end()
-  })
+  multicolour.stop(test.end.bind(test))
 })

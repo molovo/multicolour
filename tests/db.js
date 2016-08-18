@@ -1,5 +1,7 @@
 "use strict"
 
+const Async = require("async")
+
 // Get the testing library.
 const tape = require("tape-catch")
 
@@ -7,8 +9,6 @@ const tape = require("tape-catch")
 const Multicolour = require("../index")
 
 tape("Waterline collections are created by Multicolour on instantiation and we only get expected errors.", test => {
-  test.plan(17)
-
   // Create an instance of multicolour.
   const multicolour = new Multicolour(require("./test_content/config.js")).scan()
   const DB = multicolour.get("database")
@@ -50,31 +50,36 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
     const models = ontology.collections
 
     // Test various inserts.
-    Promise.all([
-      models.test.create({ name: "test", age: 100, empty: null, test2: 1 }, (err, t) => {
+    Async.parallel([
+      next => models.test.create({ name: "test", age: 100, empty: null, test2: 1 }, (err, t) => {
         test.equal(err, null, "No error during 1st seed")
         test.doesNotThrow(() => t.toJSON(), "Called toJSON on test")
+        next()
       }),
-      models.test2.create({ name: "test", age: 100 }, (err, t) => {
+      next => models.test2.create({ name: "test", age: 100 }, (err, t) => {
         test.equal(err, null, "No error during 2nd seed")
         test.doesNotThrow(() => t.toJSON(), "Called toJSON on test2")
+        next()
       }),
-      models.multicolour_user.create({
+      next => models.multicolour_user.create({
         username: "test",
         name: "test",
         password: "password"
       }, (err, user) => {
         test.equal(err, null, "No error during 3rd seed")
         test.doesNotThrow(() => user.toJSON(), "Called toJSON on user")
+        next()
       }),
-      models.multicolour_user.create({
+      next => models.multicolour_user.create({
         username: "test2",
         name: "test2",
         email: null
       }, (err, user) => {
         test.equal(err, null, "No error during 4th seed")
         test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
+        next()
       })
-    ], multicolour.stop.bind(multicolour))
+      // Done. We've checked for errors above. Just stop and quit.
+    ], () => multicolour.stop(test.end.bind(test)))
   })
 })

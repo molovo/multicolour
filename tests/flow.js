@@ -25,9 +25,7 @@ multicolour.use(class extends Map {
   generate_routes() {}
 })
 
-tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
-  test.plan(8)
-
+tape("Flow runs without error.", test => {
   test.doesNotThrow(() => {
     multicolour.Flow
       .create("test", { name: "test", age: 28 })
@@ -55,4 +53,6 @@ tape("Flow runs without error.", { objectPrintDepth: Infinity }, test => {
 
     task.run(() => {})
   }, "Task 'runs' without throwing error.")
+
+  multicolour.stop(test.end.bind(test))
 })
