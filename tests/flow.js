@@ -36,7 +36,7 @@ tape("Task run without error.", test => {
 })
 
 tape("Flow runs as expected", test => {
-  test.plan(3)
+  test.plan(2)
 
   test.throws(() => new Flow(), ReferenceError, "Throws error when no Multicolour instance provided")
   multicolour.Flow
@@ -48,16 +48,6 @@ tape("Flow runs as expected", test => {
     .run(errors => {
       test.ok(!errors, "No errors during basic flow run.")
     })
-
-  test.doesNotThrow(() => {
-    multicolour.Flow
-      .create("test", { name: "test", age: 28 })
-      .read("test", 1)
-      .update("test", 1, { name: "testing" })
-      .delete("test", 1)
-      .then("read", "test", 1)
-      .run()
-  })
 })
 
 tape("Flow teardown", test => {

@@ -52,6 +52,11 @@ tape("Handlers", test => {
         test.equal(rows.length, 1, "Returned 1 document")
         next()
       }),
+      next => handlers.GET.call(model, { params: { id: 999 }, url }, (err, rows) => {
+        test.ok(err, "Expected error in GET handler with bad id.")
+        test.equal(err.code, 404, "Returned a 404")
+        next()
+      }),
       next => handlers.PATCH.call(model, { payload, params: { id:1 }, url }, err => {
         test.equal(err, null, "No error in PATCH handler with id.")
         next()
@@ -69,6 +74,22 @@ tape("Handlers", test => {
         test.equal(err, null, "No error in PUT handler with id.")
         next()
       }),
+      next => handlers.PUT.call(model, { params: { id: 2 }, payload, url }, err => {
+        test.equal(err, null, "No error in PUT handler with newly created record.")
+        next()
+      }),
+      next => handlers.UPLOAD.call(model, {
+        params: { id: 999 },
+        payload: {
+          file: {
+            filename: test_content_path + "circle.svg",
+            path: test_content_path + "circle.svg"
+          }
+        }, url }, err => {
+          test.ok(err, "Expected error in UPLOAD handler when row not found.")
+          test.equal(err.code, 404, "Get a 404 for trying to upload to unknown row")
+          next()
+        }),
       next => handlers.UPLOAD.call(model, {
         params: { id: 2 },
         payload: {

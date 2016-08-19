@@ -77,7 +77,10 @@ class Flow {
 
   run_tasks(callback) {
     // Start the flows by currying an Async task function.
-    Async.series(Array.from(this.tests).map(task => next => task.run(next)), callback || this.report.bind(this))
+    Async.series(Array.from(this.tests).map(task => next => task.run(next)), errors => {
+      callback && callback(errors)
+      this.report(errors)
+    })
   }
 
   create(model, payload) {
