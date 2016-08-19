@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.4.2](https://github.com/Multicolour/multicolour/tree/0.4.2) (2016-08-19)
+[Full Changelog](https://github.com/Multicolour/multicolour/compare/0.4.2...0.4.2)
+
+**Fixed bugs:**
+
+- Default env is development, should be production [\#82](https://github.com/Multicolour/multicolour/issues/82)
+- Cannot read property identity of undefined. [\#81](https://github.com/Multicolour/multicolour/issues/81)
+- Investigate failing tests but everything working.. [\#80](https://github.com/Multicolour/multicolour/issues/80)
+
 ## [0.4.2](https://github.com/Multicolour/multicolour/tree/0.4.2) (2016-08-12)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/0.4.1...0.4.2)
 
@@ -12,13 +21,6 @@
 - Add better logging behind debug module [\#74](https://github.com/Multicolour/multicolour/issues/74)
 - Uncaught error: reply\[multicolour.request\(...\)\] is not a function [\#72](https://github.com/Multicolour/multicolour/issues/72)
 - Clean exit when running app.js without DB running [\#71](https://github.com/Multicolour/multicolour/issues/71)
-
-**Merged pull requests:**
-
-- Feature/74 debugging logging [\#78](https://github.com/Multicolour/multicolour/pull/78) ([davemackintosh](https://github.com/davemackintosh))
-- 🐛 Fixes missing `multicolour.request\("decorator"\)` [\#77](https://github.com/Multicolour/multicolour/pull/77) ([davemackintosh](https://github.com/davemackintosh))
-- Default register method negates the requirement for one in the plugin. [\#76](https://github.com/Multicolour/multicolour/pull/76) ([davemackintosh](https://github.com/davemackintosh))
-- 🐛 Bug :: Process doesn't exit when DB errors. [\#75](https://github.com/Multicolour/multicolour/pull/75) ([davemackintosh](https://github.com/davemackintosh))
 
 ## [0.4.1](https://github.com/Multicolour/multicolour/tree/0.4.1) (2016-08-05)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/0.3.4...0.4.1)
@@ -39,17 +41,6 @@
 
 - 0.3.2 Release [\#50](https://github.com/Multicolour/multicolour/issues/50)
 - Integrate Sorrow [\#12](https://github.com/Multicolour/multicolour/issues/12)
-- Create automated test suite based on Joi for REST api. [\#9](https://github.com/Multicolour/multicolour/issues/9)
-- JWT integration. [\#6](https://github.com/Multicolour/multicolour/issues/6)
-
-**Merged pull requests:**
-
-- Feature/blueprint abstraction [\#68](https://github.com/Multicolour/multicolour/pull/68) ([davemackintosh](https://github.com/davemackintosh))
-- Feature/flow based testing [\#67](https://github.com/Multicolour/multicolour/pull/67) ([davemackintosh](https://github.com/davemackintosh))
-- Update eslint to version 3.0.1 🚀 [\#66](https://github.com/Multicolour/multicolour/pull/66) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
-- Update pluralize to version 3.0.0 🚀 [\#63](https://github.com/Multicolour/multicolour/pull/63) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
-- snyk@1.15.0 breaks build 🚨 [\#62](https://github.com/Multicolour/multicolour/pull/62) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
-- Update all dependencies 🌴 [\#61](https://github.com/Multicolour/multicolour/pull/61) ([greenkeeperio-bot](https://github.com/greenkeeperio-bot))
 
 ## [0.3.4](https://github.com/Multicolour/multicolour/tree/0.3.4) (2016-03-10)
 [Full Changelog](https://github.com/Multicolour/multicolour/compare/v0.2.9...0.3.4)
@@ -75,8 +66,6 @@
 - Missing role support for users [\#32](https://github.com/Multicolour/multicolour/issues/32)
 - Remove any default migration policy. [\#28](https://github.com/Multicolour/multicolour/issues/28)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
-- Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
-- Add query parameter support to GET requests. [\#22](https://github.com/Multicolour/multicolour/issues/22)
 
 **Fixed bugs:**
 
@@ -91,7 +80,6 @@
 - Don't default the migration policy to "alter" [\#27](https://github.com/Multicolour/multicolour/issues/27)
 - Throwing error in multicolour start and not db start prevents error reporting [\#26](https://github.com/Multicolour/multicolour/issues/26)
 - Disable overly protective migrate default from "safe" to "alter" [\#25](https://github.com/Multicolour/multicolour/issues/25)
-- Make plugins less archaic [\#24](https://github.com/Multicolour/multicolour/issues/24)
 - Fix PUT and PATCH [\#23](https://github.com/Multicolour/multicolour/issues/23)
 - Identity in blueprints not respected [\#21](https://github.com/Multicolour/multicolour/issues/21)
 
@@ -100,24 +88,12 @@
 - Can't seed app generated with CLI [\#42](https://github.com/Multicolour/multicolour/issues/42)
 - Mongodb kerberos peer dependency [\#40](https://github.com/Multicolour/multicolour/issues/40)
 - Create Example app [\#35](https://github.com/Multicolour/multicolour/issues/35)
-- Add upload storage provider plugin support [\#19](https://github.com/Multicolour/multicolour/issues/19)
 - API docs/WIKI [\#18](https://github.com/Multicolour/multicolour/issues/18)
 - Blueprint -\> Frontend route/collection/model generation. [\#17](https://github.com/Multicolour/multicolour/issues/17)
 - Custom, additional route creation in blueprints. [\#15](https://github.com/Multicolour/multicolour/issues/15)
 - Create CLI [\#14](https://github.com/Multicolour/multicolour/issues/14)
 - Make it all JSON API compliant [\#13](https://github.com/Multicolour/multicolour/issues/13)
 - Paginate GET requests [\#10](https://github.com/Multicolour/multicolour/issues/10)
-- Create Waterline to Joi converter [\#8](https://github.com/Multicolour/multicolour/issues/8)
-- Integrate Swagger for automatic REST docs. [\#7](https://github.com/Multicolour/multicolour/issues/7)
-- `Bell` integration for multiple OAuth authorisation types on REST api. [\#5](https://github.com/Multicolour/multicolour/issues/5)
-- Rainbow blueprint -\> Hapi CRUD route generation. [\#4](https://github.com/Multicolour/multicolour/issues/4)
-- Rainbow blueprint -\> Waterline Collection. [\#3](https://github.com/Multicolour/multicolour/issues/3)
-- Version 1.0 [\#1](https://github.com/Multicolour/multicolour/issues/1)
-
-**Merged pull requests:**
-
-- Add a Gitter chat badge to README.md [\#20](https://github.com/Multicolour/multicolour/pull/20) ([gitter-badger](https://github.com/gitter-badger))
-- Dev [\#2](https://github.com/Multicolour/multicolour/pull/2) ([davemackintosh](https://github.com/davemackintosh))
 
 
 
