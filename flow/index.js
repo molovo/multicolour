@@ -35,6 +35,7 @@ class Flow {
     if (!db.get("database_connected")) {
       // Start the database.
       db.start(err => {
+        /* istanbul ignore next */
         if (err) throw err
 
         // Run the tasks.
