@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape-catch")
+const tape = require("tape")
 const Async = require("async")
 
 // Get Multicolour.
@@ -65,14 +65,21 @@ tape("Handlers", test => {
         test.equal(err.code, 410, "Document gone status code.")
         next()
       }),
-      next => handlers.PUT.call(model, { params: { id:2 }, payload, url }, err => {
+      next => handlers.PUT.call(model, { params: { id: 2 }, payload, url }, err => {
         test.equal(err, null, "No error in PUT handler with id.")
         next()
       }),
-      next => handlers.UPLOAD.call(model, { params: { id:2 }, payload: {file: test_content_path + "circle.svg"}, url }, err => {
-        test.equal(err, null, "No error in UPLOAD handler with id.")
-        next()
-      })
+      next => handlers.UPLOAD.call(model, {
+        params: { id: 2 },
+        payload: {
+          file: {
+            filename: test_content_path + "circle.svg",
+            path: test_content_path + "circle.svg"
+          }
+        }, url }, err => {
+          test.equal(err, null, "No error in UPLOAD handler.")
+          next()
+        })
     ], multicolour.stop.bind(multicolour, test.end.bind(test)))
   })
 })

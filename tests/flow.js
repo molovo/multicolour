@@ -1,5 +1,7 @@
 "use strict"
 
+Error.stackTraceLimit = Infinity
+
 // Get the testing library.
 const tape = require("tape")
 const Task = require("../flow/task")
@@ -11,29 +13,10 @@ const Multicolour = require("../index")
 let multicolour = Multicolour.new_from_config_file_path("./tests/test_content/config.js").scan()
 
 // Add a fake server.
-multicolour.use(class extends Map {
-  constructor() {
-    super()
-    this.set("flow_runner", function(task, done) { done(null) }.bind(this))
-    this.set("validators", new Map([["application/json", () => {}]]))
-  }
-  register(host) { host.set("server", this) }
-  start(callback) { callback(null); return this }
-  stop(callback) { callback(null); return this }
-  generate_routes() {}
-})
+multicolour.use(require("./test_content/server"))
 
-tape("Flow runs without error.", test => {
-  test.doesNotThrow(() => {
-    multicolour.Flow
-      .create("test", { name: "test", age: 28 })
-      .read("test", 1)
-      .update("test", 1, { name: "testing" })
-      .delete("test", 1)
-      .then("read", "test", 1)
-      .run()
-  }, "Basic Flow does not error while running")
-
+tape("Task run without error.", test => {
+  test.plan(6)
   test.throws(() => new Task(), TypeError, "Throws when no options passed in")
   test.throws(() => new Task({}), ReferenceError, "Throws when missing verb option")
   test.throws(() => new Task({ verb: "GET" }), ReferenceError, "Throws when missing model option")
@@ -47,6 +30,23 @@ tape("Flow runs without error.", test => {
       multicolour
     })
 
-    task.run(() => multicolour.stop(test.end.bind(test)))
+    task.run(() => {})
   }, "Task 'runs' without throwing error.")
+})
+
+tape("Flow runs without error", test => {
+  test.plan(1)
+  multicolour.Flow
+    .create("test", { name: "test", age: 28 })
+    .read("test", 1)
+    .update("test", 1, { name: "testing" })
+    .delete("test", 1)
+    .then("read", "test", 1)
+    .run(errors => {
+      test.ok(!errors, "No errors during basic flow run.")
+    })
+})
+
+tape("Flow teardown", test => {
+  multicolour.get("database").stop(test.end.bind(test))
 })

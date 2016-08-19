@@ -27,23 +27,23 @@ class Flow {
     return this
   }
 
-  run() {
+  run(callback) {
     const db = this.multicolour.get("database")
 
     // If the database isn't connected,
     // force the connection.
     if (!db.get("database_connected")) {
       // Start the database.
-      this.multicolour.start(err => {
+      db.start(err => {
         if (err) throw err
 
         // Run the tasks.
-        this.run_tasks()
+        this.run_tasks(callback)
       })
     }
     else {
       /* istanbul ignore next */
-      this.run_tasks()
+      this.run_tasks(callback)
     }
 
     return this
@@ -74,9 +74,9 @@ class Flow {
     }
   }
 
-  run_tasks() {
+  run_tasks(callback) {
     // Start the flows by currying an Async task function.
-    Async.series(Array.from(this.tests).map(task => next => task.run(next)), this.report.bind(this))
+    Async.series(Array.from(this.tests).map(task => next => task.run(next)), callback || this.report.bind(this))
   }
 
   create(model, payload) {
