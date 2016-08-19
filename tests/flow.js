@@ -5,6 +5,7 @@ Error.stackTraceLimit = Infinity
 // Get the testing library.
 const tape = require("tape")
 const Task = require("../flow/task")
+const Flow = require("../flow")
 
 // Get Multicolour.
 const Multicolour = require("../index")
@@ -34,8 +35,10 @@ tape("Task run without error.", test => {
   }, "Task 'runs' without throwing error.")
 })
 
-tape("Flow runs without error", test => {
-  test.plan(1)
+tape("Flow runs as expected", test => {
+  test.plan(3)
+
+  test.throws(() => new Flow(), ReferenceError, "Throws error when no Multicolour instance provided")
   multicolour.Flow
     .create("test", { name: "test", age: 28 })
     .read("test", 1)
@@ -45,6 +48,16 @@ tape("Flow runs without error", test => {
     .run(errors => {
       test.ok(!errors, "No errors during basic flow run.")
     })
+
+  test.doesNotThrow(() => {
+    multicolour.Flow
+      .create("test", { name: "test", age: 28 })
+      .read("test", 1)
+      .update("test", 1, { name: "testing" })
+      .delete("test", 1)
+      .then("read", "test", 1)
+      .run()
+  })
 })
 
 tape("Flow teardown", test => {

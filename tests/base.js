@@ -86,7 +86,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
   // Expect N tests.
-  test.plan(3)
+  test.plan(4)
 
   // Create an instance of Multicolour.
   const multicolour = Multicolour
@@ -113,13 +113,19 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
   })
 
   test.throws(() => {
-    const bad_multicolour = new Multicolour({
+    new Multicolour({
       db: {},
       content: test_content_path
-    }).scan()
-
-    bad_multicolour.start(() => bad_multicolour.stop())
+    })
   }, Error, "Improperly configured DB throws on start with callback.")
+
+  test.doesNotThrow(() => {
+    const multicolour = Multicolour
+      .new_from_config_file_path(test_content_path + "config.js")
+      .scan()
+
+    multicolour.start(() => multicolour.stop(null, true))
+  })
 })
 
 tape("Multicolour global setup", test => {
