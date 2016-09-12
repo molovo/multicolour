@@ -33,7 +33,7 @@
     "joi": "^9.0.4",
     "jsocrud": "^2.0.3",
     "pluralize": "^3.0.0",
-    "replacestream": "^4.0.0",
+    "replacestream": "^4.0.2",
     "snyk": "^1.17.0",
     "uuid": "^2.0.2",
     "validate-npm-package-name": "^2.2.2",
