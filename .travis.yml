@@ -10,7 +10,7 @@ env:
   - NODE_ENV=development
 
 script:
-  - "istanbul cover tape tests/*.js --recursive --report lcov -x cli.js | tap-spec"
+  - "npm run travis-coverage"
 
 after_script:
   - "npm install coveralls@2 && cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
