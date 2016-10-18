@@ -46,6 +46,7 @@
   },
   "devDependencies": {
     "eslint": "^3.8.1",
+    "html": "^1.0.0",
     "istanbul": "^0.4.5",
     "mkdirp": "^0.5.1",
     "sails-memory": "^0.10.7",
