@@ -3,7 +3,7 @@
 const Async = require("async")
 
 // Get the testing library.
-const tape = require("tape-catch")
+const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index")
