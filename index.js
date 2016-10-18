@@ -257,7 +257,7 @@ class multicolour extends Map {
 
     if (forced && !this.get("is_stopping")) {
       /* eslint-disable */
-      console.info("Shutting down services. Press ctrl+c again to quit ungracefully.")
+      console.info("Received SIGKILL. Press ctrl+c to quit ungracefully.")
       /* eslint-enable */
     }
 
