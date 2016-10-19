@@ -272,9 +272,10 @@ class multicolour extends Map {
     callback = callback || (() => console.info("Service stopped."))
     /* eslint-enable */
 
+    // Only ungracefully exit with confirmation.
     if (forced && !this.get("is_stopping")) {
       /* eslint-disable */
-      console.info("Received SIGKILL. Press ctrl+c to quit ungracefully.")
+      console.info("Received SIGINT (interrupt signal). Press ctrl+c to quit ungracefully.")
       /* eslint-enable */
     }
 
