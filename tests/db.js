@@ -13,6 +13,9 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   const multicolour = new Multicolour(require("./test_content/config.js")).scan()
   const DB = multicolour.get("database")
 
+  // Enable the user model for seeding.
+  test.doesNotThrow(() => multicolour._enable_user_model(), "No error while enablking user model.")  
+
   // Test stuff exists.
   test.notEquals(typeof multicolour.get("blueprints"), "undefined", "Blueprints exists")
   test.notEquals(typeof DB, "undefined", "Database connection exists")
