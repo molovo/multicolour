@@ -1,7 +1,7 @@
 "use strict"
 
 // Get the testing library.
-const tape = require("tape-catch")
+const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index.js")
@@ -86,7 +86,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
   // Expect N tests.
-  test.plan(4)
+  test.plan(3)
 
   // Create an instance of Multicolour.
   const multicolour = Multicolour
@@ -118,14 +118,6 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
       content: test_content_path
     })
   }, Error, "Improperly configured DB throws on start with callback.")
-
-  test.doesNotThrow(() => {
-    const multicolour = Multicolour
-      .new_from_config_file_path(test_content_path + "config.js")
-      .scan()
-
-    multicolour.start(() => multicolour.stop(null, true))
-  })
 })
 
 tape("Multicolour global setup", test => {

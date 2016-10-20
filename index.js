@@ -148,6 +148,26 @@ class multicolour extends Map {
   }
 
   /**
+   * We don't always want the user model,
+   * if we do want it. Run this function to add it to
+   * the list of known blueprints. Reduce noise for newcomers.
+   *
+   * @return {multicolour} multicolour instance with added blueprint.
+   */
+  _enable_user_model() {
+    // Resolve the blueprint.
+    const blueprint = require.resolve("./lib/user-model")
+
+    // Help debuggers.
+    this.debug("User model requested, registering blueprint." + blueprint)
+
+    // Push our user model to the array of blueprints.
+    this.get("database").register_new_model(blueprint)
+
+    return this
+  }
+
+  /**
    * Scan the content directory for content like blueprints,
    * config files, etc and set the appropriate properties on
    * this instance of multicolour.
@@ -167,9 +187,6 @@ class multicolour extends Map {
 
       // Create a full path from it.
       .map(file => `${content}/blueprints/${file}`)
-
-    // Push our user model to the array of blueprints.
-    files.push(require.resolve("./lib/user-model"))
 
     // Debugging.
     this.debug("Scanned and found: %s", JSON.stringify(files, null, 2))
@@ -255,9 +272,10 @@ class multicolour extends Map {
     callback = callback || (() => console.info("Service stopped."))
     /* eslint-enable */
 
+    // Only ungracefully exit with confirmation.
     if (forced && !this.get("is_stopping")) {
       /* eslint-disable */
-      console.info("Shutting down services. Press ctrl+c again to quit ungracefully.")
+      console.info("Received SIGINT (interrupt signal). Press ctrl+c to quit ungracefully.")
       /* eslint-enable */
     }
 

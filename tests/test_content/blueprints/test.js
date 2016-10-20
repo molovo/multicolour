@@ -20,7 +20,9 @@ module.exports = {
   },
 
   constraints: {
-    post: {},
+    post: {
+      "test": "payload.test"
+    },
     get: {},
     patch: {},
     delete: {},

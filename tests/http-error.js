@@ -1,7 +1,7 @@
 "use strict"
 
 const Http_Error = require("../lib/http-error")
-const tape = require("tape-catch")
+const tape = require("tape")
 
 tape("http error class", test => {
   test.ok(new Http_Error("I'm an error, of the HTTP variety.", 400))

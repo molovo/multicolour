@@ -3,7 +3,7 @@
 const Async = require("async")
 
 // Get the testing library.
-const tape = require("tape-catch")
+const tape = require("tape")
 
 // Get Multicolour.
 const Multicolour = require("../index")
@@ -12,6 +12,9 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   // Create an instance of multicolour.
   const multicolour = new Multicolour(require("./test_content/config.js")).scan()
   const DB = multicolour.get("database")
+
+  // Enable the user model for seeding.
+  test.doesNotThrow(() => multicolour._enable_user_model(), "No error while enablking user model.")  
 
   // Test stuff exists.
   test.notEquals(typeof multicolour.get("blueprints"), "undefined", "Blueprints exists")
