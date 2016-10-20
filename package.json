@@ -52,12 +52,7 @@
     "mkdirp": "^0.5.1",
     "sails-memory": "^0.10.7",
     "tap-spec": "^4.1.1",
-<<<<<<< HEAD
-    "tape": "^4.6.0",
-    "tape-catch": "^1.0.6"
-=======
     "tape": "^1.0.6",
     "waterline-joi": "^1.0.12"
->>>>>>> master
   }
 }
