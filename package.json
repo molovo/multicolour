@@ -8,7 +8,8 @@
     "multicolour": "start.js"
   },
   "scripts": {
-    "test": "tape tests/*.js | tap-spec",
+    "linter": "eslint ./**/*.js",
+    "test": "npm run linter && tape tests/*.js | tap-spec",
     "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov html -x cli.js | tap-spec",
     "travis-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x cli.js | tap-spec",
     "changelog": "github_changelog_generator -u Multicolour -p multicolour"
