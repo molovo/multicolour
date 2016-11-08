@@ -1,5 +1,7 @@
 "use strict"
 
+const utils = require("multicolour/lib/utils")
+
 module.exports = {
   attributes: {
     name: {
@@ -17,22 +19,27 @@ module.exports = {
       type: "string",
       minLength: 5
     }
+    salt: "string",
   },
 
   // Before we create anything, make sure
   // to hash the password for security.
   beforeCreate: (values, next) => {
-    // Get the crypto library.
-    const crypto = require("crypto")
+    // If no password was provided, just move on and exit.
+    if (!values.password) {
+      return next()
+    }
 
-    // Create a hash, we're going to encrypt the password.
-    const password = crypto.createHash("sha1")
-    password.update(values.password)
+    // Create a salt for this user if they don't have one.
+    const salt = utils.create_salt()
 
-    // Apply the hash to the inbound values.
-    values.password = password.digest("hex")
+    utils.hash_password(values.password, salt, (password, salt) => {
+      // Apply the hash and salt to the inbound values.
+      values.password = password.toString("hex")
+      values.salt = salt
 
-    // Move on.
-    next()
+      // Move on.
+      next()
+    })
   }
 }
