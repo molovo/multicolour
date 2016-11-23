@@ -51,7 +51,7 @@
     "mkdirp": "^0.5.1",
     "sails-memory": "^0.10.7",
     "tap-spec": "^4.1.1",
-    "tape": "^1.0.6",
+    "tape": "^4.6.3",
     "waterline-joi": "^1.0.12"
   }
 }
