@@ -20,9 +20,9 @@ tape("Task run without error.", test => {
   test.plan(6)
   test.throws(() => new Task(), TypeError, "Throws when no options passed in")
   test.throws(() => new Task({}), ReferenceError, "Throws when missing verb option")
-  test.throws(() => new Task({ verb: "GET" }), ReferenceError, "Throws when missing model option")
-  test.throws(() => new Task({ verb: "GET", model: "test" }), ReferenceError, "Throws when missing multicolour option")
-  test.doesNotThrow(() => new Task({ verb: "GET", model: "test", multicolour }), ReferenceError, "Doesn't throw an error with minimum args passed in.")
+  test.throws(() => new Task({verb: "GET"}), ReferenceError, "Throws when missing model option")
+  test.throws(() => new Task({verb: "GET", model: "test"}), ReferenceError, "Throws when missing multicolour option")
+  test.doesNotThrow(() => new Task({verb: "GET", model: "test", multicolour}), ReferenceError, "Doesn't throw an error with minimum args passed in.")
 
   test.doesNotThrow(() => {
     const task = new Task({
@@ -40,9 +40,9 @@ tape("Flow runs as expected", test => {
 
   test.throws(() => new Flow(), ReferenceError, "Throws error when no Multicolour instance provided")
   multicolour.Flow
-    .create("test", { name: "test", age: 28 })
+    .create("test", {name: "test", age: 28})
     .read("test", 1)
-    .update("test", 1, { name: "testing" })
+    .update("test", 1, {name: "testing"})
     .delete("test", 1)
     .then("read", "test", 1)
     .run(errors => {

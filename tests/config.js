@@ -11,7 +11,7 @@ const test_content_path = "./tests/test_content/"
 
 tape("Multicolour initializes a config instance", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({ content: test_content_path })
+  const multicolour = new Multicolour({content: test_content_path})
 
   // Get the CLI from it.
   const config = multicolour.get("config")
@@ -24,7 +24,7 @@ tape("Multicolour initializes a config instance", test => {
 
 tape("Config can `set` and `get`", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({ content: test_content_path })
+  const multicolour = new Multicolour({content: test_content_path})
 
   // Get the CLI from it.
   const config = multicolour.get("config")

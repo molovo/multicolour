@@ -6,7 +6,7 @@ module.exports = class extends Map {
   constructor() {
     super()
 
-    this.set("flow_runner", function(task, done) { done(null) }.bind(this))
+    this.set("flow_runner", function flow_runner(task, done) { done(null) }.bind(this))
     this.set("validators", [])
 
     const validation = new validator()

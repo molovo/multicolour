@@ -8,7 +8,7 @@ const Multicolour = require("../index")
 
 tape("Endpoint library", test => {
 
-  const endpoint = new Multicolour.Endpoint({ test: "string" })
+  const endpoint = new Multicolour.Endpoint({test: "string"})
     .add_create_route()
     .add_read_route()
     .add_update_route()

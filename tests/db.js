@@ -14,7 +14,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   const DB = multicolour.get("database")
 
   // Enable the user model for seeding.
-  test.doesNotThrow(() => multicolour._enable_user_model(), "No error while enablking user model.")  
+  test.doesNotThrow(() => multicolour._enable_user_model(), "No error while enablking user model.")
 
   // Test stuff exists.
   test.notEquals(typeof multicolour.get("blueprints"), "undefined", "Blueprints exists")
@@ -42,6 +42,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   )
 
   // Check error behaviour.
+  test.throws(() => DB.register_new_model(), TypeError, "Throws error trying to register model with no path.")
   test.throws(() => DB.add_relation_to_collection("fake1", "fake", "test2"), ReferenceError, "Throws when source collection not found.")
   test.throws(() => DB.add_relation_to_collection("fake2", "test", "fake"), ReferenceError, "Throws when target collection not found.")
   test.throws(() => DB.add_relation_to_collection("one2one", "test", "test2"), TypeError, "Throws when trying to overwrite existing relationship.")
@@ -54,14 +55,14 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
 
     // Test various inserts.
     Async.parallel([
-      next => models.test.create({ name: "test", age: 100, empty: null, test2: 1 }, (err, t) => {
+      next => models.test.create({name: "test", age: 100, empty: null, test2: 1}, (err, t) => {
         test.equal(err, null, "No error during 1st seed")
-        test.doesNotThrow(() => t.toJSON(), "Called toJSON on test")
+        test.doesNotThrow(t.toJSON.bind(t), "Called toJSON on test")
         next()
       }),
-      next => models.test2.create({ name: "test", age: 100 }, (err, t) => {
+      next => models.test2.create({name: "test", age: 100}, (err, t) => {
         test.equal(err, null, "No error during 2nd seed")
-        test.doesNotThrow(() => t.toJSON(), "Called toJSON on test2")
+        test.doesNotThrow(t.toJSON.bind(t), "Called toJSON on test2")
         next()
       }),
       next => models.multicolour_user.create({
@@ -70,7 +71,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
         password: "password"
       }, (err, user) => {
         test.equal(err, null, "No error during 3rd seed")
-        test.doesNotThrow(() => user.toJSON(), "Called toJSON on user")
+        test.doesNotThrow(user.toJSON.bind(user), "Called toJSON on user")
         next()
       }),
       next => models.multicolour_user.create({
@@ -79,7 +80,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
         email: null
       }, (err, user) => {
         test.equal(err, null, "No error during 4th seed")
-        test.doesNotThrow(() => user.toJSON(), "Called toJSON on user without password")
+        test.doesNotThrow(user.toJSON.bind(user), "Called toJSON on user without password")
         next()
       })
       // Done. We've checked for errors above. Just stop and quit.
