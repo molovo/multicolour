@@ -97,7 +97,7 @@ class Flow {
   read(model, search_payload) {
     // If it's an object, it's probably already a query
     // otherwise, it's probably an ID of some variety.
-    const search = typeof search_payload === "object" ? search_payload : { id: search_payload }
+    const search = typeof search_payload === "object" ? search_payload : {id: search_payload}
 
     this.tests.add(new Task({
       verb: "read",
@@ -112,7 +112,7 @@ class Flow {
   update(model, search_payload, payload) {
     // If it's an object, it's probably already a query
     // otherwise, it's probably an ID of some variety.
-    const search = typeof search_payload === "object" ? search_payload : { id: search_payload }
+    const search = typeof search_payload === "object" ? search_payload : {id: search_payload}
 
     // Create the task.
     this.tests.add(new Task({
@@ -129,7 +129,7 @@ class Flow {
   delete(model, search_payload) {
     // If it's an object, it's probably already a query
     // otherwise, it's probably an ID of some variety.
-    const search = typeof search_payload === "object" ? search_payload : { id: search_payload }
+    const search = typeof search_payload === "object" ? search_payload : {id: search_payload}
 
     this.tests.add(new Task({
       verb: "delete",

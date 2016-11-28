@@ -8,9 +8,9 @@
     "multicolour": "start.js"
   },
   "scripts": {
-    "test": "tape tests/*.js | tap-spec",
-    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov html -x cli.js | tap-spec",
-    "travis-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x cli.js | tap-spec",
+    "linter": "eslint ./**/*.js",
+    "test": "npm run linter && tape tests/*.js | tap-spec",
+    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x **/cli.js | tap-spec",
     "changelog": "github_changelog_generator -u Multicolour -p multicolour"
   },
   "repository": {
@@ -38,15 +38,16 @@
     "snyk": "^1.19.1",
     "uuid": "^3.0.0",
     "validate-npm-package-name": "^2.2.2",
-    "waterline": "^0.12.2"
+    "waterline": "^0.12.2",
+    "waterline-joi": "^1.0.12"
   },
   "engine-strict": true,
   "engineStrict": true,
   "engines": {
-    "node": ">= 4.0.0"
+    "node": ">= 4.5.0"
   },
   "devDependencies": {
-    "eslint": "^3.8.1",
+    "eslint": "^3.10.2",
     "istanbul": "^0.4.5",
     "mkdirp": "^0.5.1",
     "sails-memory": "^0.10.7",

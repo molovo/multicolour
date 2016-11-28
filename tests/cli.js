@@ -4,14 +4,14 @@
 const tape = require("tape")
 
 // Get Multicolour.
-const Multicolour = require("../index.js", { bash: true })
+const Multicolour = require("../index.js", {bash: true})
 
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"
 
 tape("CLI initializes an interface", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({ content: test_content_path })
+  const multicolour = new Multicolour({content: test_content_path})
 
   // Get the CLI from it.
   const cli = multicolour.cli()
