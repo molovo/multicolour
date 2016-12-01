@@ -27,7 +27,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   // One to Many
   test.doesNotThrow(() => DB.add_relation_to_collection("one2many", "test", "test2", true), "Does not throw when forcefully extending collection as a collection.")
 
-  // as a "join", is actually just a pretty way to add_relation_to_collection.
+  // "join", is actually just a pretty way to add_relation_to_collection.
   test.doesNotThrow(() => DB
     .join({
       as: "join",
@@ -52,6 +52,11 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
     test.ok(!err, "Error in starting DB is undefined.")
 
     const models = ontology.collections
+
+    const valid_model = {name: "Multicolour", age: 100}
+    const invalid_model = {age: 100}
+    test.deepEqual(models.test.is_valid(valid_model).value, valid_model, "is_valid class member validates valid object")
+    test.ok(models.test.is_valid(invalid_model).error, "is_valid class member validates invalid object")
 
     // Test various inserts.
     Async.parallel([
