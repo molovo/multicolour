@@ -1,6 +1,8 @@
 "use strict"
 
 module.exports = {
+  autoCreatedAt: false,
+  autoUpdatedAt: false,
   attributes: {
     name: {
       required: true,

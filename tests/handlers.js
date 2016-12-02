@@ -23,11 +23,15 @@ tape("Handlers", test => {
 
     test.doesNotThrow(() => handlers.set_host(multicolour), "Doesn't throw error when setting host for handlers.")
     test.doesNotThrow(() => handlers.collection_has_associations(model), "Doesn't throw error while checking for associations on a collection.")
+
     test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, constraints), {user: 1}, "Doesn't throw error while compiling constraints")
     test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, null), {}, "Exits with no constraints passed in.")
     test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, {user: () => 1}), {user: 1}, "Executes the function in a constraint.")
     test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, {user: {compile: false, value: 1}}), {user: 1}, "Executes and non-compilable a constraint.")
     test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, {user: {compile: true, value: "payload.user"}}), {user: 1}, "Executes and compiles a constraint.")
+
+    handlers.compile_constraints({payload: {user: 1}}, constraints)
+    test.deepEquals(handlers.compile_constraints({payload: {user: 1}}, constraints), {user: 1}, "Doesn't throw error while compiling constraints")
 
     const url = {query: {}}
     const payload = {name: "test", age: 12}

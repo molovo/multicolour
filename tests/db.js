@@ -27,7 +27,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   // One to Many
   test.doesNotThrow(() => DB.add_relation_to_collection("one2many", "test", "test2", true), "Does not throw when forcefully extending collection as a collection.")
 
-  // as a "join", is actually just a pretty way to add_relation_to_collection.
+  // "join", is actually just a pretty way to add_relation_to_collection.
   test.doesNotThrow(() => DB
     .join({
       as: "join",
@@ -42,6 +42,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   )
 
   // Check error behaviour.
+  test.throws(() => DB.register_new_model(), TypeError, "Throws error trying to register model with no path.")
   test.throws(() => DB.add_relation_to_collection("fake1", "fake", "test2"), ReferenceError, "Throws when source collection not found.")
   test.throws(() => DB.add_relation_to_collection("fake2", "test", "fake"), ReferenceError, "Throws when target collection not found.")
   test.throws(() => DB.add_relation_to_collection("one2one", "test", "test2"), TypeError, "Throws when trying to overwrite existing relationship.")
@@ -51,6 +52,11 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
     test.ok(!err, "Error in starting DB is undefined.")
 
     const models = ontology.collections
+
+    const valid_model = {name: "Multicolour", age: 100}
+    const invalid_model = {age: 100}
+    test.deepEqual(models.test.is_valid(valid_model).value, valid_model, "is_valid class member validates valid object")
+    test.ok(models.test.is_valid(invalid_model).error, "is_valid class member validates invalid object")
 
     // Test various inserts.
     Async.parallel([
