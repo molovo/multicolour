@@ -18,8 +18,8 @@ module.exports = {
       required: true,
       type: "string",
       minLength: 5
-    }
-    salt: "string",
+    },
+    salt: "string"
   },
 
   // Before we create anything, make sure

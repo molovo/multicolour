@@ -13,6 +13,12 @@
   },
   "multicolour": {
     "config": "./config",
-    "plugins": []
+    "plugins": [
+      {
+        "as": "server",
+        "name": "multicolour-server-hapi",
+        "plugins": []
+      }
+    ]
   }
 }
