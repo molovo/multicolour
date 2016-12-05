@@ -73,6 +73,9 @@ class multicolour extends Map {
       // Whether the service is stopping.
       .set("is_stopping", false)
 
+      // Where we store the validators.
+      .set("validators", new Map())
+
     // Show the config.
     this.debug("config is %s", this.get("config").toString())
 
@@ -201,10 +204,11 @@ class multicolour extends Map {
       .set("has_scanned", true)
       .set("blueprints", files)
 
-    // Set up the DB and basic storage plugin.
+    // Set up the core plugins.
     this
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
+      .use(require("./lib/validator"))
 
     // Debugging.
     this.debug("Finished scanning")
