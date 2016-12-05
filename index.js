@@ -24,7 +24,11 @@ class multicolour extends Map {
    * of Multicolour ready to start testing.
    */
   get Flow() {
-    return this.flow
+    /* eslint-disable */
+    console.info("We have temporarily disabled the flow integration testing library")
+    console.info("We will re-enable in the next version of Multicolour where it will work much better than it currently does and doesn't")
+    /* eslint-enable */
+    return {}
   }
 
   /**
@@ -49,6 +53,7 @@ class multicolour extends Map {
     // Add the debug module.
     this.debug = debug("multicolour:core")
 
+    // Set up the flow library (beta)
     this.flow = new Flow(this)
 
     // Set raw properties on Multicolour.

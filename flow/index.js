@@ -57,7 +57,7 @@ class Flow {
    * @return {void}
    */
   report(errors) {
-    const validators = this.multicolour.get("server").get("validators")
+    const validators = this.multicolour.get("validators")
 
     /* istanbul ignore next */
     if (errors && errors.length > 0) {
@@ -70,7 +70,7 @@ class Flow {
       this.tasks_complete = true
 
       /* eslint-disable */
-      console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.length, validators.length)
+      console.log("\nAll %d tests passed using %d validators\n", this.tests.size * validators.size, validators.size)
       /* eslint-enable */
     }
   }
