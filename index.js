@@ -209,6 +209,7 @@ class multicolour extends Map {
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
       .use(require("./lib/validator"))
+      .use(require("./lib/handlers"))
 
     // Debugging.
     this.debug("Finished scanning")
