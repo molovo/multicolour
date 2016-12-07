@@ -4,7 +4,6 @@
 const Talkie = require("@newworldcode/talkie")
 
 // Get some bits we need to instantiate later.
-const Flow = require("./flow")
 const Config = require("./lib/config")
 const Async = require("async")
 const debug = require("debug")
@@ -24,7 +23,11 @@ class multicolour extends Map {
    * of Multicolour ready to start testing.
    */
   get Flow() {
-    return this.flow
+    /* eslint-disable */
+    console.info("We have temporarily disabled the flow integration testing library")
+    console.info("We will re-enable in the next version of Multicolour where it will work much better than it currently does and doesn't")
+    /* eslint-enable */
+    return {}
   }
 
   /**
@@ -49,8 +52,6 @@ class multicolour extends Map {
     // Add the debug module.
     this.debug = debug("multicolour:core")
 
-    this.flow = new Flow(this)
-
     // Set raw properties on Multicolour.
     this
       // Get the CLI.
@@ -67,6 +68,9 @@ class multicolour extends Map {
 
       // Whether the service is stopping.
       .set("is_stopping", false)
+
+      // Where we store the validators.
+      .set("validators", new Map())
 
     // Show the config.
     this.debug("config is %s", this.get("config").toString())
@@ -196,10 +200,12 @@ class multicolour extends Map {
       .set("has_scanned", true)
       .set("blueprints", files)
 
-    // Set up the DB and basic storage plugin.
+    // Set up the core plugins.
     this
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
+      .use(require("./lib/validator"))
+      .use(require("./lib/handlers"))
 
     // Debugging.
     this.debug("Finished scanning")
@@ -275,6 +281,7 @@ class multicolour extends Map {
     // Only ungracefully exit with confirmation.
     if (forced && !this.get("is_stopping")) {
       /* eslint-disable */
+      /* istanbul ignore next: Untestable */
       console.info("Received SIGINT (interrupt signal). Press ctrl+c to quit ungracefully.")
       /* eslint-enable */
     }

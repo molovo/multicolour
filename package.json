@@ -10,7 +10,7 @@
   "scripts": {
     "linter": "eslint ./**/*.js",
     "test": "npm run linter && tape tests/*.js | tap-spec",
-    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x **/cli.js | tap-spec",
+    "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x '**/cli.js' -x '**/waterline-fixes/**' | tap-spec",
     "changelog": "github_changelog_generator -u Multicolour -p multicolour"
   },
   "repository": {
@@ -31,7 +31,7 @@
     "debug": "^2.3.3",
     "fs-extra": "^1.0.0",
     "inquirer": "^1.2.3",
-    "joi": "^10.0.1",
+    "joi": "^10.0.5",
     "jsocrud": "^2.0.3",
     "npm-registry-client": "^7.4.1",
     "pluralize": "^3.0.0",
@@ -40,7 +40,7 @@
     "uuid": "^3.0.1",
     "validate-npm-package-name": "^2.2.2",
     "waterline": "^0.12.2",
-    "waterline-joi": "^1.0.12"
+    "waterline-joi": "^1.0.13"
   },
   "engine-strict": true,
   "engineStrict": true,
@@ -54,6 +54,6 @@
     "sails-memory": "^0.10.7",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.3",
-    "waterline-joi": "^1.0.12"
+    "waterline-joi": "^1.0.13"
   }
 }
