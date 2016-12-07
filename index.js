@@ -281,6 +281,7 @@ class multicolour extends Map {
     // Only ungracefully exit with confirmation.
     if (forced && !this.get("is_stopping")) {
       /* eslint-disable */
+      /* istanbul ignore next: Untestable */
       console.info("Received SIGINT (interrupt signal). Press ctrl+c to quit ungracefully.")
       /* eslint-enable */
     }
