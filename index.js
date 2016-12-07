@@ -4,7 +4,6 @@
 const Talkie = require("@newworldcode/talkie")
 
 // Get some bits we need to instantiate later.
-const Flow = require("./flow")
 const Config = require("./lib/config")
 const Async = require("async")
 const debug = require("debug")
@@ -52,9 +51,6 @@ class multicolour extends Map {
 
     // Add the debug module.
     this.debug = debug("multicolour:core")
-
-    // Set up the flow library (beta)
-    this.flow = new Flow(this)
 
     // Set raw properties on Multicolour.
     this
