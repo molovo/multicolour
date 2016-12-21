@@ -6,7 +6,11 @@ module.exports = {
   attributes: {
     name: {
       required: true,
-      type: "string"
+      type: "string",
+      metadata: {
+        notes: "Notes on the name of a test thing.",
+        description: "The name is a short string that colloqually identifies a thing from other things."
+      }
     },
     age: {
       required: true,
