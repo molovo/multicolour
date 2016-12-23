@@ -18,7 +18,7 @@ module.exports = {
       required: true,
       type: "string",
       minLength: 5
-    }
+    },
     salt: "string",
   },
 
