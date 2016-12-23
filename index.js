@@ -25,7 +25,7 @@ class multicolour extends Map {
   get Flow() {
     /* eslint-disable */
     console.info("We have temporarily disabled the flow integration testing library")
-    console.info("We will re-enable in the next version of Multicolour where it will work much better than it currently does and doesn't")
+    console.info("We will re-enable in the next; non-maintenance, version of Multicolour where it will work much better than it previously did.")
     /* eslint-enable */
     return {}
   }
@@ -71,6 +71,9 @@ class multicolour extends Map {
 
       // Where we store the validators.
       .set("validators", new Map())
+
+      // A flag to turn certain helpers off.
+      .set("power_user", Boolean(process.env.I_KNOW_WHAT_IM_DOING))
 
     // Show the config.
     this.debug("config is %s", this.get("config").toString())
