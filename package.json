@@ -36,7 +36,7 @@
     "npm-registry-client": "^7.4.1",
     "pluralize": "^3.0.0",
     "replacestream": "^4.0.2",
-    "snyk": "^1.21.2",
+    "snyk": "^1.23.1",
     "uuid": "^3.0.1",
     "validate-npm-package-name": "^2.2.2",
     "waterline": "^0.12.2",
