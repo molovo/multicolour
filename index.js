@@ -257,9 +257,9 @@ class multicolour extends Map {
     Async.series({
       start_database: next => database.start(next),
       start_server: next => server ? server.start(next) : next()
-    }, results => {
+    }, (err, results) => {
       // Debugging.
-      this.debug("Start routine finished with %s", JSON.stringify(results, null, 2))
+      this.debug("Start routine finished with", err, results)
 
       callback && callback(results, database, server)
     })
@@ -318,9 +318,9 @@ class multicolour extends Map {
 
         database = null
       }
-    }, results => {
+    }, (err, results) => {
       // Debugging.
-      this.debug("Stop routine finished with %s", JSON.stringify(results, null, 2))
+      this.debug("Stop routine finished with", err, results)
 
       callback && callback(results)
     })
