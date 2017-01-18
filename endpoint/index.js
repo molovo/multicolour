@@ -37,9 +37,7 @@ class Endpoint {
   }
 
   rawify() {
-    return {
-      attributes: this.attributes
-    }
+    return this
   }
 
   add_create_route() {
