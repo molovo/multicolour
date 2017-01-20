@@ -261,7 +261,7 @@ class multicolour extends Map {
       // Debugging.
       this.debug("Start routine finished with", err, results)
 
-      callback && callback(results, database, server)
+      callback && callback(err, results, database, server)
     })
 
     // When we ask the program to terminate,
@@ -322,7 +322,7 @@ class multicolour extends Map {
       // Debugging.
       this.debug("Stop routine finished with", err, results)
 
-      callback && callback(results)
+      callback && callback(err, results)
     })
 
     return this
