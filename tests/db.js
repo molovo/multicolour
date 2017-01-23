@@ -50,7 +50,11 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
     DB.stop(),
     DB.start()
   ])
-    .then(([stop, ontology]) => {
+    .then(results => {
+      // Maintain Node 4.x compat.
+      const stop = results[0]
+      const ontology = results[1]
+
       /* eslint-disable */
       if (!stop) console.log(stop)
       /* eslint-enable */
@@ -83,7 +87,7 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
           /* eslint-disable */
           test.doesNotThrow(() => results.forEach(result => result.toJSON()), "No error calling toJSON on test results")
           /* eslint-enable */
-          
+
           test.pass("Database seeding and tests (4 rounds) completed without error.")
           test.end()
         })
