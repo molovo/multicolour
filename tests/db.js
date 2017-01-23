@@ -1,7 +1,5 @@
 "use strict"
 
-const Async = require("async")
-
 // Get the testing library.
 const tape = require("tape")
 
@@ -48,47 +46,54 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   test.throws(() => DB.add_relation_to_collection("one2one", "test", "test2"), TypeError, "Throws when trying to overwrite existing relationship.")
 
   // Seed for some more tests.
-  DB.start((err, ontology) => {
-    test.ok(!err, "Error in starting DB is undefined.")
+  Promise.all([
+    DB.stop(),
+    DB.start()
+  ])
+    .then(([stop, ontology]) => {
+      /* eslint-disable */
+      if (!stop) console.log(stop)
+      /* eslint-enable */
 
-    const models = ontology.collections
+      const models = ontology.collections
 
-    const valid_model = {name: "Multicolour", age: 100}
-    const invalid_model = {age: 100}
-    test.deepEqual(models.test.is_valid(valid_model).value, valid_model, "is_valid class member validates valid object")
-    test.ok(models.test.is_valid(invalid_model).error, "is_valid class member validates invalid object")
+      const valid_model = {name: "Multicolour", age: 100}
+      const invalid_model = {age: 100}
 
-    // Test various inserts.
-    Async.parallel([
-      next => models.test.create({name: "test", age: 100, empty: null, test2: 1}, (err, t) => {
-        test.equal(err, null, "No error during 1st seed")
-        test.doesNotThrow(t.toJSON.bind(t), "Called toJSON on test")
-        next()
-      }),
-      next => models.test2.create({name: "test", age: 100}, (err, t) => {
-        test.equal(err, null, "No error during 2nd seed")
-        test.doesNotThrow(t.toJSON.bind(t), "Called toJSON on test2")
-        next()
-      }),
-      next => models.multicolour_user.create({
-        username: "test",
-        name: "test",
-        password: "password"
-      }, (err, user) => {
-        test.equal(err, null, "No error during 3rd seed")
-        test.doesNotThrow(user.toJSON.bind(user), "Called toJSON on user")
-        next()
-      }),
-      next => models.multicolour_user.create({
-        username: "test2",
-        name: "test2",
-        email: null
-      }, (err, user) => {
-        test.equal(err, null, "No error during 4th seed")
-        test.doesNotThrow(user.toJSON.bind(user), "Called toJSON on user without password")
-        next()
-      })
+      test.deepEqual(models.test.is_valid(valid_model).value, valid_model, "is_valid class member validates valid object")
+      test.ok(models.test.is_valid(invalid_model).error, "is_valid class member validates invalid object")
+
+      // Test various inserts.
+      Promise.all([
+        models.test.create({name: "test", age: 100, empty: null, test2: 1}),
+        models.test2.create({name: "test", age: 100}),
+        models.multicolour_user.create({
+          username: "test",
+          name: "test",
+          password: "password"
+        }),
+        models.multicolour_user.create({
+          username: "test2",
+          name: "test2",
+          email: null
+        })
       // Done. We've checked for errors above. Just stop and quit.
-    ], () => multicolour.stop(test.end.bind(test)))
-  })
+      ])
+        .then(results => {
+          /* eslint-disable */
+          test.doesNotThrow(() => results.forEach(result => result.toJSON()), "No error calling toJSON on test results")
+          /* eslint-enable */
+          
+          test.pass("Database seeding and tests (4 rounds) completed without error.")
+          test.end()
+        })
+        .catch(err => {
+          test.fail("Database seeding and tests (4 rounds) completed with error " + err.message)
+          test.end()
+        })
+    })
+    .catch(err => {
+      test.fail("Error in starting DB is undefined." + err.message)
+      test.end()
+    })
 })

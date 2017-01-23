@@ -26,7 +26,7 @@ tape("Compile basic constraint.", assert => {
 })
 
 tape("Compile comparitive constraints.", assert => {
-  assert.plan(21)
+  assert.plan(17)
 
   const query = new Constraints()
 
@@ -74,14 +74,6 @@ tape("Compile comparitive constraints.", assert => {
   query.set_rules({name: "! request.payload.user"})
   assert.doesNotThrow(() => query.compile(), "Does not throw while compiling name constraint (not equal to 'dave').")
   assert.deepEquals(query.results, {name: {"!": "dave"}}, "Compiled constraint is as expected (not equal to 'dave').")
-
-  query.set_rules({name: () => "dave"})
-  assert.doesNotThrow(() => query.compile(), "Does not throw while running function constraint")
-  assert.deepEquals(query.results, {name: "dave"}, "Compiled constraint is as expected (function return equal to 'dave').")
-
-  query.set_rules({name: {value: "dave"}})
-  assert.doesNotThrow(() => query.compile(), "Does not throw while running function constraint")
-  assert.deepEquals(query.results, {name: "dave"}, "value, compiled constraint name equal to dave.")
 })
 
 tape("Constraint error handlers", assert => {

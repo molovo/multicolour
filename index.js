@@ -5,7 +5,6 @@ const Talkie = require("@newworldcode/talkie")
 
 // Get some bits we need to instantiate later.
 const Config = require("./lib/config")
-const Async = require("async")
 const debug = require("debug")
 
 class multicolour extends Map {
@@ -82,7 +81,9 @@ class multicolour extends Map {
     const package_path = require("path").resolve("package.json")
 
     // Get the package as well, if it exists.
+    /* eslint-disable */
     if (require("fs").existsSync(package_path)) {
+    /* eslint-enable */
       /* istanbul ignore next: Untestable */
       this.set("package", require(package_path))
 
@@ -100,6 +101,9 @@ class multicolour extends Map {
 
       // The default decorator is application/json.
       .reply("decorator", "application/json")
+
+    this
+      .use(require("./lib/http-server"))
 
     // Does the config say to add to global?
     if (this.get("config").get("make_global")) {
@@ -188,7 +192,9 @@ class multicolour extends Map {
     this.debug("Scanning %s", content)
 
     // Get the file list.
+    /* eslint-disable */
     const files = require("fs").readdirSync(`${content}/blueprints`)
+    /* eslint-enable */
       // Delete crap like .DS_Store.
       .filter(file_name => file_name !== ".DS_Store")
 
@@ -242,10 +248,14 @@ class multicolour extends Map {
 
   /**
    * Start the various services behind Multicolour.
-   * @param {Function} callback to execute when server has started with error argument.
-   * @return {multicolour} object for chaining.
+   *
+   * @return {Promise} promise of start in resolved state.
    */
-  start(callback) {
+  start() {
+    // Check we've scanned for content and blueprints.
+    if (!this.get("has_scanned"))
+      return Promise.reject("Refusing to start services as you have not .scan()ed for content/blueprints.")
+
     // Get the server & database.
     const server = this.get("server")
     const database = this.get("database")
@@ -253,33 +263,40 @@ class multicolour extends Map {
     // Don't limit sockets.
     require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
 
-    // Start the database and server.
-    Async.series({
-      start_database: next => database.start(next),
-      start_server: next => server ? server.start(next) : next()
-    }, (err, results) => {
-      // Debugging.
-      this.debug("Start routine finished with", err, results)
-
-      callback && callback(err, results, database, server)
-    })
-
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
     process.on("SIGINT", this.stop.bind(this, process.exit.bind(process), true))
 
-    return this
+    // Start our components up.
+    return database.start().then(() => {
+      server.start()
+        .then(() => this.debug("All services and plugins started without error"))
+    })
+    .catch(err => {
+      this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
+    })
   }
 
   /**
    * Destroy all resources gracefully and terminate Multicolour.
-   * @param {Function} callback to execute when server has shutdown with error argument.
-   * @return {multicolour} Object for chaining.
+   *
+   * @return {Promise} Promise of stop routine finishing in resolved state.
    */
-  stop(callback, forced) {
-    /* eslint-disable */
-    callback = callback || (() => console.info("Service stopped."))
-    /* eslint-enable */
+  stop(forced) {
+    const server = this.get("server")
+    const db = this.get("database")
+
+    const tasks = [db.stop()]
+
+    if (!server) {
+      /* eslint-disable */
+      console.error("There is no server defined to stop. There should; at least, be the default server configured")
+      console.error("\nThis is unusual, do you have a plugin that sets the 'server' or did you not .scan() for content?")
+      console.log("https://getmulticolour.com/docs/0.5.2/api-reference/#multicolour.scan")
+      /* eslint-enable */
+    }
+    else
+      tasks.push(server.stop())
 
     // Only ungracefully exit with confirmation.
     if (forced && !this.get("is_stopping")) {
@@ -293,39 +310,28 @@ class multicolour extends Map {
     this.set("is_stopping", true)
 
     // Stahp all the things.
-    Async.series({
-      // Stop the server.
-      stop_server: next => {
-        let server = this.get("server")
+    return Promise.all(tasks)
+      .then(() => {
+        this.debug("All services stopped successfully.")
 
-        // Stop the server.
-        if (server) {
-          server.stop(() => {
-            // Continue.
-            next()
-            server = null
-          })
-        }
-        else next()
-      },
+        /* eslint-disable */
+        console.log("Service stopped without error.")
+        /* eslint-disable */
 
-      // Stop the database.
-      stop_database: next => {
-        let database = this.get("database")
+        // If it's forced, exit hard.
+        if (forced) process.exit(0)
+      })
+      .catch(err => {
+        this.debug("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is: ", err)
 
-        if (database) database.stop(next)
-        else next()
+        /* eslint-disable */
+        console.error("An error occured while stopping your service.")
+        console.error(err)
+        /* eslint-enable */
 
-        database = null
-      }
-    }, (err, results) => {
-      // Debugging.
-      this.debug("Stop routine finished with", err, results)
-
-      callback && callback(err, results)
-    })
-
-    return this
+        // Exit anyway.
+        process.exit(1)
+      })
   }
 }
 

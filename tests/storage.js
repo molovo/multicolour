@@ -28,5 +28,6 @@ tape("Default disk storage adapter.", test => {
   test.equal(multicolour.request("storage").upload(test_stream, "circle_abort.svg").abort().destroyed, true, "Aborted upload stream is destroyed")
   test.doesNotThrow(() => multicolour.request("storage").get("circle.svg"), "Can retrieve file.")
 
-  multicolour.stop(test.end.bind(test))
+  multicolour.stop()
+    .then(() => test.end())
 })

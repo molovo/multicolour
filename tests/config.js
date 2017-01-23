@@ -11,7 +11,7 @@ const test_content_path = "./tests/test_content/"
 
 tape("Multicolour initializes a config instance", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({content: test_content_path})
+  const multicolour = new Multicolour({content: test_content_path}).scan()
 
   // Get the CLI from it.
   const config = multicolour.get("config")
@@ -19,12 +19,12 @@ tape("Multicolour initializes a config instance", test => {
   // Test it's not undefined and it is instantiated correctly.
   test.notEqual(typeof config, "undefined", "config should not be undefined")
 
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })
 
 tape("Config can `set` and `get`", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({content: test_content_path})
+  const multicolour = new Multicolour({content: test_content_path}).scan()
 
   // Get the CLI from it.
   const config = multicolour.get("config")
@@ -35,5 +35,5 @@ tape("Config can `set` and `get`", test => {
   config.set("test", 1)
   test.equal(config.get("test"), 1, "config.get('test') should be 1")
 
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })

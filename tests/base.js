@@ -10,14 +10,6 @@ const Plugin = require("../lib/plugin")
 // Where we keep the test content.
 const test_content_path = "./tests/test_content/"
 
-// Used in a few tests below.
-class Server {
-  constructor() { }
-  register(multicolour) { multicolour.set("server", this) }
-  start(callback) { callback(); return this }
-  stop(callback) { callback(); return this }
-}
-
 class Alt extends Plugin {}
 
 tape("(Stupid tests) Multicolour initializes with base properties.", test => {
@@ -64,13 +56,17 @@ tape("Multicolour can register plugins.", test => {
   // Load from a file.
   const multicolour = Multicolour.new_from_config_file_path(test_content_path + "config.js")
 
-  // Register a fake server generator.
-  multicolour.scan().use(Server)
+  // Register a plugin.
+  multicolour.scan().use(class {
+    register() {
+      test.pass("Plugin got registered.")
+    }
+  })
 
   test.doesNotThrow(() => multicolour.use(Alt), "Should not throw if plugin inherits from Multicolour.Plugin.")
   test.notEqual(typeof multicolour.get("server"), "undefined", "Should register server plugin.")
 
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })
 
 tape("Multicolour scans for and finds blueprints.", test => {
@@ -82,7 +78,7 @@ tape("Multicolour scans for and finds blueprints.", test => {
   test.throws(() => new Multicolour().scan(), Error, "Throws error when no content path is set.")
 
   // Done and dusted. Go home.
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })
 
 tape("Multicolour can start and stop a server and throws expected errors.", test => {
@@ -94,24 +90,24 @@ tape("Multicolour can start and stop a server and throws expected errors.", test
     .new_from_config_file_path(test_content_path + "config.js")
     .scan()
 
-  // Register the plugin.
-  multicolour.use(Server)
-
   // Check when a server is configured properly that error is non-existent.
-  multicolour.start(err => {
-    test.ok(!err, "Error not set when starting properly configured server plugin.")
+  multicolour.start()
+    .then(() => {
+      test.pass("No error when starting properly configured server plugin.")
 
-    multicolour.stop(err => {
-      // @TODO: Come back when this is fixed in the dependency.
-      // FWIW: This is shit.
-      if (err && err.message === "Cannot read property 'teardown' of undefined") {
-        test.equal(err.message, "Cannot read property 'teardown' of undefined", "This 🐄 💩 error can be expected.")
-      }
-      else {
-        test.ok(!err, "Error not set when stopping properly configured server plugin.")
-      }
+      /* eslint-disable */
+      multicolour.stop()
+        .then(() => {
+          test.pass("No error when stopping properly configured server plugin.")
+        })
+        .catch(err => {
+          test.fail("Error when stopping properly configured server plugin.")
+        })
     })
-  })
+    .catch(err => {
+      multicolour.stop()
+      throw err
+    })
 
   test.throws(() => {
     new Multicolour({
@@ -131,10 +127,15 @@ tape("Multicolour global setup", test => {
 
   test.ok(global.multicolour, "Multicolour should be global when configured so.")
 
-  multicolour.stop(() => {
-    multicolour = null
-    delete global.multicolour
-    delete config.make_global
-    test.end()
-  })
+  multicolour.stop()
+    .then(() => {
+      multicolour = null
+      delete global.multicolour
+      delete config.make_global
+      test.end()
+    })
+    .catch(err => {
+      test.fail(err)
+      test.end()
+    })
 })

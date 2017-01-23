@@ -11,7 +11,7 @@ const test_content_path = "./tests/test_content/"
 
 tape("CLI initializes an interface", test => {
   // Create an instance of multicolour.
-  const multicolour = new Multicolour({content: test_content_path})
+  const multicolour = new Multicolour({content: test_content_path}).scan()
 
   // Get the CLI from it.
   const cli = multicolour.cli()
@@ -22,7 +22,7 @@ tape("CLI initializes an interface", test => {
   test.ok(cli.__scope instanceof Multicolour, "Scope is set to an instance of multicolour.")
   test.notEquals(typeof cli.program, "undefined", "cli instance has a program.")
 
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })
 
 tape("CLI scope should change when using `.scope()`", test => {
@@ -36,5 +36,5 @@ tape("CLI scope should change when using `.scope()`", test => {
   test.deepEquals(cli.__scope, alt_multicolour, "Scope changed to alternative instance of multicolour.")
   test.throws(() => cli.scope(), ReferenceError, "Should throw ReferenceError when no scope provided.")
 
-  multicolour.stop(test.end.bind(test))
+  test.end()
 })
