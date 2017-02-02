@@ -267,14 +267,19 @@ class multicolour extends Map {
     // do so as gracefully as programmatically possible.
     process.on("SIGINT", this.stop.bind(this, process.exit.bind(process), true))
 
-    // Start our components up.
-    return database.start().then(() => {
-      server.start()
-        .then(() => this.debug("All services and plugins started without error"))
-    })
-    .catch(err => {
+    const report_error = err => {
       this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
-    })
+      process.exit(1)
+    }
+
+    // Start our components up.
+    return database.start()
+      .then(() => {
+        return server.start()
+          .then(() => this.debug("All services and plugins started without error"))
+          .catch(report_error)
+      })
+      .catch(report_error)
   }
 
   /**
