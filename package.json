@@ -30,7 +30,7 @@
     "debug": "^2.6.0",
     "fs-extra": "^2.0.0",
     "inquirer": "^3.0.1",
-    "joi": "^10.2.1",
+    "joi": "^10.2.2",
     "jsocrud": "^2.0.3",
     "mkdirp": "^0.5.1",
     "npm-registry-client": "^7.4.5",
