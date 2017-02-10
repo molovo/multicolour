@@ -1,5 +1,5 @@
 # Sponsors
 
-Sponsors make Multicolour possible, they afford me the time to dedicate to Multicolour's development and publishing.
+Sponsors make Multicolour possible, they afford us the time to dedicate to Multicolour's development and publishing.
 
-[New World Code](https://newworld.codes?source=https://getmulticolour.com)  are a NodeJS and Swift agency that create scalable, usable apps and APIs for clients of all sizes.
+[New World Code](https://newworld.codes?source=https://getmulticolour.com)  are an agency that create scalable, usable web apps and APIs for clients of all sizes.
