@@ -3,7 +3,9 @@
     "host": "localhost",
     "port": 1811,
     "routes": {
-      "cors": true
+      "cors": {
+        "origins": ["*"] 
+      }
     },
     "router": {
       "stripTrailingSlash": true
@@ -24,12 +26,6 @@
       "development": null
     },
     "connections": {
-      "development": {
-        "adapter": "production",
-        "host": "localhost",
-        "port": 27017,
-        "database": "multicolour"
-      }
     }
   }
 }
