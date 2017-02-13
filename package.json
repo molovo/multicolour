@@ -38,7 +38,7 @@
     "pluralize": "^3.1.0",
     "replacestream": "^4.0.2",
     "uuid": "^3.0.1",
-    "validate-npm-package-name": "^2.2.2",
+    "validate-npm-package-name": "^3.0.0",
     "waterline": "git+https://github.com/Multicolour/waterline.git#0.12.x",
     "waterline-joi": "^1.1.1"
   },
