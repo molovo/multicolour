@@ -16,27 +16,43 @@
  */
 
 module.exports = {
+  types: {
+    // A simple validator that checks there's two words
+    // or first name and surname in the value passed in.
+    firstAndLast: value => value && value.split(" ").length >= 2
+  },
+
   attributes: {
     name: {
       required: true,
-      type: "string"
+      type: "string",
+
+      // We can add custom validation types
+      // to each attribute which if they fail
+      // will cause a 400 for the request made.
+      firstAndLast: true,
+
+      metadata: {
+        notes: "A helpful note to any consumer of the API of any gotchas, for instance here we might let consumers know that this field requires two words- a first and last name.",
+        description: "A description that will appear in the overview of the /docs page."
+      }
     },
     age: {
       required: true,
       type: "integer",
       min: 0,
-      max: 9000
+      max: 130
     },
     password: {
       required: true,
       type: "string",
       minLength: 5
     },
-    salt: "string",
+    salt: "string"
   },
 
   /**
-   * An example, lifecyle callback.
+   * An example lifecyle callback.
    *
    * This example takes the values passed in,
    * checks if it has a password present and it then
@@ -66,6 +82,65 @@ module.exports = {
 
       // Move on.
       next()
+    })
+  },
+
+  /**
+   * We can add any custom routes we like by defining them
+   * in the custom_routes function.
+   *
+   * There's no magic, no trade offs you simply write the code
+   * you would normally write here.
+   *
+   * Multicolour will not modify, read or actually do anything
+   * to your custom code, it's yours and yours only.
+   *
+   * @param  {Hapi} hapi_server running your API.
+   * @param  {Multicolour} multicolour instance this REST API is running in.
+   * @return {void}
+   */
+  custom_routes: function custom_routes(hapi_server, multicolour) {
+    // Joi is an amazing validation library,
+    // read me at https://github.com/hapijs/joi/blob/v10.2.2/API.md
+    const Joi = require("joi")
+
+    // Set up a simple route that counts examples.
+    hapi_server.route({
+      method: "GET",
+      path: "/example/count",
+      config: {
+        // Get any auth config from core.
+        auth: multicolour.get("server").request("auth_config"),
+
+        // Add tags to appear in the /docs endpoint.
+        tags: ["api", "example"],
+
+        // Validate the params.
+        validate: {
+          // Get valid headers from Multicolour.
+          headers: Joi.object(
+            multicolour.get("server")
+              .request("header_validator")
+              .get()
+            ).unknown(true)
+        },
+
+        // Validate the response.
+        response: {
+          // Get the schema from Multicolour to validate the response.
+          schema: Joi.object({count: Joi.number().required()})
+            .meta({className: "entity_types"})
+            .label("entity_types")
+        },
+
+        handler: (request, reply) => {
+          // `this` is the current model but only with
+          // a full function () definition (no fat arrows)
+          // on the custom_routes file.
+          this.count(request.url.query)
+            .then(count => reply({count}))
+        }
+      }
     })
   }
 }

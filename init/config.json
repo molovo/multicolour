@@ -4,7 +4,7 @@
     "port": 1811,
     "routes": {
       "cors": {
-        "origins": ["*"] 
+        "origin": ["*"]
       }
     },
     "router": {
@@ -25,7 +25,6 @@
     "adapters": {
       "development": null
     },
-    "connections": {
-    }
+    "connections": {}
   }
 }

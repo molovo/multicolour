@@ -8,6 +8,7 @@
     "node": ">= 4.0.0"
   },
   "dependencies": {
+    "joi": "^10.2.2",
     "multicolour": "^0.5.0",
     "multicolour-server-hapi": "^1.4.0"
   },
