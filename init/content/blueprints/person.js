@@ -17,8 +17,8 @@
 
 module.exports = {
   types: {
-    // A simple validator that checks there's two words
-    // or first name and surname in the value passed in.
+    // A simple validator that checks theres at least
+    // two words in the value passed in.
     firstAndLast: value => value && value.split(" ").length >= 2
   },
 
@@ -47,6 +47,9 @@ module.exports = {
       required: true,
       type: "string",
       minLength: 5
+    },
+    parent: {
+      model: "person"
     },
     salt: "string"
   },
