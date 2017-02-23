@@ -5,8 +5,19 @@
 	"order": [],
 	"folders": [
 		{
+			"id": "7f0c6e42-5891-f244-381c-1c91aae79f76",
+			"name": "Header/request tests",
+			"description": "",
+			"order": [
+				"6fa6fa9a-268b-5402-afcc-a39aaacc6303",
+				"4d768fed-853b-fa79-394f-48d3dcb70b1c",
+				"6ce25de9-ebc1-932e-0be5-902433b09c91"
+			],
+			"owner": 0
+		},
+		{
 			"id": "ee51e8b7-c616-a6d9-a882-277682191fac",
-			"name": "No auth",
+			"name": "VERB tests",
 			"description": "Tests with no auth plugin installed.",
 			"order": [
 				"d5b5e7ff-32c3-a015-2da9-05a325203378",
@@ -132,6 +143,26 @@
 			"rawModeData": ""
 		},
 		{
+			"id": "4d768fed-853b-fa79-394f-48d3dcb70b1c",
+			"headers": "",
+			"url": "http://localhost:1811/person",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"returns 400 bad request code\"] = jsonData.statusCode === 400\ntests[\"returns helpful message\"] = jsonData.message === \"child \\\"accept\\\" fails because [\\\"accept\\\" must be one of [application/json]]\"",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1487867551624,
+			"name": "GET with malformed accept header errors",
+			"description": "",
+			"collectionId": "c2de7dd4-2759-f82d-79c9-df3a6d768111",
+			"responses": [],
+			"rawModeData": "{\n \"identifier\": \"newexhibit\",\n \"type\" : \"exhibit\"\n}"
+		},
+		{
 			"id": "569822dc-a260-7e86-a7a6-72c93871fcf5",
 			"headers": "Accept: application/json\nContent-Type: application/json\n",
 			"url": "http://localhost:1811/person",
@@ -190,6 +221,46 @@
 			"collectionId": "c2de7dd4-2759-f82d-79c9-df3a6d768111",
 			"responses": [],
 			"rawModeData": ""
+		},
+		{
+			"id": "6ce25de9-ebc1-932e-0be5-902433b09c91",
+			"headers": "Accept: application/json;charset=UTF-8\n",
+			"url": "http://localhost:1811/person",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"returns rows\"] = jsonData.length > 0",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1487867590485,
+			"name": "GET with UTF definition in Accept header doesn't error",
+			"description": "",
+			"collectionId": "c2de7dd4-2759-f82d-79c9-df3a6d768111",
+			"responses": [],
+			"rawModeData": "{\n \"identifier\": \"newexhibit\",\n \"type\" : \"exhibit\"\n}"
+		},
+		{
+			"id": "6fa6fa9a-268b-5402-afcc-a39aaacc6303",
+			"headers": "Accept: application/json\n",
+			"url": "http://localhost:1811/person",
+			"preRequestScript": null,
+			"pathVariables": {},
+			"method": "GET",
+			"data": [],
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "var jsonData = JSON.parse(responseBody);\ntests[\"returns 400 bad request code\"] = jsonData.statusCode === 400\ntests[\"returns helpful message\"] = jsonData.message === \"child \\\"accept\\\" fails because [\\\"accept\\\" must be one of [application/json]]\"",
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"time": 1487867543274,
+			"name": "GET with missing accept header errors",
+			"description": "",
+			"collectionId": "c2de7dd4-2759-f82d-79c9-df3a6d768111",
+			"responses": [],
+			"rawModeData": "{\n \"identifier\": \"newexhibit\",\n \"type\" : \"exhibit\"\n}"
 		},
 		{
 			"id": "919a1972-80c1-5167-3836-379ee915f4f3",
