@@ -1,7 +1,7 @@
 {
   "name": "multicolour",
-  "version": "0.6.2-beta",
-  "description": "Generate your API and single page app with a config file and JSON and use almost any DB tech",
+  "version": "0.6.3",
+  "description": "Generate your REST API with JSON and use almost any DB tech.",
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
@@ -9,9 +9,9 @@
   },
   "scripts": {
     "linter": "eslint ./**/*.js",
-    "unit-tests": "npm run linter && tape tests/*.js | tap-spec",
+    "unit-tests": "tape tests/*.js | tap-spec",
     "integration-tests": "newman run tests/integration/postman_collection.json",
-    "test": "npm run unit-tests && npm run integration-tests",
+    "test": "npm run linter && npm run unit-tests",
     "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x '**/cli.js' -x '**/waterline-fixes/**' | tap-spec",
     "changelog": "github_changelog_generator -u Multicolour -p multicolour"
   },
