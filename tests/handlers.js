@@ -66,7 +66,7 @@ tape("Handlers", test => {
         }),
         next => handlers.DELETE(model, {params: {id: 999}, url}, err => {
           test.ok(err instanceof Http_Error, "Get an error which is a HTTP document gone status.")
-          test.equal(err.code, 410, "Document gone status code.")
+          test.equal(err.code, 404, "Document not found status code.")
           next()
         }),
         next => handlers.PUT(model, {params: {id: 2}, payload, url}, err => {
