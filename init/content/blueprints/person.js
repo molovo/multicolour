@@ -76,7 +76,7 @@ module.exports = {
     const utils = require("multicolour/lib/utils")
 
     // Create a salt for this user if they don't have one.
-    const salt = utils.create_salt()
+    const salt = values.salt || utils.create_salt()
 
     utils.hash_password(values.password, salt, (password, salt) => {
       // Apply the hash and salt to the inbound values.
