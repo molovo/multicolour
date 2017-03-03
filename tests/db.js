@@ -45,12 +45,20 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   test.throws(() => DB.add_relation_to_collection("fake2", "test", "fake"), ReferenceError, "Throws when target collection not found.")
   test.throws(() => DB.add_relation_to_collection("one2one", "test", "test2"), TypeError, "Throws when trying to overwrite existing relationship.")
 
+  multicolour.on("database_started", () => {
+    test.pass("Received database_started event")
+  })
+
+  multicolour.on("database_stopped", () => {
+    test.pass("Received database_stopped event")
+  })
+
   // Seed for some more tests.
   Promise.all([
     DB.stop(),
     DB.start()
   ])
-    .then(results => {
+    .then(/*([stop, ontology])*/results => {
       // Maintain Node 4.x compat.
       const stop = results[0]
       const ontology = results[1]
