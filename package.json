@@ -11,7 +11,7 @@
     "linter": "eslint ./**/*.js",
     "unit-tests": "tape tests/*.js | tap-spec",
     "integration-tests": "newman run tests/integration/postman_collection.json",
-    "test": "snyk test && npm run linter && npm run unit-tests",
+    "test": "npm run linter && npm run unit-tests",
     "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x '**/cli.js' -x '**/waterline-fixes/**' | tap-spec",
     "changelog": "github_changelog_generator -u Multicolour -p multicolour"
   },

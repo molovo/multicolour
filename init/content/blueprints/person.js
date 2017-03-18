@@ -8,7 +8,7 @@
  * Feel free to delete this file and create your
  * own blueprints.
  *
- * We (Dave, Joe and Jamie) hope you enjoy using
+ * We (Dave & Joe) hope you enjoy using
  * Multicolour to make your APIs easier.
  *
  * If you need any help, join the Slack channel:
@@ -132,8 +132,8 @@ module.exports = {
         response: {
           // Get the schema from Multicolour to validate the response.
           schema: Joi.object({count: Joi.number().required()})
-            .meta({className: "entity_types"})
-            .label("entity_types")
+            .meta({className: "person_count"})
+            .label("person_count")
         },
 
         handler: (request, reply) => {

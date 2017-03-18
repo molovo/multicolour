@@ -1,5 +1,6 @@
 {
   "version": "1.0.0",
+  "private": true,
   "scripts": {
     "start": "multicolour start"
   },
@@ -9,7 +10,7 @@
   },
   "dependencies": {
     "joi": "^10.2.2",
-    "multicolour": "^0.6.4",
+    "multicolour": "^0.6.3",
     "multicolour-server-hapi": "^1.4.0"
   },
   "multicolour": {

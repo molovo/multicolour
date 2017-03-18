@@ -6,4 +6,4 @@
 const Multicolour = require("./index")
 
 // Instantiate.
-new Multicolour().cli()
+module.exports = new Multicolour().cli()
