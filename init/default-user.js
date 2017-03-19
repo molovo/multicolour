@@ -2,6 +2,7 @@
 
 const email = ""
 const password = ""
+const role = "user"
 
 /**
  * Create a default user once the database has started,
@@ -46,7 +47,8 @@ class Default_User_Check {
                 email: email,
                 username: email,
                 password: password,
-                name: email
+                name: email,
+                role: role
               })
             ])
             .then(() => {
