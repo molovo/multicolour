@@ -5,7 +5,9 @@
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
-    "multicolour": "start.js"
+    "multicolour": "start.js",
+    "multicolor": "start.js",
+    "color": "start.js"
   },
   "scripts": {
     "linter": "eslint ./**/*.js",
