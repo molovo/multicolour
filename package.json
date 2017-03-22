@@ -2,6 +2,7 @@
   "name": "multicolour",
   "version": "0.6.4",
   "description": "Generate your REST API with JSON and use almost any DB tech.",
+  "keywords": ["Multicolour", "REST API", "generator", "ORM"],
   "main": "index.js",
   "preferGlobal": true,
   "bin": {
