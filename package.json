@@ -39,7 +39,7 @@
     "joi": "^10.2.2",
     "jsocrud": "^2.0.3",
     "mkdirp": "^0.5.1",
-    "npm-registry-client": "^7.4.6",
+    "npm-registry-client": "^8.1.0",
     "pluralize": "^4.0.0",
     "replacestream": "^4.0.2",
     "uuid": "^3.0.1",
