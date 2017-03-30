@@ -213,7 +213,6 @@ class multicolour extends Map {
     this
       .use(require("./lib/db"))
       .use(require("./lib/storage"))
-      .use(require("./lib/validator"))
       .use(require("./lib/handlers"))
 
     // Debugging.
@@ -255,6 +254,9 @@ class multicolour extends Map {
     // Check we've scanned for content and blueprints.
     if (!this.get("has_scanned"))
       return Promise.reject("Refusing to start services as you have not .scan()ed for content/blueprints.")
+
+    // Create the validations.
+    this.use(require("./lib/validator"))
 
     // Get the server & database.
     const server = this.get("server")
