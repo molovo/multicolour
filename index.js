@@ -103,8 +103,8 @@ class multicolour extends Map {
       // The default decorator is application/json.
       .reply("decorator", "application/json")
 
-    this
-      .use(require("./lib/http-server"))
+    // Create a really basic HTTP server. It will emit events on Multicolour core.
+    this.use(require("./lib/http-server"))
 
     // Does the config say to add to global?
     if (this.get("config").get("make_global")) {
