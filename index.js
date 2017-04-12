@@ -263,24 +263,24 @@ class multicolour extends Map {
     const database = this.get("database")
 
     // Don't limit sockets.
-    require("http").globalAgent.maxSockets = require("https").globalAgent.maxSockets = Infinity
+    require("http").globalAgent.maxSockets =
+    require("https").globalAgent.maxSockets = Infinity
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
-    process.on("SIGINT", this.stop.bind(this, process.exit.bind(process), true))
+    process.on("SIGINT", this.stop.bind(this, this.get("is_stopping")))
 
     const report_error = err => {
       this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
-      process.exit(1)
+      this.stop()
     }
 
     // Start our components up.
     return database.start()
-      .then(() => {
-        return server.start()
-          .then(() => this.debug("All services and plugins started without error"))
-          .catch(report_error)
-      })
+      .then(() => server.start()
+        .then(() => this.debug("All services and plugins started without error"))
+        .catch(report_error)
+      )
       .catch(report_error)
   }
 
@@ -290,26 +290,17 @@ class multicolour extends Map {
    * @return {Promise} Promise of stop routine finishing in resolved state.
    */
   stop(forced) {
+    if (forced)
+      process.exit(0)
+
     const server = this.get("server")
     const db = this.get("database")
 
-    const tasks = [db.stop()]
-
-    if (!server) {
-      /* eslint-disable */
-      console.error("There is no server defined to stop. There should; at least, be the default server configured")
-      console.error("\nThis is unusual, do you have a plugin that sets the 'server' or did you not .scan() for content?")
-      console.log("https://getmulticolour.com/docs/0.5.2/api-reference/#multicolour.scan")
-      /* eslint-enable */
-    }
-    else
-      tasks.push(server.stop())
-
-    // Only ungracefully exit with confirmation.
-    if (forced && !this.get("is_stopping")) {
+    // If we're not force closing show a nice message.
+    if (!this.get("is_stopping")) {
       /* eslint-disable */
       /* istanbul ignore next: Untestable */
-      console.info("Received SIGINT (interrupt signal). Press ctrl+c to quit ungracefully.")
+      console.info("Received interrupt signal, closing services. Press ctrl+c again to quit ungracefully.")
       /* eslint-enable */
     }
 
@@ -317,27 +308,20 @@ class multicolour extends Map {
     this.set("is_stopping", true)
 
     // Stahp all the things.
-    return Promise.all(tasks)
+    return Promise.all([
+      server.stop(),
+      db.stop()
+    ])
       .then(() => {
-        this.debug("All services stopped successfully.")
-
         /* eslint-disable */
-        console.log("Service stopped without error.")
+        console.log("All services stopped successfully.")
         /* eslint-disable */
-
-        // If it's forced, exit hard.
-        if (forced) process.exit(0)
       })
       .catch(err => {
-        this.debug("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is: ", err)
-
         /* eslint-disable */
-        console.error("An error occured while stopping your service.")
+        console.error("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is:")
         console.error(err)
         /* eslint-enable */
-
-        // Exit anyway.
-        process.exit(1)
       })
   }
 }
