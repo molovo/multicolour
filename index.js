@@ -266,9 +266,9 @@ class multicolour extends Map {
     require("http").globalAgent.maxSockets =
     require("https").globalAgent.maxSockets = Infinity
 
-    // When we ask the program to terminate,
-    // do so as gracefully as programmatically possible.
-    process.on("SIGINT", () => this.stop(true))
+    /* eslint-disable */
+    process.on("SIGINT", () => console.log("All services going away."))
+    /* eslint-enable */
 
     const report_error = err => {
       this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
@@ -289,21 +289,7 @@ class multicolour extends Map {
    *
    * @return {Promise} Promise of stop routine finishing in resolved state.
    */
-  stop(forced) {
-    if (forced)
-      process.exit(0)
-
-    // If we're not force closing show a nice message.
-    if (!this.get("is_stopping")) {
-      /* eslint-disable */
-      /* istanbul ignore next: Untestable */
-      console.info("Received interrupt signal, closing services. Press ctrl+c again to quit ungracefully.")
-      /* eslint-enable */
-    }
-
-    // Show intent to stop.
-    this.set("is_stopping", true)
-
+  stop() {
     return Promise.all([
       this.get("server").stop(),
       this.get("database").stop()
@@ -312,16 +298,12 @@ class multicolour extends Map {
         /* eslint-disable */
         console.log("All services stopped successfully.")
         /* eslint-disable */
-
-        process.exit(0)
       })
       .catch(err => {
         /* eslint-disable */
         console.error("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is:")
         console.error(err)
         /* eslint-enable */
-
-        process.exit(1)
       })
   }
 }

@@ -54,19 +54,8 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
   })
 
   // Seed for some more tests.
-  Promise.all([
-    DB.stop(),
-    DB.start()
-  ])
-    .then(/*([stop, ontology])*/results => {
-      // Maintain Node 4.x compat.
-      const stop = results[0]
-      const ontology = results[1]
-
-      /* eslint-disable */
-      if (!stop) console.log(stop)
-      /* eslint-enable */
-
+  DB.start()
+    .then(ontology => {
       const models = ontology.collections
 
       const valid_model = {name: "Multicolour", age: 100}
@@ -97,14 +86,17 @@ tape("Waterline collections are created by Multicolour on instantiation and we o
           /* eslint-enable */
 
           test.pass("Database seeding and tests (4 rounds) completed without error.")
+          DB.stop()
           test.end()
         })
         .catch(err => {
+          DB.stop()
           test.fail("Database seeding and tests (4 rounds) completed with error " + err.message)
           test.end()
         })
     })
     .catch(err => {
+      DB.stop()
       test.fail("Error in starting DB is undefined." + err.message)
       test.end()
     })
