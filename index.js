@@ -267,7 +267,10 @@ class multicolour extends Map {
     require("https").globalAgent.maxSockets = Infinity
 
     /* eslint-disable */
-    process.on("SIGINT", () => console.log("All services going away."))
+    process.on("SIGINT", () => {
+      console.log("All services going away. CLI will be handed back immediately but services may continue to shut down in background.")
+      this.stop()
+    })
     /* eslint-enable */
 
     const report_error = err => {
