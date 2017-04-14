@@ -268,7 +268,7 @@ class multicolour extends Map {
 
     // When we ask the program to terminate,
     // do so as gracefully as programmatically possible.
-    process.on("SIGINT", this.stop.bind(this, this.get("is_stopping")))
+    process.on("SIGINT", () => this.stop(true))
 
     const report_error = err => {
       this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
@@ -278,7 +278,7 @@ class multicolour extends Map {
     // Start our components up.
     return database.start()
       .then(() => server.start()
-        .then(() => this.debug("All services and plugins started without error"))
+        .then(() => this.debug("All services and plugins started without error. Go nuts!"))
         .catch(report_error)
       )
       .catch(report_error)
@@ -293,9 +293,6 @@ class multicolour extends Map {
     if (forced)
       process.exit(0)
 
-    const server = this.get("server")
-    const db = this.get("database")
-
     // If we're not force closing show a nice message.
     if (!this.get("is_stopping")) {
       /* eslint-disable */
@@ -307,21 +304,24 @@ class multicolour extends Map {
     // Show intent to stop.
     this.set("is_stopping", true)
 
-    // Stahp all the things.
     return Promise.all([
-      server.stop(),
-      db.stop()
+      this.get("server").stop(),
+      this.get("database").stop()
     ])
       .then(() => {
         /* eslint-disable */
         console.log("All services stopped successfully.")
         /* eslint-disable */
+
+        process.exit(0)
       })
       .catch(err => {
         /* eslint-disable */
         console.error("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is:")
         console.error(err)
         /* eslint-enable */
+
+        process.exit(1)
       })
   }
 }
