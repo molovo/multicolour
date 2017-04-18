@@ -275,7 +275,7 @@ class multicolour extends Map {
 
     const report_error = err => {
       this.debug("There was an error while starting some or all of the service(s) and plugins. The error was", err)
-      this.stop()
+      this.stop().then(() => process.exit(1))
     }
 
     // Start our components up.
@@ -301,12 +301,16 @@ class multicolour extends Map {
         /* eslint-disable */
         console.log("All services stopped successfully.")
         /* eslint-disable */
+
+        process.exit(0)
       })
       .catch(err => {
         /* eslint-disable */
         console.error("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is:")
         console.error(err)
         /* eslint-enable */
+
+        process.exit(1)
       })
   }
 }
