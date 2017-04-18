@@ -19,8 +19,9 @@ module.exports = {
       max: 9000 // OVER 9000!???!!!
     },
     empty: "string",
+    order: "order",
 
-    toJSON: function() {
+    toJSON: function toJSON() {
       return this.toObject()
     }
   },
