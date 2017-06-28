@@ -17,7 +17,7 @@
   },
   "scripts": {
     "linter": "eslint ./**/*.js",
-    "unit-tests": "tape tests/*.js | tap-spec",
+    "unit-tests": "tape tests/all.js | tap-spec",
     "integration-tests": "newman run tests/integration/postman_collection.json",
     "test": "npm run linter && npm run unit-tests",
     "test-coverage": "istanbul cover tape tests/*.js --recursive --report lcov -x '**/cli/**' -x '**/waterline-fixes/**' | tap-spec",
