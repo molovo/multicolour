@@ -305,7 +305,6 @@ class multicolour extends Map {
       .catch(err => {
         /* eslint-disable */
         console.error("There was an error while trying to stop some or all of the services/plugins. The process will exit forcefully now but the error is:")
-        console.error(err)
         /* eslint-enable */
 
         throw err
