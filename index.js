@@ -308,7 +308,7 @@ class multicolour extends Map {
         console.error(err)
         /* eslint-enable */
 
-        process.exit(1)
+        throw err
       })
   }
 }
