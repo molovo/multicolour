@@ -301,8 +301,6 @@ class multicolour extends Map {
         /* eslint-disable */
         console.log("All services stopped successfully.")
         /* eslint-disable */
-
-        process.exit(0)
       })
       .catch(err => {
         /* eslint-disable */
